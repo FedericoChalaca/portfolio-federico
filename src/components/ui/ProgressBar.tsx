@@ -21,12 +21,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!animate) { setWidth(value); return; }
+        let timeout: ReturnType<typeof setTimeout>;
+        if (!animate) {
+            timeout = setTimeout(() => setWidth(value), 0);
+            return () => clearTimeout(timeout);
+        }
 
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setTimeout(() => setWidth(value), 150);
+                    timeout = setTimeout(() => setWidth(value), 150);
                     observer.disconnect();
                 }
             },
@@ -34,7 +38,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         );
 
         if (ref.current) observer.observe(ref.current);
-        return () => observer.disconnect();
+        return () => {
+            clearTimeout(timeout);
+            observer.disconnect();
+        };
     }, [value, animate]);
 
     return (

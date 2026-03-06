@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Button.module.css';
 
 interface ButtonProps {
-    variant?: 'primary' | 'ghost';
+    variant?: 'primary' | 'ghost' | 'outline';
     size?: 'sm' | 'md' | 'lg';
     href?: string;
     onClick?: () => void;

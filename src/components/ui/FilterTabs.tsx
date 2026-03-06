@@ -1,10 +1,9 @@
-import React from 'react';
 import type { FilterOption } from '../../types';
 
 interface FilterTabsProps<T extends string> {
-    options: FilterOption<T>[];
-    active: T;
-    onChange: (value: T) => void;
+  options: FilterOption<T>[];
+  active: T;
+  onChange: (value: T) => void;
 }
 
 /**
@@ -12,20 +11,20 @@ interface FilterTabsProps<T extends string> {
  * Single Responsibility: manages tab selection UI.
  */
 export function FilterTabs<T extends string>({ options, active, onChange }: FilterTabsProps<T>) {
-    return (
-        <div className="filter-tabs">
-            {options.map((opt) => (
-                <button
-                    key={opt.id}
-                    type="button"
-                    className={`filter-tab ${active === opt.id ? 'active' : ''}`}
-                    onClick={() => onChange(opt.id)}
-                >
-                    {opt.label}
-                    <span className="filter-count">{opt.count}</span>
-                </button>
-            ))}
-            <style>{`
+  return (
+    <div className="filter-tabs">
+      {options.map((opt) => (
+        <button
+          key={opt.id}
+          type="button"
+          className={`filter-tab ${active === opt.id ? 'active' : ''}`}
+          onClick={() => onChange(opt.id)}
+        >
+          {opt.label}
+          <span className="filter-count">{opt.count}</span>
+        </button>
+      ))}
+      <style>{`
         .filter-tabs {
           display: flex;
           flex-wrap: wrap;
@@ -70,6 +69,6 @@ export function FilterTabs<T extends string>({ options, active, onChange }: Filt
           color: var(--color-text-muted);
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

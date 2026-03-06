@@ -8,7 +8,7 @@ export function useTypingEffect(texts: string[], speed = 80, pause = 2000) {
     const [displayed, setDisplayed] = useState('');
     const [isDeleting, setIsDeleting] = useState(false);
     const [textIndex, setTextIndex] = useState(0);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     useEffect(() => {
         const current = texts[textIndex];
@@ -16,8 +16,10 @@ export function useTypingEffect(texts: string[], speed = 80, pause = 2000) {
         if (!isDeleting && displayed === current) {
             timeoutRef.current = setTimeout(() => setIsDeleting(true), pause);
         } else if (isDeleting && displayed === '') {
-            setIsDeleting(false);
-            setTextIndex((i) => (i + 1) % texts.length);
+            timeoutRef.current = setTimeout(() => {
+                setIsDeleting(false);
+                setTextIndex((i) => (i + 1) % texts.length);
+            }, 0);
         } else {
             const delta = isDeleting ? speed / 2 : speed;
             timeoutRef.current = setTimeout(() => {
