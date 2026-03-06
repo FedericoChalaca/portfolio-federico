@@ -1,0 +1,9 @@
+.app {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
