@@ -206,25 +206,37 @@ export const Hero: React.FC = () => {
         }
 
         @media (max-width: 968px) {
+          .hero-section {
+            padding: 100px 20px 60px;
+            height: auto;
+            min-height: 100vh;
+          }
           .hero-grid {
             grid-template-columns: 1fr;
             text-align: center;
-            gap: 40px;
+            gap: 20px;
           }
           .hero-text-col {
              text-align: center;
              display: flex;
              flex-direction: column;
              align-items: center;
+             order: 2;
           }
           .hero-bio {
             text-align: center;
+            margin-bottom: 32px;
           }
           .hero-graphic-col {
             width: 100%;
-            height: 350px;
+            height: 450px; /* Increased height to prevent clipping */
             justify-content: center;
-            order: -1; /* Move 3D element above text on mobile for better visual flow */
+            order: 1; /* Keep 3D element above text for visual impact */
+            margin-bottom: 0;
+          }
+          .hero-name {
+            font-size: clamp(2.5rem, 10vw, 4rem);
+            margin-bottom: 16px;
           }
         }
       `}</style>

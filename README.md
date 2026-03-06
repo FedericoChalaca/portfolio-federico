@@ -1,73 +1,44 @@
-# React + TypeScript + Vite
+# Federico Chalaca | Full Stack Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Un portafolio web de alto impacto, diseñado con una estética natural y minimalista, integrando elementos interactivos avanzados y una arquitectura robusta.
 
-Currently, two official plugins are available:
+![Portfolio Preview](public/screenshot.png) (Próximamente/Opcional)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Características Destacadas
 
-## React Compiler
+- **🖥️ Experiencia 3D Interactiva:** Modelo de laptop 3D estilizado en la sección Hero, con rotación dinámica y personalización de materiales en tiempo real (Three.js + React Three Fiber).
+- **🖱️ Cursor Personalizado:** Un sistema de puntero inteligente que reacciona a elementos interactivos, mejorando la navegación en escritorio.
+- **🎨 Estética Orgánica:** Paleta de colores "Earthy" (Forest Green, Sand, Terracotta) cuidadosamente seleccionada para una experiencia visual relajante y profesional.
+- **📱 Responsividad Total:** Layouts asimétricos y adaptables que garantizan una visualización perfecta en cualquier dispositivo.
+- **🚀 Animaciones Fluidas:** Transiciones suaves y efectos de scroll utilizando Framer Motion.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tecnologías
 
-## Expanding the ESLint configuration
+- **Core:** React 18, TypeScript, Vite.
+- **3D & Animación:** Three.js, @react-three/fiber, @react-three/drei, Framer Motion.
+- **Estilos:** Vanilla CSS (CSS Modules) con un sistema de tokens dinámicos.
+- **Iconos:** Lucide React.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Instalación y Desarrollo
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/FedericoChalaca/portfolio-federico.git
+   ```
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+3. Iniciar servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+4. Construir para producción:
+   ```bash
+   npm run build
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📄 Licencia
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Este proyecto está bajo la Licencia MIT.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```

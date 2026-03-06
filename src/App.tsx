@@ -7,6 +7,7 @@ import { About } from './sections/About';
 import { Projects } from './sections/Projects';
 import { Technologies } from './sections/Technologies';
 import { Contact } from './sections/Contact';
+import { CustomCursor } from './components/ui/CustomCursor';
 import { useTheme } from './hooks/useTheme';
 
 /**
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <div className="app">
+      <CustomCursor />
       <Navbar theme={theme} onToggleTheme={toggleTheme} />
       <main>
         <Hero />
