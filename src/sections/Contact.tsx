@@ -1,8 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { Github, Linkedin, Mail, Code2, Phone } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Github, Linkedin, Mail, Code2, Phone, Check, Copy } from 'lucide-react';
 import { personalInfo, socialLinks } from '../data/portfolio';
 
 const iconMap = {
@@ -18,6 +15,14 @@ const iconMap = {
 export const Contact: React.FC = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(personalInfo.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section id="contacto" className="section contact-section">
@@ -55,6 +60,27 @@ export const Contact: React.FC = () => {
             <div className="contact-socials-grid">
               {socialLinks.map((link) => {
                 const Icon = iconMap[link.icon];
+                if (link.id === 'email') {
+                  return (
+                    <motion.button
+                      key={link.id}
+                      onClick={handleCopyEmail}
+                      className="social-link-large"
+                      aria-label="Copiar Email"
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                      style={{ width: '100%', border: 'none', cursor: 'pointer', textAlign: 'left', outline: 'none' }}
+                    >
+                      <div className="social-link-icon">
+                        {copied ? <Check size={24} color="var(--color-primary)" /> : <Mail size={24} />}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                        <span>{copied ? '¡Email Copiado!' : link.label}</span>
+                        {!copied && <span className="copy-hint" style={{ fontSize: '0.75rem', opacity: 0.5, fontWeight: 400 }}>Clic para copiar</span>}
+                      </div>
+                    </motion.button>
+                  );
+                }
                 return (
                   <motion.a
                     key={link.id}
@@ -76,9 +102,11 @@ export const Contact: React.FC = () => {
 
               {personalInfo.phone && (
                 <motion.a
-                  href={`tel:${personalInfo.phone}`}
+                  href={`https://wa.me/57${personalInfo.phone}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-link-large"
-                  aria-label="Teléfono"
+                  aria-label="WhatsApp"
                   whileHover={{ scale: 1.03, y: -2 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
@@ -182,6 +210,7 @@ export const Contact: React.FC = () => {
           border: 1px solid var(--color-border);
           color: var(--color-text);
           text-decoration: none;
+          font-family: inherit;
           font-weight: 500;
           font-size: 1.05rem;
           transition: all var(--transition-base);
