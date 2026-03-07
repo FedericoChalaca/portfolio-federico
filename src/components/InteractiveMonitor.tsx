@@ -134,7 +134,7 @@ export const InteractiveMonitor: React.FC = () => {
         <div className="interactive-3d-container">
             <div className="canvas-wrapper">
                 <Canvas shadows gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
-                    <PerspectiveCamera makeDefault position={[0, 2, 11]} fov={35} />
+                    <PerspectiveCamera makeDefault position={[0, 2, 11.5]} fov={35} />
                     <ambientLight intensity={1.2} />
                     <spotLight position={[15, 20, 15]} angle={0.3} penumbra={1} intensity={2.5} castShadow />
                     <spotLight position={[-15, 20, 10]} angle={0.3} penumbra={1} intensity={1.5} color="#fff" />
@@ -178,7 +178,7 @@ export const InteractiveMonitor: React.FC = () => {
         .interactive-3d-container {
           position: relative;
           width: 100%;
-          height: 500px;
+          height: 750px;
           display: flex;
           flex-direction: column;
           align-items: center;

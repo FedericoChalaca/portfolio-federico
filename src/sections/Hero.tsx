@@ -189,7 +189,7 @@ export const Hero: React.FC = () => {
           position: relative;
           z-index: 2;
           width: 100%;
-          min-height: 400px;
+          min-height: 700px;
         }
         .hero-scroll-hint {
           position: absolute;
