@@ -2,13 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Github, Linkedin, Mail, Code2 } from 'lucide-react';
+import { Github, Linkedin, Mail, Code2, Phone } from 'lucide-react';
 import { personalInfo, socialLinks } from '../data/portfolio';
 
 const iconMap = {
   github: Github,
   linkedin: Linkedin,
   mail: Mail,
+  phone: Phone,
 };
 
 /**
@@ -72,6 +73,21 @@ export const Contact: React.FC = () => {
                   </motion.a>
                 );
               })}
+
+              {personalInfo.phone && (
+                <motion.a
+                  href={`tel:${personalInfo.phone}`}
+                  className="social-link-large"
+                  aria-label="Teléfono"
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                >
+                  <div className="social-link-icon">
+                    <Phone size={24} />
+                  </div>
+                  <span>{personalInfo.phone}</span>
+                </motion.a>
+              )}
             </div>
           </motion.div>
         </div>

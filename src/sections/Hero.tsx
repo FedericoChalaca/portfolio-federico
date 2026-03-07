@@ -91,7 +91,7 @@ export const Hero: React.FC = () => {
           min-height: 100vh;
           display: flex;
           align-items: center;
-          padding: 120px 24px 80px;
+          padding: 80px 24px 80px;
           position: relative;
           overflow: hidden;
         }
@@ -120,7 +120,7 @@ export const Hero: React.FC = () => {
         }
         .hero-grid {
           display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
+          grid-template-columns: 0.8fr 1.2fr;
           gap: 60px;
           align-items: center;
         }

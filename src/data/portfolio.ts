@@ -28,9 +28,10 @@ export const personalInfo: PersonalInfo = {
         'Más allá de escribir código, mi objetivo es crear herramientas que optimicen el día a día. Creo en el diseño centrado en el usuario y en la mejora continua como pilares fundamentales para cualquier producto digital exitoso.',
     ],
     location: 'Medellín, Colombia',
-    email: 'federicochalaca@gmail.com',
+    email: 'federicoml2004@gmail.com',
+    phone: '3016935489',
     githubUrl: 'https://github.com/FedericoChalaca',
-    linkedinUrl: 'https://linkedin.com/in/federicomartinez',
+    linkedinUrl: 'https://www.linkedin.com/in/federico-martinez-10b58931a/',
     values: [
         {
             icon: 'code',
@@ -80,13 +81,13 @@ export const socialLinks: SocialLink[] = [
     {
         id: 'linkedin',
         label: 'LinkedIn',
-        url: 'https://linkedin.com/in/federicomartinez',
+        url: 'https://www.linkedin.com/in/federico-martinez-10b58931a/',
         icon: 'linkedin',
     },
     {
         id: 'email',
         label: 'Email',
-        url: 'mailto:federicochalaca@gmail.com',
+        url: 'mailto:federicoml2004@gmail.com',
         icon: 'mail',
     },
 ];
