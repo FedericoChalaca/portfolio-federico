@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
-import { Github, Linkedin, Mail, Code2, Phone, Check, Copy } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { Github, Linkedin, Mail, Code2, Phone, Check } from 'lucide-react';
 import { personalInfo, socialLinks } from '../data/portfolio';
 
 const iconMap = {
