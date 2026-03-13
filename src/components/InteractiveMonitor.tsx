@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Float, Text, ContactShadows, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
@@ -122,6 +122,21 @@ const LaptopModel: React.FC<LaptopProps> = ({ color }) => {
 
 export const InteractiveMonitor: React.FC = () => {
     const [color, setColor] = useState('#3E5A47'); // Default Forest Green from palette
+    const [scale, setScale] = useState(1);
+    const [positionY, setPositionY] = useState(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const isMobile = window.innerWidth < 768;
+            setScale(isMobile ? 0.7 : 1); // Very slightly larger
+            setPositionY(isMobile ? 1.0 : 0); // Lowered the shift upwards
+        };
+
+        handleResize(); // Set initial scale
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const colors = [
         { name: 'Forest', value: '#3E5A47' },
@@ -133,7 +148,7 @@ export const InteractiveMonitor: React.FC = () => {
     return (
         <div className="interactive-3d-container">
             <div className="canvas-wrapper">
-                <Canvas shadows gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
+                <Canvas shadows={{ type: THREE.PCFShadowMap }} gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
                     <PerspectiveCamera makeDefault position={[0, 2, 11.5]} fov={35} />
                     <ambientLight intensity={1.2} />
                     <spotLight position={[15, 20, 15]} angle={0.3} penumbra={1} intensity={2.5} castShadow />
@@ -143,7 +158,9 @@ export const InteractiveMonitor: React.FC = () => {
                     <pointLight position={[0, 0, -12]} intensity={2.5} color={color} distance={20} /> {/* Rim Light */}
 
                     <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                        <LaptopModel color={color} />
+                        <group scale={scale} position={[0, positionY, 0]}>
+                            <LaptopModel color={color} />
+                        </group>
                     </Float>
 
                     <ContactShadows
@@ -183,6 +200,12 @@ export const InteractiveMonitor: React.FC = () => {
           flex-direction: column;
           align-items: center;
           justify-content: center;
+        }
+        @media (max-width: 768px) {
+          .interactive-3d-container {
+            height: 350px;
+            margin-top: -30px;
+          }
         }
         .canvas-wrapper {
           width: 100%;

@@ -229,7 +229,8 @@ export const Hero: React.FC = () => {
           }
           .hero-graphic-col {
             width: 100%;
-            height: 450px; /* Increased height to prevent clipping */
+            height: auto;
+            min-height: 350px; /* Override 700px min-height to reduce vertical space */
             justify-content: center;
             order: 1; /* Keep 3D element above text for visual impact */
             margin-bottom: 0;
