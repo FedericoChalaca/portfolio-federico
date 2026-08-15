@@ -9,6 +9,7 @@ import { Technologies } from './sections/Technologies';
 import { Contact } from './sections/Contact';
 import { CustomCursor } from './components/ui/CustomCursor';
 import { useTheme } from './hooks/useTheme';
+import { Analytics } from '@vercel/analytics/react';
 
 /**
  * App - Root composition component.
@@ -30,6 +31,7 @@ function App() {
         <Contact />
       </main>
       <ScrollToTop />
+      <Analytics />
     </div>
   );
 }
