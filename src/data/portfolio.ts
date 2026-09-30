@@ -18,15 +18,15 @@ export const personalInfo: PersonalInfo = {
     lastName: 'Martinez',
     roles: [
         'Desarrollador Full-Stack',
-        'Arquitecto de Soluciones',
         'Ingeniero de Procesos',
-        'Creador de Experiencias Digitales',
+        'Sistemas de gestión a medida',
     ],
     bio: [
         '¡Hola! Soy Federico Martinez. Combino mi formación en ingeniería de procesos con mi pasión por el desarrollo de software para construir sistemas eficientes, escalables y visualmente atractivos.',
         'Mi trayectoria técnica me ha llevado desde las bases de la programación en C hasta el dominio de ecosistemas modernos como React y Node.js. Me especializo en traducir lógicas de negocio complejas en arquitecturas limpias y aplicaciones web intuitivas.',
         'Más allá de escribir código, mi objetivo es crear herramientas que optimicen el día a día. Creo en el diseño centrado en el usuario y en la mejora continua como pilares fundamentales para cualquier producto digital exitoso.',
     ],
+    tagline: 'Convierto procesos de negocio en software que funciona: sistemas de gestión, apps web y landings listas para vender.',
     location: 'Medellín, Colombia',
     email: 'federicoml2004@gmail.com',
     phone: '3016935489',
@@ -35,25 +35,19 @@ export const personalInfo: PersonalInfo = {
     values: [
         {
             icon: 'code',
-            title: 'Artesanía del Código',
-            description: 'Estructuro mis aplicaciones basándome en los principios SOLID, buscando siempre un equilibrio entre elegancia y rendimiento.',
+            title: 'Entiendo tu operación',
+            description: 'Antes de programar mapeo cómo funciona tu negocio: quién hace qué, dónde se pierde tiempo y qué vale la pena automatizar.',
         },
         {
             icon: 'process',
-            title: 'Ingeniería Operativa',
-            description: 'No solo programo; analizo el panorama completo. Identifico cuellos de botella y diseño integraciones fluidas aportando mi visión como ingeniero.',
+            title: 'Construyo por entregas',
+            description: 'Avances funcionales que puedes probar desde el primer ciclo, para ajustar el rumbo antes de que cueste caro.',
         },
         {
             icon: 'innovation',
-            title: 'Evolución Digital',
-            description: 'El ecosistema tech nunca se detiene, y yo tampoco. Exploro continuamente nuevas herramientas para aportar el máximo valor a cada proyecto.',
+            title: 'Entrego algo que crece',
+            description: 'Código ordenado con TypeScript y principios SOLID, desplegado en la nube y listo para evolucionar con tu empresa.',
         },
-    ],
-    stats: [
-        { value: '∞', label: 'Ideas creativas' },
-        { value: '24/7', label: 'Disponibilidad' },
-        { value: '100%', label: 'Dedicación' },
-        { value: '∞', label: 'Aprendizaje' },
     ],
 };
 
@@ -290,6 +284,13 @@ export const technologies: Technology[] = [
         icon: 'Vi',
         relatedProjects: ['Portfolio Personal', 'GMCO'],
     },
+];
+
+// Real numbers only: derived from the data above
+export const stats = [
+    { value: String(projects.length), label: 'Proyectos' },
+    { value: String(projects.filter((p) => p.demoUrl && p.demoUrl !== '#').length), label: 'Sitios en producción' },
+    { value: String(technologies.length), label: 'Tecnologías' },
 ];
 
 // ============================================================

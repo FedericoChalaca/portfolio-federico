@@ -33,9 +33,9 @@ export const Projects: React.FC = () => {
     <section id="proyectos" className="section" style={{ background: 'var(--color-bg-secondary)' }}>
       <div className="container">
         <SectionHeader
-          title="Obras"
-          highlight="Destacadas"
-          subtitle="Una selección cuidadosa de mi trabajo reciente"
+          title="Trabajo"
+          highlight="Real"
+          subtitle="Sitios en producción que puedes abrir ahora mismo, y el resto de mis proyectos."
         />
 
         <ShowcaseCarousel projects={showcaseProjects} />

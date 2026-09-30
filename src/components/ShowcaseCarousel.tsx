@@ -143,7 +143,7 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
           transition={{ duration: 0.25 }}
         >
           <h3 className="showcase-title">{current.title}</h3>
-          <p className="showcase-desc">{current.description}</p>
+          <p className="showcase-desc">{current.longDescription}</p>
           <div className="project-links showcase-links">
             {current.demoUrl && (
               <a href={current.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link-demo">

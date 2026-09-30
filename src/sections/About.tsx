@@ -33,9 +33,9 @@ export const About: React.FC = () => {
     <section id="sobre-mi" className="section">
       <div className="container">
         <SectionHeader
-          title="Mi"
-          highlight="Viaje"
-          subtitle="Una historia sobre diseño, código y aprendizajes"
+          title="Procesos convertidos en"
+          highlight="Software"
+          subtitle="Primero entiendo cómo opera tu negocio. Después lo automatizo."
         />
 
         <div ref={ref} className="about-wrapper">
@@ -69,7 +69,7 @@ export const About: React.FC = () => {
           <div className="about-values">
             <div className="about-bio-header">
               <Cpu size={22} className="about-icon" />
-              <h3>Mis Valores</h3>
+              <h3>Cómo trabajo</h3>
             </div>
 
             <div className="values-staggered-grid">

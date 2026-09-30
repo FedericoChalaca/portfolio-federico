@@ -1,5 +1,6 @@
 import './index.css';
 import './App.css';
+import { MotionConfig } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { ScrollToTop } from './components/layout/ScrollToTop';
 import { Hero } from './sections/Hero';
@@ -19,6 +20,8 @@ function App() {
   const { theme, toggleTheme } = useTheme();
 
   return (
+    // reducedMotion="user": every framer animation honors the OS setting
+    <MotionConfig reducedMotion="user">
     <div className="app">
       <CustomCursor />
       <Navbar theme={theme} onToggleTheme={toggleTheme} />
@@ -31,6 +34,7 @@ function App() {
       </main>
       <ScrollToTop />
     </div>
+    </MotionConfig>
   );
 }
 

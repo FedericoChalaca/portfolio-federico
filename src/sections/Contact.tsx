@@ -1,7 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Github, Linkedin, Mail, Code2, Phone, Check } from 'lucide-react';
-import { personalInfo, socialLinks } from '../data/portfolio';
+import { Github, Linkedin, Mail, Code2, Phone, Check, MessageCircle } from 'lucide-react';
+import { Button } from '../components/ui/Button';
+import { personalInfo, socialLinks, stats } from '../data/portfolio';
+
+const whatsappUrl = `https://wa.me/57${personalInfo.phone}?text=${encodeURIComponent(
+  'Hola Federico, vi tu portafolio y quiero hablar de un proyecto.',
+)}`;
 
 const iconMap = {
   github: Github,
@@ -46,8 +51,13 @@ export const Contact: React.FC = () => {
             </h2>
             <p className="contact-role">Desarrollador Web & Ingeniero de Procesos</p>
             <p className="contact-tagline">
-              Creando experiencias web excepcionales con pasión y dedicación
+              ¿Tienes un proceso que se puede automatizar o una idea que quieres lanzar? Cuéntame y lo revisamos juntos.
             </p>
+            {personalInfo.phone && (
+              <Button variant="primary" size="lg" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <MessageCircle size={18} /> Hablemos por WhatsApp
+              </Button>
+            )}
           </motion.div>
 
           {/* Social Links Right side */}
@@ -103,7 +113,7 @@ export const Contact: React.FC = () => {
 
               {personalInfo.phone && (
                 <motion.a
-                  href={`https://wa.me/57${personalInfo.phone}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link-large"
@@ -128,7 +138,7 @@ export const Contact: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <p className="contact-made-with">
-            Hecho con ☕ &nbsp;·&nbsp; Desarrollado con{' '}
+            Desarrollado con{' '}
             <span style={{ fontWeight: 600 }}>React</span> &{' '}
             <span style={{ fontWeight: 600 }}>TypeScript</span>
           </p>
@@ -141,7 +151,7 @@ export const Contact: React.FC = () => {
 
         {/* Stats */}
         <div className="footer-stats">
-          {personalInfo.stats.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="footer-stat">
               <span className="footer-stat-value">{stat.value}</span>
               <span className="footer-stat-label">{stat.label}</span>
@@ -260,7 +270,7 @@ export const Contact: React.FC = () => {
           color: var(--color-text-secondary);
           font-size: 1.05rem;
           font-weight: 300;
-          margin-bottom: 16px;
+          margin-bottom: 28px;
           line-height: 1.6;
         }
         .contact-made-with {

@@ -22,7 +22,7 @@ export const Technologies: React.FC = () => {
         <SectionHeader
           title="Caja de"
           highlight="Herramientas"
-          subtitle="Las tecnologías orgánicas con las que doy vida a mis proyectos"
+          subtitle="Las herramientas con las que construyo, y en qué proyectos las he usado."
         />
 
         <FilterTabs

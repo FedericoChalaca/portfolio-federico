@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ChevronDown } from 'lucide-react';
+import { MapPin, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 import { personalInfo } from '../data/portfolio';
-import { InteractiveMonitor } from '../components/InteractiveMonitor';
+// three.js is ~1 MB: load it after the text so the hero paints first
+const InteractiveMonitor = lazy(() =>
+  import('../components/InteractiveMonitor').then((m) => ({ default: m.InteractiveMonitor })),
+);
 
 /**
  * Hero - Entry section with gradient name, typing animation, and CTA buttons.
@@ -12,8 +15,8 @@ import { InteractiveMonitor } from '../components/InteractiveMonitor';
 export const Hero: React.FC = () => {
   const role = useTypingEffect(personalInfo.roles);
 
-  const scrollToProjects = () => {
-    document.getElementById('proyectos')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -39,29 +42,24 @@ export const Hero: React.FC = () => {
               <span className="hero-cursor">|</span>
             </div>
 
-            <p className="hero-bio">{personalInfo.bio[0]}</p>
+            <p className="hero-bio">{personalInfo.tagline}</p>
 
             <div className="hero-actions">
-              <Button variant="primary" size="lg" onClick={scrollToProjects}>
-                &lt;/&gt; Ver Proyectos
+              <Button variant="primary" size="lg" onClick={() => scrollTo('proyectos')}>
+                &lt;/&gt; Ver proyectos
               </Button>
-              <Button
-                variant="ghost"
-                size="lg"
-                href={personalInfo.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-                </svg>
-                GitHub
+              <Button variant="ghost" size="lg" onClick={() => scrollTo('contacto')}>
+                <MessageCircle size={18} /> Hablemos
               </Button>
             </div>
 
             <div className="hero-location">
-              <MapPin size={16} />
-              <span>{personalInfo.location}</span>
+              <span className="hero-loc-item">
+                <span className="hero-available" aria-hidden="true" /> Disponible para proyectos
+              </span>
+              <span className="hero-loc-item">
+                <MapPin size={16} /> {personalInfo.location}
+              </span>
             </div>
           </motion.div>
 
@@ -72,18 +70,11 @@ export const Hero: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
           >
-            <InteractiveMonitor />
+            <Suspense fallback={null}>
+              <InteractiveMonitor />
+            </Suspense>
           </motion.div>
         </div>
-      </div>
-
-      <div className="hero-scroll-hint" onClick={scrollToProjects}>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <ChevronDown size={24} />
-        </motion.div>
       </div>
 
       <style>{`
@@ -174,13 +165,22 @@ export const Hero: React.FC = () => {
           margin-bottom: 40px;
         }
         .hero-location {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px 20px;
           color: var(--color-text-muted);
           font-size: 0.95rem;
           font-family: 'Inter', sans-serif;
           letter-spacing: 0.02em;
+        }
+        .hero-loc-item { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .hero-available {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+          margin-right: 4px;
         }
         .hero-graphic-col {
           display: flex;
@@ -191,20 +191,6 @@ export const Hero: React.FC = () => {
           width: 100%;
           min-height: 700px;
         }
-        .hero-scroll-hint {
-          position: absolute;
-          bottom: 40px;
-          left: 50%;
-          transform: translateX(-50%);
-          color: var(--color-text-muted);
-          cursor: pointer;
-          transition: color var(--transition-base), transform var(--transition-base);
-        }
-        .hero-scroll-hint:hover { 
-          color: var(--color-primary); 
-          transform: translate(-50%, 4px);
-        }
-
         @media (max-width: 968px) {
           .hero-section {
             padding: 100px 20px 60px;
@@ -221,8 +207,9 @@ export const Hero: React.FC = () => {
              display: flex;
              flex-direction: column;
              align-items: center;
-             order: 2;
+             order: 1;
           }
+          .hero-location, .hero-actions { justify-content: center; }
           .hero-bio {
             text-align: center;
             margin-bottom: 32px;
@@ -230,9 +217,9 @@ export const Hero: React.FC = () => {
           .hero-graphic-col {
             width: 100%;
             height: auto;
-            min-height: 350px; /* Override 700px min-height to reduce vertical space */
+            min-height: 320px; /* Override 700px min-height to reduce vertical space */
             justify-content: center;
-            order: 1; /* Keep 3D element above text for visual impact */
+            order: 2; /* Name and CTAs first on small screens */
             margin-bottom: 0;
           }
           .hero-name {

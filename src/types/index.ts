@@ -52,13 +52,13 @@ export interface PersonalInfo {
     lastName: string;
     roles: string[];
     bio: string[];
+    tagline: string;
     location: string;
     email: string;
     phone?: string;
     githubUrl: string;
     linkedinUrl?: string;
     values: { icon: string; title: string; description: string }[];
-    stats: { value: string; label: string }[];
 }
 
 export interface FilterOption<T extends string> {
