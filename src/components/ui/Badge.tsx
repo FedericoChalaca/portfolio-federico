@@ -7,7 +7,7 @@ interface BadgeProps {
 
 const statusConfig: Record<ProjectStatus, { label: string; color: string; bg: string }> = {
     Completado: { label: 'Completado', color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)' },
-    'En Progreso': { label: 'En Progreso', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
+    'En Progreso': { label: 'En Progreso', color: '#d97706', bg: 'rgba(217, 119, 6, 0.12)' },
 };
 
 /**

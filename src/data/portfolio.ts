@@ -110,7 +110,7 @@ export const projects: Project[] = [
     },
     {
         id: 'tugu-landing',
-        title: 'Tugu — Landing Fintech',
+        title: 'Tugu',
         description: 'Landing page para Tugu, fintech de datáfonos con lector de huella digital.',
         longDescription: 'Landing para Tugu: producto, seguridad biométrica y flujo de registro en tres pasos, con respaldo de Ruta N y la Universidad Pontificia Bolivariana. Diseño responsive con foco en conversión.',
         status: 'Completado',
@@ -122,7 +122,7 @@ export const projects: Project[] = [
     },
     {
         id: 'gmco',
-        title: 'GMCO — Sistema de Gestión',
+        title: 'GMCO',
         description: 'Sistema de gestión empresarial web con arquitectura PWA.',
         longDescription: 'Sistema de gestión con administración de operaciones, reportes y flujos internos, instalable como PWA y accesible desde cualquier dispositivo.',
         status: 'En Progreso',
@@ -163,7 +163,7 @@ export const projects: Project[] = [
         category: 'E-commerce',
         tags: ['JavaScript', 'HTML', 'CSS', 'E-commerce'],
         githubUrl: 'https://github.com/FedericoChalaca/BigoteS-pizzeria',
-        imageColor: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+        imageColor: 'linear-gradient(135deg, #a16b54, #2f2a24)',
     },
     {
         id: 'wing-house',
@@ -298,7 +298,7 @@ export function getProjectFilters(): FilterOption<ProjectCategory>[] {
         id: cat,
         label: cat,
         count: cat === 'Todos' ? projects.length : projects.filter((p) => p.category === cat).length,
-    }));
+    })).filter((f) => f.count > 0);
 }
 
 export function getTechFilters(): FilterOption<TechCategory>[] {

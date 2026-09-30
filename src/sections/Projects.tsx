@@ -75,6 +75,16 @@ export const Projects: React.FC = () => {
                   </div>
 
                   <div className="project-links">
+                    {project.demoUrl && project.demoUrl !== '#' && (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-link-demo"
+                      >
+                        <ExternalLink size={15} /> Ver Demo
+                      </a>
+                    )}
                     <a
                       href={project.githubUrl}
                       target="_blank"
@@ -83,16 +93,6 @@ export const Projects: React.FC = () => {
                     >
                       <Github size={16} /> GitHub
                     </a>
-                    {project.demoUrl && (
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link project-link-demo"
-                      >
-                        <ExternalLink size={16} /> Demo
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>
@@ -240,7 +240,8 @@ export const Projects: React.FC = () => {
         }
         .project-links {
           display: flex;
-          gap: 16px;
+          gap: 12px;
+          flex-wrap: wrap;
           margin-top: auto;
         }
         .project-link {
@@ -263,12 +264,22 @@ export const Projects: React.FC = () => {
           background: rgba(62, 90, 71, 0.05);
         }
         .project-link-demo {
-          border-color: var(--color-accent);
-          color: var(--color-accent);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 18px;
+          border-radius: 6px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-decoration: none;
+          color: #fff;
+          background: var(--gradient-primary);
+          box-shadow: var(--shadow-button);
+          transition: transform var(--transition-base), filter var(--transition-base);
         }
         .project-link-demo:hover {
-          background: var(--color-accent);
-          color: white;
+          transform: translateY(-1px);
+          filter: brightness(1.08);
         }
         
         @media (max-width: 768px) {

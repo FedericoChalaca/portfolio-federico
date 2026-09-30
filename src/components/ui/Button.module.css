@@ -37,7 +37,7 @@
 
 .primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.45);
+    box-shadow: 0 8px 30px rgba(62, 90, 71, 0.35);
     filter: brightness(1.08);
 }
 

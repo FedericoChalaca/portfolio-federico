@@ -135,8 +135,9 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
           gap: 4px;
         }
         .nav-link {
-          padding: 8px 16px;
+          padding: 8px 12px;
           border-radius: var(--radius-full);
+          white-space: nowrap;
           text-decoration: none;
           font-size: 0.9rem;
           font-weight: 500;
@@ -145,7 +146,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
         }
         .nav-link:hover { color: var(--color-primary); }
         .nav-link.active {
-          background: rgba(124, 58, 237, 0.1);
+          background: rgba(62, 90, 71, 0.1);
           color: var(--color-primary);
           font-weight: 600;
         }
@@ -205,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
           transition: all var(--transition-base);
         }
         .mobile-link:hover, .mobile-link.active {
-          background: rgba(124, 58, 237, 0.1);
+          background: rgba(62, 90, 71, 0.1);
           color: var(--color-primary);
         }
         @media (max-width: 768px) {

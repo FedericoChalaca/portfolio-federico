@@ -23,9 +23,10 @@
 
   --color-border: rgba(94, 86, 77, 0.15);
   --color-border-hover: rgba(62, 90, 71, 0.3);
+  --color-bg-hover: rgba(62, 90, 71, 0.05);
 
   --color-success: #4a6c55;
-  --color-warning: #cxa264;
+  --color-warning: #d97706;
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #3E5A47, #567b62);
@@ -74,6 +75,10 @@
 
   --color-border: rgba(181, 172, 159, 0.1);
   --color-border-hover: rgba(196, 138, 113, 0.4);
+  --color-bg-hover: rgba(142, 163, 149, 0.08);
+
+  /* Light start so gradient text stays readable on dark bg */
+  --gradient-hero-text: linear-gradient(135deg, #ebdcd0 0%, #8ea395 60%, #c48a71 100%);
 
   --gradient-bg-radial: radial-gradient(circle at top right, rgba(196, 138, 113, 0.05) 0%, transparent 60%),
                         radial-gradient(circle at bottom left, rgba(142, 163, 149, 0.05) 0%, transparent 60%);
@@ -152,6 +157,6 @@ body {
    SELECTION
    ============================================================ */
 ::selection {
-  background: rgba(124, 58, 237, 0.2);
+  background: rgba(62, 90, 71, 0.2);
   color: var(--color-primary);
 }
