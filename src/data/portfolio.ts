@@ -106,6 +106,7 @@ export const projects: Project[] = [
         tags: ['JavaScript', 'Mapas', 'UX Móvil', 'i18n'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://www.thegoodtrip.online/',
+        previews: { desktop: '/previews/thegoodtrip-desktop.jpg', mobile: '/previews/thegoodtrip-mobile.jpg' },
         imageColor: 'linear-gradient(135deg, #0e7f9e, #3E5A47)',
     },
     {
@@ -118,6 +119,7 @@ export const projects: Project[] = [
         tags: ['Landing', 'Fintech', 'Responsive', 'SEO'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://tugu-landing.vercel.app/',
+        previews: { desktop: '/previews/tugu-desktop.jpg', mobile: '/previews/tugu-mobile.jpg' },
         imageColor: 'linear-gradient(135deg, #567b62, #c48a71)',
     },
     {
@@ -130,6 +132,7 @@ export const projects: Project[] = [
         tags: ['React', 'PWA', 'Gestión', 'Vercel'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://gmco-delta.vercel.app/',
+        previews: { desktop: '/previews/gmco-desktop.jpg', mobile: '/previews/gmco-mobile.jpg' },
         imageColor: 'linear-gradient(135deg, #2c312e, #5e564d)',
     },
     {

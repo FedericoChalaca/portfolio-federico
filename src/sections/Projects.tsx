@@ -4,11 +4,13 @@ import { Github, ExternalLink } from 'lucide-react';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { FilterTabs } from '../components/ui/FilterTabs';
 import { Badge } from '../components/ui/Badge';
-import { filterProjects, getProjectFilters } from '../data/portfolio';
+import { ShowcaseCarousel } from '../components/ShowcaseCarousel';
+import { filterProjects, getProjectFilters, projects } from '../data/portfolio';
 
 import type { ProjectCategory } from '../types';
 
 const ITEMS_PER_PAGE = 6;
+const showcaseProjects = projects.filter((p) => p.previews);
 
 /**
  * Projects - Filterable, paginated project grid.
@@ -35,6 +37,8 @@ export const Projects: React.FC = () => {
           highlight="Destacadas"
           subtitle="Una selección cuidadosa de mi trabajo reciente"
         />
+
+        <ShowcaseCarousel projects={showcaseProjects} />
 
         <FilterTabs
           options={getProjectFilters()}
@@ -125,6 +129,8 @@ export const Projects: React.FC = () => {
       </div>
 
       <style>{`
+        /* The fanned showcase cards reach past the viewport edge */
+        #proyectos { overflow-x: clip; }
         .projects-grid {
           display: flex;
           flex-direction: column;

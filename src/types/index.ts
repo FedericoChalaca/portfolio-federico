@@ -18,6 +18,7 @@ export interface Project {
     tags: string[];
     githubUrl: string;
     demoUrl?: string;
+    previews?: { desktop: string; mobile: string }; // screenshots in /public/previews
     imageColor: string; // gradient color for the card image placeholder
 }
 
