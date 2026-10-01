@@ -9,6 +9,7 @@ import { Projects } from './sections/Projects';
 import { Technologies } from './sections/Technologies';
 import { Contact } from './sections/Contact';
 import { CustomCursor } from './components/ui/CustomCursor';
+import { WhatsAppFab } from './components/WhatsAppFab';
 import { useTheme } from './hooks/useTheme';
 
 /**
@@ -33,6 +34,7 @@ function App() {
         <Contact />
       </main>
       <ScrollToTop />
+      <WhatsAppFab />
     </div>
     </MotionConfig>
   );

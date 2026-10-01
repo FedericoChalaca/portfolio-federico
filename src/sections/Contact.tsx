@@ -4,7 +4,7 @@ import { Github, Linkedin, Mail, Code2, Phone, Check, MessageCircle } from 'luci
 import { Button } from '../components/ui/Button';
 import { personalInfo, socialLinks, stats } from '../data/portfolio';
 
-const whatsappUrl = `https://wa.me/57${personalInfo.phone}?text=${encodeURIComponent(
+export const whatsappUrl = `https://wa.me/57${personalInfo.phone}?text=${encodeURIComponent(
   'Hola Federico, vi tu portafolio y quiero hablar de un proyecto.',
 )}`;
 
