@@ -29,8 +29,8 @@ export const ScrollToTop: React.FC = () => {
             <style>{`
         .scroll-top-btn {
           position: fixed;
-          bottom: 32px;
-          right: 32px;
+          bottom: 30px;
+          right: 96px; /* left of the WhatsApp FAB (24px + 56px + gap) */
           z-index: 999;
           display: inline-flex;
           align-items: center;
@@ -58,6 +58,10 @@ export const ScrollToTop: React.FC = () => {
         .scroll-top-btn:hover {
           filter: brightness(1.1);
           transform: translateY(-3px);
+        }
+        /* On mobile the FAB stacks above this button instead */
+        @media (max-width: 768px) {
+          .scroll-top-btn { right: 24px; }
         }
         @media (max-width: 480px) {
           .scroll-top-btn span { display: none; }

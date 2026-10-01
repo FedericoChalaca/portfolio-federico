@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import BlurText from '../components/ui/BlurText';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 import { personalInfo } from '../data/portfolio';
 // three.js is ~1 MB: load it after the text so the hero paints first
@@ -42,7 +43,7 @@ export const Hero: React.FC = () => {
               <span className="hero-cursor">|</span>
             </div>
 
-            <p className="hero-bio">{personalInfo.tagline}</p>
+            <BlurText text={personalInfo.tagline} className="hero-bio" delay={45} direction="bottom" />
 
             <div className="hero-actions">
               <Button variant="primary" size="lg" onClick={() => scrollTo('proyectos')}>
@@ -211,6 +212,7 @@ export const Hero: React.FC = () => {
           }
           .hero-location, .hero-actions { justify-content: center; }
           .hero-bio {
+            justify-content: center;
             text-align: center;
             margin-bottom: 32px;
           }

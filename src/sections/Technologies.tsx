@@ -3,9 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { FilterTabs } from '../components/ui/FilterTabs';
 import { ProgressBar } from '../components/ui/ProgressBar';
+import LogoLoop from '../components/ui/LogoLoop';
 import { filterTechnologies, getTechFilters } from '../data/portfolio';
 
 import type { TechCategory } from '../types';
+
+const stack = [
+  ['javascript', 'JavaScript'], ['typescript', 'TypeScript'], ['react', 'React'], ['nodedotjs', 'Node.js'],
+  ['html5', 'HTML5'], ['css', 'CSS'], ['c', 'C'], ['git', 'Git'], ['github', 'GitHub'], ['vite', 'Vite'], ['vercel', 'Vercel'],
+].map(([slug, name]) => ({
+  node: (
+    <span className="stack-logo">
+      <img src={`/logos/${slug}.svg`} alt="" width={26} height={26} /> {name}
+    </span>
+  ),
+  title: name,
+}));
 
 /**
  * Technologies - Filterable tech stack grid with animated progress bars.
@@ -24,6 +37,8 @@ export const Technologies: React.FC = () => {
           highlight="Herramientas"
           subtitle="Las herramientas con las que construyo, y en qué proyectos las he usado."
         />
+
+        <LogoLoop logos={stack} ariaLabel="Tecnologías que uso" className="stack-loop" />
 
         <FilterTabs
           options={getTechFilters()}
@@ -89,6 +104,17 @@ export const Technologies: React.FC = () => {
       </div>
 
       <style>{`
+        .stack-loop { margin: -16px 0 48px; }
+        .stack-logo {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 1rem;
+          font-weight: 500;
+          color: var(--color-text-secondary);
+          white-space: nowrap;
+        }
+        .stack-logo img { width: 26px; height: 26px; }
         .tech-grid {
           display: flex;
           flex-wrap: wrap;

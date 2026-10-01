@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { personalInfo } from '../data/portfolio';
 import { Code2, Cpu, Lightbulb } from 'lucide-react';
+import SpotlightCard from '../components/ui/SpotlightCard';
 
 
 const valueIcons: Record<string, React.ReactNode> = {
@@ -76,17 +77,19 @@ export const About: React.FC = () => {
               {personalInfo.values.map((val, i) => (
                 <motion.div
                   key={val.title}
-                  className={`value-card staggered-${i}`}
+                  className={`staggered-${i}`}
                   initial="hidden"
                   animate={inView ? 'visible' : 'hidden'}
                   custom={i + 1}
                   variants={fadeUp}
                 >
-                  <div className="value-icon">{valueIcons[val.icon]}</div>
-                  <div>
-                    <h4 className="value-title">{val.title}</h4>
-                    <p className="value-desc">{val.description}</p>
-                  </div>
+                  <SpotlightCard className="value-card" spotlightColor="rgba(196, 138, 113, 0.22)">
+                    <div className="value-icon">{valueIcons[val.icon]}</div>
+                    <div>
+                      <h4 className="value-title">{val.title}</h4>
+                      <p className="value-desc">{val.description}</p>
+                    </div>
+                  </SpotlightCard>
                 </motion.div>
               ))}
             </div>

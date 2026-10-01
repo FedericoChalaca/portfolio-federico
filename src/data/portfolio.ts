@@ -327,9 +327,9 @@ export const technologies: Technology[] = [
 
 // Real numbers only: derived from the data above
 export const stats = [
-    { value: String(projects.length), label: 'Proyectos' },
-    { value: String(projects.filter((p) => p.demoUrl && p.demoUrl !== '#').length), label: 'Sitios en producción' },
-    { value: String(technologies.length), label: 'Tecnologías' },
+    { value: projects.length, label: 'Proyectos' },
+    { value: projects.filter((p) => p.demoUrl && p.demoUrl !== '#').length, label: 'Sitios en producción' },
+    { value: technologies.length, label: 'Tecnologías' },
 ];
 
 // ============================================================

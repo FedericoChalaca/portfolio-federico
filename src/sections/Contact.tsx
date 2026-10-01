@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Github, Linkedin, Mail, Code2, Phone, Check, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import CountUp from '../components/ui/CountUp';
 import { personalInfo, socialLinks, stats } from '../data/portfolio';
 
 export const whatsappUrl = `https://wa.me/57${personalInfo.phone}?text=${encodeURIComponent(
@@ -153,7 +154,7 @@ export const Contact: React.FC = () => {
         <div className="footer-stats">
           {stats.map((stat) => (
             <div key={stat.label} className="footer-stat">
-              <span className="footer-stat-value">{stat.value}</span>
+              <CountUp to={stat.value} duration={1.5} className="footer-stat-value" />
               <span className="footer-stat-label">{stat.label}</span>
             </div>
           ))}
