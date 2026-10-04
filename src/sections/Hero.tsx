@@ -1,14 +1,11 @@
-import React, { Suspense, lazy, useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { MapPin, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import BlurText from '../components/ui/BlurText';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 import { personalInfo } from '../data/portfolio';
-// three.js is ~1 MB: load it after the text so the hero paints first
-const InteractiveMonitor = lazy(() =>
-  import('../components/InteractiveMonitor').then((m) => ({ default: m.InteractiveMonitor })),
-);
+import { HeroLaptop } from '../components/HeroLaptop';
 
 /** Own component so each typed character re-renders only this line, not the whole hero. */
 const TypedRole: React.FC = () => {
@@ -20,7 +17,7 @@ const TypedRole: React.FC = () => {
  * Hero - Entry section with gradient name, typing animation, and CTA buttons.
  */
 export const Hero: React.FC = () => {
-  // On phones the 3D column sits below the fold: don't download or run three.js until it is close
+  // Don't download or run three.js until its column has been on screen
   const graphicRef = useRef<HTMLDivElement>(null);
   const graphicNear = useInView(graphicRef, { once: true });
 
@@ -80,11 +77,7 @@ export const Hero: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
           >
-            {graphicNear && (
-              <Suspense fallback={null}>
-                <InteractiveMonitor />
-              </Suspense>
-            )}
+            <HeroLaptop near={graphicNear} />
           </motion.div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Float, Text, ContactShadows, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import { useInView } from 'framer-motion';
+import { laptopColors } from './laptopColors';
 
 interface LaptopProps {
     color: string;
@@ -123,8 +124,13 @@ const LaptopModel: React.FC<LaptopProps> = ({ color }) => {
     );
 };
 
-export const InteractiveMonitor: React.FC = () => {
-    const [color, setColor] = useState('#3E5A47'); // Default Forest Green from palette
+interface InteractiveMonitorProps {
+    initialColor?: string;
+    onReady?: () => void; // the scene compiled and is about to draw its first frame
+}
+
+export const InteractiveMonitor: React.FC<InteractiveMonitorProps> = ({ initialColor, onReady }) => {
+    const [color, setColor] = useState(initialColor ?? laptopColors[0].value);
     const [scale, setScale] = useState(1);
     const [positionY, setPositionY] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -135,7 +141,7 @@ export const InteractiveMonitor: React.FC = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            const isMobile = window.innerWidth < 768;
+            const isMobile = window.innerWidth <= 768; // same breakpoint as the phone still
             setScale(isMobile ? 0.7 : 1); // Very slightly larger
             setPositionY(isMobile ? 1.0 : 0); // Lowered the shift upwards
         };
@@ -146,13 +152,6 @@ export const InteractiveMonitor: React.FC = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const colors = [
-        { name: 'Forest', value: '#3E5A47' },
-        { name: 'Sand', value: '#ebdcd0' },
-        { name: 'Terracotta', value: '#c48a71' },
-        { name: 'Charcoal', value: '#2c312e' }
-    ];
-
     return (
         <div className="interactive-3d-container" ref={containerRef}>
             <div className="canvas-wrapper">
@@ -161,7 +160,10 @@ export const InteractiveMonitor: React.FC = () => {
                     gl={{ antialias: true, alpha: true }}
                     dpr={[1, 2]}
                     onCreated={({ gl, scene, camera }) => {
-                        gl.compileAsync(scene, camera).then(() => setCompiled(true));
+                        gl.compileAsync(scene, camera).then(() => {
+                            setCompiled(true);
+                            onReady?.();
+                        });
                     }}
                 >
                     <PerspectiveCamera makeDefault position={[0, 2, 11.5]} fov={35} />
@@ -195,13 +197,14 @@ export const InteractiveMonitor: React.FC = () => {
             </div>
 
             <div className="color-controls">
-                {colors.map((c) => (
+                {laptopColors.map((c) => (
                     <button
                         key={c.name}
                         className={`color-btn ${color === c.value ? 'active' : ''}`}
                         onClick={() => setColor(c.value)}
                         style={{ backgroundColor: c.value }}
                         title={c.name}
+                        aria-label={`Color ${c.name}`}
                     />
                 ))}
             </div>
@@ -229,35 +232,6 @@ export const InteractiveMonitor: React.FC = () => {
         }
         .canvas-wrapper:active {
           cursor: grabbing;
-        }
-        .color-controls {
-          position: absolute;
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          display: flex;
-          gap: 12px;
-          padding: 8px 16px;
-          background: var(--color-bg-card);
-          backdrop-filter: blur(8px);
-          border-radius: var(--radius-full);
-          border: 1px solid var(--color-border);
-          z-index: 10;
-        }
-        .color-btn {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          border: 2px solid transparent;
-          cursor: pointer;
-          transition: all var(--transition-fast);
-        }
-        .color-btn.active {
-          border-color: var(--color-text);
-          transform: scale(1.2);
-        }
-        .color-btn:hover {
-          transform: scale(1.1);
         }
       `}</style>
         </div>
