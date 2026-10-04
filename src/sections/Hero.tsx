@@ -1,5 +1,5 @@
-import React, { Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
+import React, { Suspense, lazy, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { MapPin, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import BlurText from '../components/ui/BlurText';
@@ -10,11 +10,19 @@ const InteractiveMonitor = lazy(() =>
   import('../components/InteractiveMonitor').then((m) => ({ default: m.InteractiveMonitor })),
 );
 
+/** Own component so each typed character re-renders only this line, not the whole hero. */
+const TypedRole: React.FC = () => {
+  const role = useTypingEffect(personalInfo.roles);
+  return <span className="hero-role">{role}</span>;
+};
+
 /**
  * Hero - Entry section with gradient name, typing animation, and CTA buttons.
  */
 export const Hero: React.FC = () => {
-  const role = useTypingEffect(personalInfo.roles);
+  // On phones the 3D column sits below the fold: don't download or run three.js until it is close
+  const graphicRef = useRef<HTMLDivElement>(null);
+  const graphicNear = useInView(graphicRef, { once: true });
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -39,7 +47,7 @@ export const Hero: React.FC = () => {
             </h1>
 
             <div className="hero-role-wrapper">
-              <span className="hero-role">{role}</span>
+              <TypedRole />
               <span className="hero-cursor">|</span>
             </div>
 
@@ -66,14 +74,17 @@ export const Hero: React.FC = () => {
 
           {/* 3D Interactive graphic col */}
           <motion.div
+            ref={graphicRef}
             className="hero-graphic-col"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
           >
-            <Suspense fallback={null}>
-              <InteractiveMonitor />
-            </Suspense>
+            {graphicNear && (
+              <Suspense fallback={null}>
+                <InteractiveMonitor />
+              </Suspense>
+            )}
           </motion.div>
         </div>
       </div>

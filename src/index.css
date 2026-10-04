@@ -1,4 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Self-hosted variable fonts (latin subset, OFL): no third-party request blocks the first paint */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url('/fonts/inter-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/playfair-display-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/playfair-display-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* ============================================================
    DESIGN TOKENS - CSS Custom Properties (Natural/Earthy Palette)
@@ -9,6 +33,7 @@
   --color-primary-light: #567b62; /* Lighter Sage/Olive */
   --color-primary-dark: #2c4233; /* Darker Forest */
   --color-accent: #c48a71; /* Terracotta/Muted Clay */
+  --color-accent-text: #8f5238; /* Terracotta dark enough for small text (AA on light bg) */
   --color-accent-pink: #d1bfae; /* Warm Sand/Beige */
 
   --color-bg: #F4F1ED; /* Very light warm beige/alabaster */
@@ -19,7 +44,7 @@
 
   --color-text: #2f2a24; /* Soft dark brown (espresso) instead of pure black */
   --color-text-secondary: #5e564d; /* Muted brown-grey */
-  --color-text-muted: #8b8178;
+  --color-text-muted: #696057; /* AA on bg and bg-secondary */
 
   --color-border: rgba(94, 86, 77, 0.15);
   --color-border-hover: rgba(62, 90, 71, 0.3);
@@ -71,7 +96,11 @@
 
   --color-text: #ebdcd0; /* Sand */
   --color-text-secondary: #b5ac9f;
-  --color-text-muted: #8b8178;
+  --color-text-muted: #a39a8f; /* AA on dark bg and cards */
+
+  /* Forest green is unreadable on dark: text, icons and borders use sage instead */
+  --color-primary: #8ea395;
+  --color-accent-text: #c48a71;
 
   --color-border: rgba(181, 172, 159, 0.1);
   --color-border-hover: rgba(196, 138, 113, 0.4);

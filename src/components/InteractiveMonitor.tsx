@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Float, Text, ContactShadows, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
+import { useInView } from 'framer-motion';
 
 interface LaptopProps {
     color: string;
@@ -100,7 +101,9 @@ const LaptopModel: React.FC<LaptopProps> = ({ color }) => {
                             <meshStandardMaterial color="#080808" />
 
                             {/* Subtle Code Overlay */}
+                            {/* Local font: without it troika downloads one from a CDN on every visit */}
                             <Text
+                                font="/fonts/noto-sans-latin.woff"
                                 position={[0, 0, 0.01]}
                                 fontSize={0.18}
                                 color={color}
@@ -124,6 +127,11 @@ export const InteractiveMonitor: React.FC = () => {
     const [color, setColor] = useState('#3E5A47'); // Default Forest Green from palette
     const [scale, setScale] = useState(1);
     const [positionY, setPositionY] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const onScreen = useInView(containerRef);
+    // Shaders compile in the background (KHR_parallel_shader_compile); drawing starts once they are ready,
+    // so the first frame does not freeze the page
+    const [compiled, setCompiled] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -146,12 +154,19 @@ export const InteractiveMonitor: React.FC = () => {
     ];
 
     return (
-        <div className="interactive-3d-container">
+        <div className="interactive-3d-container" ref={containerRef}>
             <div className="canvas-wrapper">
-                <Canvas shadows={{ type: THREE.PCFShadowMap }} gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
+                <Canvas
+                    frameloop={compiled && onScreen ? 'always' : 'never'}
+                    gl={{ antialias: true, alpha: true }}
+                    dpr={[1, 2]}
+                    onCreated={({ gl, scene, camera }) => {
+                        gl.compileAsync(scene, camera).then(() => setCompiled(true));
+                    }}
+                >
                     <PerspectiveCamera makeDefault position={[0, 2, 11.5]} fov={35} />
                     <ambientLight intensity={1.2} />
-                    <spotLight position={[15, 20, 15]} angle={0.3} penumbra={1} intensity={2.5} castShadow />
+                    <spotLight position={[15, 20, 15]} angle={0.3} penumbra={1} intensity={2.5} />
                     <spotLight position={[-15, 20, 10]} angle={0.3} penumbra={1} intensity={1.5} color="#fff" />
                     <pointLight position={[0, 5, 0]} intensity={2} color="#fff" distance={10} />
                     <pointLight position={[5, -5, -5]} intensity={1.5} color="#fff" />

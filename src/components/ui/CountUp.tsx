@@ -54,19 +54,12 @@ export default function CountUp({
 
   const maxDecimals = Math.max(getDecimalPlaces(from), getDecimalPlaces(to));
 
+  // toFixed instead of Intl.NumberFormat: building a formatter costs ~10ms per counter at startup
   const formatValue = useCallback(
     (latest: number) => {
-      const hasDecimals = maxDecimals > 0;
-
-      const options: Intl.NumberFormatOptions = {
-        useGrouping: !!separator,
-        minimumFractionDigits: hasDecimals ? maxDecimals : 0,
-        maximumFractionDigits: hasDecimals ? maxDecimals : 0
-      };
-
-      const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
-
-      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+      const [int, dec] = latest.toFixed(maxDecimals).split('.');
+      const grouped = separator ? int.replace(/\B(?=(\d{3})+(?!\d))/g, separator) : int;
+      return dec ? `${grouped}.${dec}` : grouped;
     },
     [maxDecimals, separator]
   );

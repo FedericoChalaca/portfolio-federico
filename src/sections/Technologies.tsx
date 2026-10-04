@@ -10,7 +10,7 @@ import type { Technology, WorkType } from '../types';
 const capabilityIcons = { search: Search, shield: ShieldCheck, bell: Bell };
 
 const TechMark: React.FC<{ tech: Technology; size: number }> = ({ tech, size }) => {
-  if (tech.logo) return <img src={`/logos/${tech.logo}`} alt="" width={size} height={size} />;
+  if (tech.logo) return <img src={`/logos/${tech.logo}`} alt="" width={size} height={size} loading="lazy" />;
   const Icon = capabilityIcons[tech.icon ?? 'search'];
   return <Icon size={size} aria-hidden="true" />;
 };
@@ -155,7 +155,7 @@ export const Technologies: React.FC = () => {
           font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: var(--color-accent);
+          color: var(--color-accent-text);
           margin-bottom: 12px;
         }
         .tech-chips {

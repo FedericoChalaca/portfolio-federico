@@ -260,7 +260,7 @@ export const Contact: React.FC = () => {
         }
         .contact-role {
           font-family: 'Inter', sans-serif;
-          color: var(--color-accent); /* Terracotta */
+          color: var(--color-accent-text); /* Terracotta */
           font-size: 0.95rem;
           font-weight: 600;
           letter-spacing: 0.05em;

@@ -1,6 +1,6 @@
 // Adapted from React Bits (https://reactbits.dev, MIT + Commons Clause)
 import { motion, type Transition } from 'framer-motion';
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { memo, useEffect, useRef, useState, useMemo } from 'react';
 
 type BlurTextProps = {
   text?: string;
@@ -84,6 +84,8 @@ const BlurText: React.FC<BlurTextProps> = ({
   const fromSnapshot = animationFrom ?? defaultFrom;
   const toSnapshots = animationTo ?? defaultTo;
 
+  const animateKeyframes = useMemo(() => buildKeyframes(fromSnapshot, toSnapshots), [fromSnapshot, toSnapshots]);
+
   const stepCount = toSnapshots.length + 1;
   const totalDuration = stepDuration * (stepCount - 1);
   const times = Array.from({ length: stepCount }, (_, i) => (stepCount === 1 ? 0 : i / (stepCount - 1)));
@@ -91,8 +93,6 @@ const BlurText: React.FC<BlurTextProps> = ({
   return (
     <p ref={ref} className={className} style={{ display: 'flex', flexWrap: 'wrap' }}>
       {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
-
         const spanTransition: Transition = {
           duration: totalDuration,
           times,
@@ -121,4 +121,4 @@ const BlurText: React.FC<BlurTextProps> = ({
   );
 };
 
-export default BlurText;
+export default memo(BlurText);

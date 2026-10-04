@@ -19,7 +19,7 @@ export interface Project {
     tags: string[];
     githubUrl: string;
     demoUrl?: string;
-    previews?: { desktop: string; mobile: string }; // screenshots in /public/previews
+    previews?: { desktop: string; mobile: string }; // WebP captures in /public/previews (960x600 and 390x844)
     imageColor: string; // gradient color for the card image placeholder
 }
 

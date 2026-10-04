@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
  * Hook that tracks which nav section is currently in the viewport.
  * Observer Pattern: subscribes to intersection events.
  */
-export function useScrollSpy(sectionIds: string[], offset = 100) {
+export function useScrollSpy(sectionIds: string[]) {
     const [activeSection, setActiveSection] = useState<string>(sectionIds[0] ?? '');
 
     useEffect(() => {
@@ -20,7 +20,9 @@ export function useScrollSpy(sectionIds: string[], offset = 100) {
                         setActiveSection(id);
                     }
                 },
-                { threshold: 0.3, rootMargin: `-${offset}px 0px -40% 0px` }
+                // A thin band 20% down the viewport: the section crossing it is the active one.
+                // (A visibility threshold never fires for sections taller than the screen.)
+                { threshold: 0, rootMargin: '-20% 0px -79% 0px' }
             );
 
             observer.observe(el);
@@ -28,7 +30,7 @@ export function useScrollSpy(sectionIds: string[], offset = 100) {
         });
 
         return () => observers.forEach((o) => o.disconnect());
-    }, [sectionIds, offset]);
+    }, [sectionIds]);
 
     return activeSection;
 }

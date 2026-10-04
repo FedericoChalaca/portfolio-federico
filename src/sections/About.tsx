@@ -139,7 +139,7 @@ export const About: React.FC = () => {
           padding: 6px 16px;
           border-radius: var(--radius-sm);
           background: rgba(196, 138, 113, 0.1);
-          color: var(--color-accent);
+          color: var(--color-accent-text);
           font-size: 0.85rem;
           font-weight: 500;
           border: 1px solid rgba(196, 138, 113, 0.2);

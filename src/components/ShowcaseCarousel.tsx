@@ -79,11 +79,11 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
               }}
               initial={false}
               animate={{
-                x: `${offset * 62}%`,
-                y: dist * 36,
-                rotate: offset * 7,
-                scale: 1 - dist * 0.16,
-                opacity: dist > 1 ? 0 : 1 - dist * 0.25,
+                x: `${offset * 58}%`,
+                y: dist * 28,
+                rotate: offset * 5,
+                scale: 1 - dist * 0.22,
+                opacity: dist > 1 ? 0 : 1 - dist * 0.2,
               }}
               transition={spring}
               style={{ zIndex: n - dist, pointerEvents: dist > 1 ? 'none' : 'auto' }}
@@ -93,6 +93,8 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
                   <img
                     src={project.previews!.desktop}
                     alt={`Vista de escritorio de ${project.title}`}
+                    width={960}
+                    height={600}
                     loading="lazy"
                     draggable={false}
                   />
@@ -103,6 +105,8 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
                 <img
                   src={project.previews!.mobile}
                   alt={`Vista en celular de ${project.title}`}
+                  width={390}
+                  height={844}
                   loading="lazy"
                   draggable={false}
                 />
@@ -159,7 +163,7 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
 
       <style>{`
         .showcase {
-          --card-w: clamp(260px, 56vw, 600px);
+          --card-w: clamp(260px, 46vw, 560px);
           position: relative;
           max-width: 1100px;
           margin: 0 auto 88px;
@@ -168,7 +172,7 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         .showcase:focus-visible { box-shadow: 0 0 0 2px var(--color-primary); border-radius: var(--radius-lg); }
         .showcase-stage {
           position: relative;
-          height: calc(var(--card-w) * 0.72);
+          height: calc(var(--card-w) * 0.5 + 48px);
           display: flex;
           justify-content: center;
           align-items: flex-start;
@@ -176,59 +180,87 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
           touch-action: pan-y;
         }
         .showcase-stage:active { cursor: grabbing; }
+        /* Laptop and phone sit side by side so neither hides the other's screen */
         .showcase-card {
           position: absolute;
           top: 0;
           width: var(--card-w);
+          padding-left: calc(var(--card-w) * 0.03);
+          display: flex;
+          align-items: flex-end;
           transform-origin: 50% 120%;
           user-select: none;
         }
         .showcase-card:not(.is-active) { cursor: pointer; }
+        .device-laptop { flex: 0 0 74%; min-width: 0; }
         .device-laptop-screen {
-          aspect-ratio: 16 / 10;
-          border: 10px solid #2f2a24;
-          border-bottom-width: 14px;
-          border-radius: 14px 14px 0 0;
-          background: #2f2a24;
-          overflow: hidden;
+          position: relative;
+          padding: 9px 9px 10px;
+          border-radius: 14px 14px 3px 3px;
+          background: #26221e;
           box-shadow: var(--shadow-lg);
+        }
+        /* Camera */
+        .device-laptop-screen::before {
+          content: '';
+          position: absolute;
+          top: 3px;
+          left: 50%;
+          width: 4px;
+          height: 4px;
+          margin-left: -2px;
+          border-radius: 50%;
+          background: #5e564d;
         }
         .device-laptop-base {
-          height: 14px;
-          margin: 0 -7%;
-          border-radius: 0 0 14px 14px;
-          background: linear-gradient(to bottom, #8b8178, #5e564d);
+          position: relative;
+          height: 11px;
+          margin: 0 -4%;
+          border-radius: 2px 2px 12px 12px;
+          background: linear-gradient(to bottom, #b5aa9e, #8b8178 45%, #6d645b);
           box-shadow: var(--shadow-md);
         }
-        .device-laptop-screen img,
-        .device-phone img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: top;
-          display: block;
-          pointer-events: none;
+        /* Lid notch */
+        .device-laptop-base::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 50%;
+          width: 14%;
+          height: 4px;
+          transform: translateX(-50%);
+          border-radius: 0 0 6px 6px;
+          background: rgba(47, 42, 36, 0.35);
         }
         .device-phone {
-          position: absolute;
-          right: -5%;
-          bottom: -10%;
-          width: 23%;
-          aspect-ratio: 9 / 19.5;
-          border: 5px solid #2f2a24;
-          border-radius: 18px;
-          background: #2f2a24;
-          overflow: hidden;
+          position: relative;
+          z-index: 1;
+          flex: 0 0 23%;
+          margin-left: 1%;
+          margin-bottom: -3%; /* stands a little in front of the laptop */
+          padding: 5px;
+          border-radius: 20px;
+          background: #26221e;
           box-shadow: var(--shadow-lg);
-          transition: opacity var(--transition-base);
         }
-        .showcase-card:not(.is-active) .device-phone { opacity: 0; }
+        /* Frames take the exact ratio of the captures, so nothing gets cropped */
+        .device-laptop-screen img,
+        .device-phone img {
+          display: block;
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          object-position: top;
+          pointer-events: none;
+        }
+        .device-laptop-screen img { aspect-ratio: 16 / 10; border-radius: 3px; }
+        .device-phone img { aspect-ratio: 390 / 844; border-radius: 15px; }
         .showcase-controls {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 20px;
-          margin-top: 56px;
+          margin-top: 32px;
         }
         .showcase-arrow {
           width: 42px;
@@ -245,18 +277,29 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         }
         .showcase-arrow:hover { border-color: var(--color-primary); color: var(--color-primary); }
         .showcase-arrow:active { transform: scale(0.96); }
-        .showcase-dots { display: flex; gap: 8px; }
+        .showcase-dots { display: flex; }
+        /* The button is a 24px touch target; the visible dot is its ::before */
         .showcase-dot {
+          min-width: 24px;
+          height: 24px;
+          padding: 0 4px;
+          border: none;
+          background: transparent;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+        .showcase-dot::before {
+          content: '';
           width: 8px;
           height: 8px;
-          padding: 0;
-          border: none;
           border-radius: var(--radius-full);
-          background: var(--color-border-hover);
-          cursor: pointer;
-          transition: width var(--transition-base), background var(--transition-base);
+          background: var(--color-text-muted);
+          opacity: 0.5;
+          transition: width var(--transition-base), background var(--transition-base), opacity var(--transition-base);
         }
-        .showcase-dot.is-active { width: 24px; background: var(--color-primary); }
+        .showcase-dot.is-active::before { width: 24px; background: var(--color-primary); opacity: 1; }
         .showcase-info {
           text-align: center;
           max-width: 560px;
@@ -277,11 +320,12 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         }
         .showcase-links { justify-content: center; }
         @media (max-width: 768px) {
-          .showcase { --card-w: 78vw; margin-bottom: 64px; }
-          .device-laptop-screen { border-width: 6px; border-bottom-width: 9px; border-radius: 10px 10px 0 0; }
-          .device-laptop-base { height: 9px; }
-          .device-phone { border-width: 3px; border-radius: 12px; }
-          .showcase-controls { margin-top: 40px; }
+          .showcase { --card-w: 88vw; margin-bottom: 64px; }
+          .device-laptop-screen { padding: 5px 5px 6px; border-radius: 9px 9px 2px 2px; }
+          .device-laptop-base { height: 7px; }
+          .device-phone { padding: 3px; border-radius: 12px; }
+          .device-phone img { border-radius: 9px; }
+          .showcase-controls { margin-top: 24px; }
         }
       `}</style>
     </div>

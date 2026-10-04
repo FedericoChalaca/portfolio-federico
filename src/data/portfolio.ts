@@ -100,7 +100,7 @@ export const projects: Project[] = [
         tags: ['E-commerce', 'Carrito', 'Branding', 'Responsive'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://silentofficial-co.vercel.app/',
-        previews: { desktop: '/previews/silent-desktop.jpg', mobile: '/previews/silent-mobile.jpg' },
+        previews: { desktop: '/previews/silent-desktop.webp', mobile: '/previews/silent-mobile.webp' },
         imageColor: 'linear-gradient(135deg, #2f2a24, #5e564d)',
     },
     {
@@ -113,7 +113,7 @@ export const projects: Project[] = [
         tags: ['Landing', 'Fintech', 'Responsive', 'SEO'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://tugu-landing.vercel.app/',
-        previews: { desktop: '/previews/tugu-desktop.jpg', mobile: '/previews/tugu-mobile.jpg' },
+        previews: { desktop: '/previews/tugu-desktop.webp', mobile: '/previews/tugu-mobile.webp' },
         imageColor: 'linear-gradient(135deg, #567b62, #c48a71)',
     },
     {
@@ -126,7 +126,7 @@ export const projects: Project[] = [
         tags: ['Portafolio', 'Bilingüe ES/EN', 'Galería interactiva', 'SEO'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://sara-posso-portafolio.vercel.app/',
-        previews: { desktop: '/previews/saraposso-desktop.jpg', mobile: '/previews/saraposso-mobile.jpg' },
+        previews: { desktop: '/previews/saraposso-desktop.webp', mobile: '/previews/saraposso-mobile.webp' },
         imageColor: 'linear-gradient(135deg, #c48a71, #2f2a24)',
     },
     {
@@ -139,7 +139,7 @@ export const projects: Project[] = [
         tags: ['JavaScript', 'Mapas', 'UX Móvil', 'i18n'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://www.thegoodtrip.online/',
-        previews: { desktop: '/previews/thegoodtrip-desktop.jpg', mobile: '/previews/thegoodtrip-mobile.jpg' },
+        previews: { desktop: '/previews/thegoodtrip-desktop.webp', mobile: '/previews/thegoodtrip-mobile.webp' },
         imageColor: 'linear-gradient(135deg, #0e7f9e, #3E5A47)',
     },
     {
@@ -152,7 +152,7 @@ export const projects: Project[] = [
         tags: ['PWA', 'Autenticación', 'Mobile first', 'Fotos'],
         githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://entredos-psi.vercel.app/',
-        previews: { desktop: '/previews/entredos-desktop.jpg', mobile: '/previews/entredos-mobile.jpg' },
+        previews: { desktop: '/previews/entredos-desktop.webp', mobile: '/previews/entredos-mobile.webp' },
         imageColor: 'linear-gradient(135deg, #a16b54, #567b62)',
     },
     {
@@ -165,7 +165,7 @@ export const projects: Project[] = [
         tags: ['App híbrida', 'Offline', 'Inventario', 'Alertas'],
         githubUrl: 'https://github.com/zteve0/AppHibridaEntrga2',
         demoUrl: 'https://zteve0.github.io/AppHibridaEntrga2/',
-        previews: { desktop: '/previews/apphibrida-desktop.jpg', mobile: '/previews/apphibrida-mobile.jpg' },
+        previews: { desktop: '/previews/apphibrida-desktop.webp', mobile: '/previews/apphibrida-mobile.webp' },
         imageColor: 'linear-gradient(135deg, #3E5A47, #8ea395)',
     },
     {
