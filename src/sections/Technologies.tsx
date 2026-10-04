@@ -1,219 +1,301 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, ExternalLink, Search, ShieldCheck } from 'lucide-react';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { FilterTabs } from '../components/ui/FilterTabs';
-import { ProgressBar } from '../components/ui/ProgressBar';
-import LogoLoop from '../components/ui/LogoLoop';
 import { filterTechnologies, getTechFilters } from '../data/portfolio';
 
-import type { TechCategory } from '../types';
+import type { Technology, WorkType } from '../types';
 
-const stack = [
-  ['javascript', 'JavaScript'], ['typescript', 'TypeScript'], ['react', 'React'], ['nodedotjs', 'Node.js'],
-  ['html5', 'HTML5'], ['css', 'CSS'], ['c', 'C'], ['git', 'Git'], ['github', 'GitHub'], ['vite', 'Vite'], ['vercel', 'Vercel'],
-].map(([slug, name]) => ({
-  node: (
-    <span className="stack-logo">
-      <img src={`/logos/${slug}.svg`} alt="" width={26} height={26} /> {name}
-    </span>
-  ),
-  title: name,
-}));
+const capabilityIcons = { search: Search, shield: ShieldCheck, bell: Bell };
+
+const TechMark: React.FC<{ tech: Technology; size: number }> = ({ tech, size }) => {
+  if (tech.logo) return <img src={`/logos/${tech.logo}`} alt="" width={size} height={size} />;
+  const Icon = capabilityIcons[tech.icon ?? 'search'];
+  return <Icon size={size} aria-hidden="true" />;
+};
+
+/** What the client gets from one technology, and the real projects that prove it. */
+const TechPanel: React.FC<{ tech: Technology; className: string; panelRef?: React.Ref<HTMLDivElement> }> = ({
+  tech,
+  className,
+  panelRef,
+}) => (
+  <div ref={panelRef} className={`tech-panel ${className}`} aria-live="polite">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={tech.id}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="tech-panel-head">
+          <span className="tech-panel-mark">
+            <TechMark tech={tech} size={28} />
+          </span>
+          <h3 className="tech-panel-name">{tech.name}</h3>
+        </div>
+        <p className="tech-panel-benefit">{tech.benefit}</p>
+        <h4 className="tech-panel-label">Dónde lo he usado</h4>
+        <ul className="tech-proofs">
+          {tech.proofs.map((proof) => (
+            <li key={proof.project} className="tech-proof">
+              <div className="tech-proof-head">
+                {proof.url ? (
+                  <a href={proof.url} target="_blank" rel="noopener noreferrer" className="tech-proof-project">
+                    {proof.project} <ExternalLink size={14} aria-hidden="true" />
+                  </a>
+                ) : (
+                  <span className="tech-proof-project">{proof.project}</span>
+                )}
+                {proof.note && <span className="tech-proof-note">{proof.note}</span>}
+              </div>
+              <p className="tech-proof-built">{proof.built}</p>
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+    </AnimatePresence>
+  </div>
+);
 
 /**
- * Technologies - Filterable tech stack grid with animated progress bars.
+ * Technologies - pick a technology to see what it does for the client and
+ * which real project proves it. Filterable by kind of work.
  */
 export const Technologies: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<TechCategory>('Todos');
-  const filtered = filterTechnologies(activeCategory);
+  const [work, setWork] = useState<WorkType>('Todos');
+  const [selectedId, setSelectedId] = useState('');
+  const inlinePanel = useRef<HTMLDivElement>(null);
 
-  const handleCategoryChange = (cat: TechCategory) => setActiveCategory(cat);
+  const filtered = filterTechnologies(work);
+  // Falls back to the first one when nothing is picked or a filter hides the pick
+  const selected = filtered.find((t) => t.id === selectedId) ?? filtered[0];
+
+  // Unfiltered: one group per kind of work. Filtered: a single flat group.
+  const groups =
+    work === 'Todos'
+      ? getTechFilters()
+          .filter((f) => f.id !== 'Todos')
+          .map((f) => ({ label: f.label, techs: filtered.filter((t) => t.work[0] === f.id) }))
+          .filter((g) => g.techs.length > 0)
+      : [{ label: work, techs: filtered }];
+
+  const select = (id: string) => {
+    setSelectedId(id);
+    // On small screens the panel opens right under the group: bring it below the navbar
+    // unless it is already fully in view (on desktop it is hidden, so its height is 0)
+    requestAnimationFrame(() => {
+      const panel = inlinePanel.current;
+      if (!panel) return;
+      const rect = panel.getBoundingClientRect();
+      const top = parseFloat(getComputedStyle(panel).scrollMarginTop);
+      if (rect.height > 0 && (rect.top < top || rect.bottom > window.innerHeight)) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  };
 
   return (
     <section id="tecnologias" className="section">
       <div className="container">
         <SectionHeader
-          title="Caja de"
-          highlight="Herramientas"
-          subtitle="Las herramientas con las que construyo, y en qué proyectos las he usado."
+          title="Qué puedo"
+          highlight="Construirte"
+          subtitle="Elige una tecnología y mira para qué te sirve y en qué proyecto real la usé."
         />
 
-        <LogoLoop logos={stack} ariaLabel="Tecnologías que uso" className="stack-loop" />
+        <FilterTabs options={getTechFilters()} active={work} onChange={setWork} />
 
-        <FilterTabs
-          options={getTechFilters()}
-          active={activeCategory}
-          onChange={handleCategoryChange}
-        />
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            className="tech-grid"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.35 }}
-          >
-            {filtered.map((tech, i) => (
-              <motion.div
-                key={tech.id}
-                className="tech-card"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.06 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              >
-                {/* Icon */}
-                <div className="tech-icon-wrapper">
-                  <div
-                    className="tech-icon"
-                    style={{ background: tech.color + '20', color: tech.color }}
-                  >
-                    <span className="tech-icon-text">{tech.icon}</span>
-                  </div>
-                  <div>
-                    <h3 className="tech-name">{tech.name}</h3>
-                    <span className="tech-category-badge">{tech.category}</span>
-                  </div>
+        <div className="tech-layout">
+          <div className="tech-groups">
+            {groups.map((group) => (
+              <div key={group.label} className="tech-group" role="group" aria-label={group.label}>
+                {work === 'Todos' && <h3 className="tech-group-label">{group.label}</h3>}
+                <div className="tech-chips">
+                  {group.techs.map((tech) => (
+                    <button
+                      key={tech.id}
+                      type="button"
+                      className="tech-chip"
+                      aria-pressed={tech.id === selected.id}
+                      onClick={() => select(tech.id)}
+                    >
+                      <TechMark tech={tech} size={18} />
+                      {tech.name}
+                    </button>
+                  ))}
                 </div>
-
-                {/* Progress */}
-                <div className="tech-progress">
-                  <ProgressBar value={tech.level} color={tech.color} />
-                </div>
-
-                <p className="tech-desc">{tech.description}</p>
-
-                {/* Related projects */}
-                <div className="tech-related">
-                  <span className="tech-related-label">PROYECTOS DESTACADOS</span>
-                  <div className="tech-related-tags">
-                    {tech.relatedProjects.slice(0, 2).map((p) => (
-                      <span key={p} className="tech-related-tag">{p}</span>
-                    ))}
-                    {tech.relatedProjects.length > 2 && (
-                      <span className="tech-related-tag">+{tech.relatedProjects.length - 2}</span>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
+                {group.techs.some((t) => t.id === selected.id) && (
+                  <TechPanel tech={selected} className="tech-panel--inline" panelRef={inlinePanel} />
+                )}
+              </div>
             ))}
-          </motion.div>
-        </AnimatePresence>
+          </div>
+
+          <TechPanel tech={selected} className="tech-panel--side" />
+        </div>
       </div>
 
       <style>{`
-        .stack-loop { margin: -16px 0 48px; }
-        .stack-logo {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 1rem;
-          font-weight: 500;
-          color: var(--color-text-secondary);
-          white-space: nowrap;
+        .tech-layout {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+          gap: 40px;
+          align-items: start;
         }
-        .stack-logo img { width: 26px; height: 26px; }
-        .tech-grid {
+        .tech-groups {
+          display: flex;
+          flex-direction: column;
+          gap: 28px;
+        }
+        .tech-group-label {
+          font-size: 0.8rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--color-accent);
+          margin-bottom: 12px;
+        }
+        .tech-chips {
           display: flex;
           flex-wrap: wrap;
-          justify-content: center;
-          gap: 24px;
-          margin-top: 32px;
+          gap: 10px;
         }
-        .tech-card {
-          flex: 1 1 calc(33.333% - 24px);
-          min-width: 280px;
-          padding: 28px;
+        .tech-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 16px;
+          border-radius: var(--radius-full);
+          border: 1px solid var(--color-border);
+          background: var(--color-bg-card);
+          color: var(--color-text-secondary);
+          font-family: 'Inter', sans-serif;
+          font-size: 0.9rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: border-color var(--transition-fast), color var(--transition-fast),
+            background var(--transition-fast), transform var(--transition-fast);
+        }
+        .tech-chip img { width: 18px; height: 18px; }
+        .tech-chip:hover {
+          border-color: var(--color-primary);
+          color: var(--color-text);
+          transform: translateY(-1px);
+        }
+        .tech-chip:active { transform: scale(0.98); }
+        .tech-chip:focus-visible {
+          outline: 2px solid var(--color-primary);
+          outline-offset: 2px;
+        }
+        .tech-chip[aria-pressed='true'] {
+          border-color: var(--color-primary);
+          background: var(--color-bg-hover);
+          color: var(--color-text);
+          font-weight: 600;
+          box-shadow: var(--shadow-sm);
+        }
+        .tech-panel {
+          padding: 32px;
           border-radius: var(--radius-lg);
           background: var(--color-bg-card);
           border: 1px solid var(--color-border);
           box-shadow: var(--shadow-sm);
-          transition: all var(--transition-slow);
-          position: relative;
-          overflow: hidden;
         }
-        /* Soften the card with a natural 'texture' feel via a subtle background gradient */
-        .tech-card::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(62, 90, 71, 0.02) 0%, transparent 100%);
-          pointer-events: none;
+        .tech-panel--side {
+          position: sticky;
+          top: calc(var(--navbar-height) + 24px);
         }
-        .tech-card:hover {
-          transform: translateY(-4px);
-          box-shadow: var(--shadow-md);
-          border-color: rgba(62, 90, 71, 0.2); /* Soft forest green hover border */
+        .tech-panel--inline {
+          display: none;
+          margin-top: 16px;
+          padding: 24px;
+          scroll-margin-top: calc(var(--navbar-height) + 16px); /* clear the fixed navbar */
         }
-        .tech-icon-wrapper {
+        .tech-panel-head {
           display: flex;
-          align-items: flex-start;
-          gap: 16px;
-          margin-bottom: 24px;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 16px;
         }
-        .tech-icon {
-          width: 56px;
-          height: 56px;
+        .tech-panel-mark {
+          width: 52px;
+          height: 52px;
           border-radius: var(--radius-md);
+          background: var(--color-bg-hover);
+          color: var(--color-primary);
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); /* organic depth */
         }
-        .tech-icon-text {
-          font-size: 0.95rem;
-          font-weight: 700;
-          letter-spacing: -0.02em;
-        }
-        .tech-name {
+        .tech-panel-name {
           font-family: 'Playfair Display', serif;
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           font-weight: 600;
           color: var(--color-text);
-          margin-bottom: 4px;
           letter-spacing: -0.01em;
         }
-        .tech-category-badge {
+        .tech-panel-benefit {
+          font-size: 1.15rem;
+          line-height: 1.6;
+          color: var(--color-text);
+          margin-bottom: 28px;
+        }
+        .tech-panel-label {
           font-size: 0.75rem;
           font-weight: 600;
-          color: var(--color-accent); /* Terracotta */
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-        }
-        .tech-progress { margin-bottom: 16px; }
-        .tech-desc {
-          font-size: 0.95rem;
-          color: var(--color-text-secondary);
-          line-height: 1.6;
-          margin-bottom: 20px;
-          font-weight: 300;
-        }
-        .tech-related-label {
-          font-family: 'Inter', sans-serif;
-          font-size: 0.7rem;
-          font-weight: 600;
           letter-spacing: 0.1em;
-          color: var(--color-text-muted);
           text-transform: uppercase;
-          display: block;
-          margin-bottom: 10px;
+          color: var(--color-text-muted);
+          margin-bottom: 12px;
         }
-        .tech-related-tags {
+        .tech-proofs {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .tech-proof {
+          padding-left: 14px;
+          border-left: 2px solid var(--color-accent);
+        }
+        .tech-proof-head {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 4px;
         }
-        .tech-related-tag {
-          padding: 4px 12px;
-          border-radius: var(--radius-sm);
-          background: rgba(196, 138, 113, 0.05); /* very soft terracotta bg */
+        .tech-proof-project {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-weight: 600;
+          color: var(--color-text);
+          text-decoration: none;
+        }
+        a.tech-proof-project:hover { color: var(--color-primary); text-decoration: underline; }
+        .tech-proof-note {
+          padding: 2px 10px;
+          border-radius: var(--radius-full);
+          background: var(--color-bg-secondary);
           color: var(--color-text-secondary);
-          font-size: 0.8rem;
+          font-size: 0.75rem;
           font-weight: 500;
-          border: 1px solid rgba(196, 138, 113, 0.15);
+        }
+        .tech-proof-built {
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: var(--color-text-secondary);
+          font-weight: 300;
+        }
+        @media (max-width: 900px) {
+          .tech-layout { grid-template-columns: 1fr; }
+          .tech-panel--side { display: none; }
+          .tech-panel--inline { display: block; }
         }
       `}</style>
     </section>

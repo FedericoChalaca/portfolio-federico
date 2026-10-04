@@ -6,7 +6,8 @@ export type ProjectStatus = 'Completado' | 'En Progreso';
 
 export type ProjectCategory = 'Todos' | 'E-commerce' | 'Web Apps' | 'Arquitectura' | 'Herramientas';
 
-export type TechCategory = 'Todos' | 'Frontend' | 'Backend' | 'Herramientas';
+// Kinds of work a client can hire; 'Todos' is the unfiltered view
+export type WorkType = 'Todos' | 'Sitios y landings' | 'Apps web' | 'Apps móviles' | 'Tiendas y pagos' | 'Backend y datos';
 
 export interface Project {
     id: string;
@@ -22,15 +23,21 @@ export interface Project {
     imageColor: string; // gradient color for the card image placeholder
 }
 
+export interface TechProof {
+    project: string;
+    built: string; // what was built with this technology in that project
+    url?: string;
+    note?: string; // e.g. 'En desarrollo', 'Proyecto universitario'
+}
+
 export interface Technology {
     id: string;
     name: string;
-    category: TechCategory;
-    level: number; // 0-100
-    description: string;
-    color: string;
-    icon: string; // emoji or abbreviation for display
-    relatedProjects: string[];
+    logo?: string; // file name in /public/logos; capabilities (SEO, tests...) use `icon` instead
+    icon?: 'search' | 'shield' | 'bell';
+    work: Exclude<WorkType, 'Todos'>[]; // the first one is the group it is listed under
+    benefit: string; // what the client gets out of it
+    proofs: TechProof[];
 }
 
 export interface NavItem {
