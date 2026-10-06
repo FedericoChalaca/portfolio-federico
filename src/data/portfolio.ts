@@ -130,6 +130,18 @@ export const projects: Project[] = [
         imageColor: 'linear-gradient(135deg, #c48a71, #2f2a24)',
     },
     {
+        id: 'bionary',
+        title: 'Bionary',
+        description: 'Portafolio bilingüe para Dany, divulgadora e ilustradora científica.',
+        longDescription: 'Portafolio para Dany (@bionary_), divulgadora e ilustradora científica: reúne sus ilustraciones, sus videos y su perfil. Incluye el libro de los animales de Colombia, una galería animada con la ficha de cada animal y sus datos con fuente. Bilingüe ES/EN y pensado primero para celular.',
+        status: 'Completado',
+        category: 'Web Apps',
+        tags: ['React', 'TypeScript', 'Framer Motion', 'Bilingüe ES/EN'],
+        demoUrl: 'https://portafolio-bionary.vercel.app/',
+        previews: { desktop: '/previews/bionary-desktop.webp', mobile: '/previews/bionary-mobile.webp' },
+        imageColor: 'linear-gradient(135deg, #7a2a2a, #1c1f1d)',
+    },
+    {
         id: 'parchate',
         title: 'Párchate',
         description: 'Landing de mi marca de ropa pintada a mano con cloro y pintura, donde cada pieza es 1 de 1.',
@@ -262,6 +274,7 @@ export const technologies: Technology[] = [
         work: ['Sitios y landings'],
         benefit: 'Animaciones y 3D para que tu marca se recuerde.',
         proofs: [
+            { project: 'Bionary', built: 'El libro de los animales, una galería animada, y el retrato del inicio, con Framer Motion.', url: 'https://portafolio-bionary.vercel.app/' },
             { project: 'Portfolio Personal', built: 'La laptop 3D interactiva, el carrusel de proyectos y las animaciones de este mismo sitio.' },
         ],
     },
@@ -286,6 +299,7 @@ export const technologies: Technology[] = [
             { project: 'Tugu', built: 'Landing de la fintech, en producción.', url: 'https://tugu-landing.vercel.app/' },
             { project: 'SILENT®', built: 'Tienda en línea de la marca.', url: 'https://silentofficial-co.vercel.app/' },
             { project: 'Sara Posso', built: 'Portafolio de una diseñadora de vestuario.', url: 'https://sara-posso-portafolio.vercel.app/' },
+            { project: 'Bionary', built: 'Portafolio de una divulgadora e ilustradora científica.', url: 'https://portafolio-bionary.vercel.app/' },
             { project: 'Entre Dos', built: 'App web con tareas programadas y almacenamiento de fotos.', url: 'https://entredos-psi.vercel.app/' },
         ],
     },
@@ -297,6 +311,7 @@ export const technologies: Technology[] = [
         benefit: 'Interfaces que responden al instante, como una app, sin recargar la página.',
         proofs: [
             { project: 'Vuelta', built: 'App de domicilios de barrio con tres vistas: cliente, domiciliario y administrador.' },
+            { project: 'Bionary', built: 'Portafolio bilingüe con rutas e idiomas hechos a mano, sin librerías adicionales.', url: 'https://portafolio-bionary.vercel.app/' },
             { project: 'ERP Tienda de Ropa', built: 'Sistema de inventario, ventas, clientes y reportes.', url: 'https://github.com/Emanuel0428/Tienda-Ropa-ERP' },
             { project: 'Portfolio Personal', built: 'Este mismo sitio.' },
         ],
@@ -320,6 +335,7 @@ export const technologies: Technology[] = [
         benefit: 'Menos errores en producción: muchos fallos se detectan antes de publicar.',
         proofs: [
             { project: 'Vuelta', built: 'Toda la app de domicilios y sus funciones de servidor.' },
+            { project: 'Bionary', built: 'Todo el sitio, incluidas sus rutas y traducciones.', url: 'https://portafolio-bionary.vercel.app/' },
             { project: 'Portfolio Personal', built: 'Los componentes y datos de este sitio.' },
         ],
     },
