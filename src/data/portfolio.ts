@@ -251,6 +251,25 @@ export const projects: Project[] = [
 ];
 
 // ============================================================
+// PERSONAL AI  (Nimbo: open source, shown in its own space)
+// ============================================================
+export const personalAi = {
+    name: 'Nimbo',
+    heading: 'Mi IA personal, que también puedes usar',
+    description: 'Nimbo es un compañero flotante para Claude Code en Windows. Vive en el borde de arriba de la pantalla y me muestra qué está haciendo cada uno de mis chats. Lo hice para mi día a día y lo publiqué con código abierto para que cualquiera lo instale.',
+    points: [
+        { title: 'Tus chats en vivo', text: 'Ves qué hace cada chat de Claude Code y apruebas permisos sin ir a la terminal.' },
+        { title: 'Sin API key', text: 'Usa el Claude que ya tienes instalado y con sesión iniciada.' },
+        { title: 'Privado', text: 'No tiene servidores ni telemetría: nada llega a mí ni a nadie más.' },
+    ],
+    tags: ['Electron', 'JavaScript', 'Código abierto', 'Licencia MIT'],
+    repoUrl: 'https://github.com/FedericoChalaca/nimbo',
+    downloadUrl: 'https://github.com/FedericoChalaca/nimbo/releases/latest',
+    requirements: 'Necesita Windows y Claude Code instalado.',
+    image: '/nimbo/nimbo.webp',
+};
+
+// ============================================================
 // TECHNOLOGIES
 // ============================================================
 export const technologies: Technology[] = [
@@ -452,6 +471,7 @@ export const technologies: Technology[] = [
         work: ['Backend y datos'],
         benefit: 'Un backend para que tu app guarde datos y se conecte con otros servicios.',
         proofs: [
+            { project: 'Nimbo', built: 'App de escritorio en Electron que se conecta con Claude Code, GitHub y Trello.', url: 'https://github.com/FedericoChalaca/nimbo' },
             { project: 'ERP Tienda de Ropa', built: 'El servidor del sistema de inventario y ventas.', url: 'https://github.com/Emanuel0428/Tienda-Ropa-ERP' },
         ],
     },
@@ -499,7 +519,7 @@ export const technologies: Technology[] = [
 
 // Real numbers only: derived from the data above
 export const stats = [
-    { value: projects.length, label: 'Proyectos' },
+    { value: projects.length + 1, label: 'Proyectos' }, // + Nimbo, which has its own space
     { value: projects.filter((p) => p.demoUrl && p.demoUrl !== '#').length, label: 'Sitios en producción' },
     { value: technologies.filter((t) => t.logo).length, label: 'Tecnologías' },
 ];

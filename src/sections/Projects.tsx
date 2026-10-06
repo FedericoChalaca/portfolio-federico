@@ -5,6 +5,7 @@ import { SectionHeader } from '../components/ui/SectionHeader';
 import { FilterTabs } from '../components/ui/FilterTabs';
 import { Badge } from '../components/ui/Badge';
 import { ShowcaseCarousel } from '../components/ShowcaseCarousel';
+import { PersonalAi } from '../components/PersonalAi';
 import { filterProjects, getProjectFilters, projects } from '../data/portfolio';
 
 import type { ProjectCategory } from '../types';
@@ -128,6 +129,8 @@ export const Projects: React.FC = () => {
             </button>
           </div>
         )}
+
+        <PersonalAi />
       </div>
 
       <style>{`
