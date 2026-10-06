@@ -130,6 +130,18 @@ export const projects: Project[] = [
         imageColor: 'linear-gradient(135deg, #c48a71, #2f2a24)',
     },
     {
+        id: 'parchate',
+        title: 'Párchate',
+        description: 'Landing de mi marca de ropa pintada a mano con cloro y pintura, donde cada pieza es 1 de 1.',
+        longDescription: 'Landing de Párchate, mi marca de ropa pintada a mano: diseñé la marca, pinté las prendas e hice la página. HTML, CSS y JavaScript sin dependencias, con animaciones ligadas al scroll, galería en diálogo nativo y tema oscuro con un solo acento.',
+        status: 'Completado',
+        category: 'Web Apps',
+        tags: ['Marca propia', 'HTML', 'CSS', 'JavaScript'],
+        demoUrl: 'https://parchate-omega.vercel.app/',
+        previews: { desktop: '/previews/parchate-desktop.webp', mobile: '/previews/parchate-mobile.webp' },
+        imageColor: 'linear-gradient(135deg, #4a5240, #1c1f1d)',
+    },
+    {
         id: 'the-good-trip',
         title: 'The Good Trip',
         description: 'Prototipo de aplicación de transporte tipo ride-hailing con flujos completos de pasajero y conductor.',
@@ -237,6 +249,7 @@ export const technologies: Technology[] = [
         work: ['Sitios y landings'],
         benefit: 'Sitios livianos que cargan rápido en cualquier celular, hechos a la medida de tu marca.',
         proofs: [
+            { project: 'Párchate', built: 'Landing de mi marca de ropa, sin dependencias ni build: animaciones ligadas al scroll en CSS y galería en diálogo nativo.', url: 'https://parchate-omega.vercel.app/' },
             { project: 'The Good Trip', built: 'Prototipo de app de transporte con vistas de cliente y conductor, sin frameworks.', url: 'https://www.thegoodtrip.online/' },
             { project: 'BigoteS Pizzeria', built: 'Web de pizzería con menú, galería, contacto, mapa y modo oscuro.', url: 'https://github.com/FedericoChalaca/BigoteS-pizzeria' },
             { project: 'Wing House', built: 'Sitio de restaurante con carta digital y promociones.' },

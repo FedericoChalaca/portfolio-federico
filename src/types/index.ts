@@ -17,7 +17,7 @@ export interface Project {
     status: ProjectStatus;
     category: ProjectCategory;
     tags: string[];
-    githubUrl: string;
+    githubUrl?: string; // omitted when the repository is private
     demoUrl?: string;
     previews?: { desktop: string; mobile: string }; // WebP captures in /public/previews (960x600 and 390x844)
     imageColor: string; // gradient color for the card image placeholder

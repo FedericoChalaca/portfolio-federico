@@ -154,9 +154,11 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
                 <ExternalLink size={15} /> Ver Demo
               </a>
             )}
-            <a href={current.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-              <Github size={16} /> GitHub
-            </a>
+            {current.githubUrl && (
+              <a href={current.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                <Github size={16} /> GitHub
+              </a>
+            )}
           </div>
         </motion.div>
       </AnimatePresence>

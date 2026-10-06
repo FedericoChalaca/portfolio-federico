@@ -89,14 +89,16 @@ export const Projects: React.FC = () => {
                         <ExternalLink size={15} /> Ver Demo
                       </a>
                     )}
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="project-link"
-                    >
-                      <Github size={16} /> GitHub
-                    </a>
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-link"
+                      >
+                        <Github size={16} /> GitHub
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
