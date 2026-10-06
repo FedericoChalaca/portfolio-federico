@@ -267,6 +267,12 @@ export const personalAi = {
     downloadUrl: 'https://github.com/FedericoChalaca/nimbo/releases/latest',
     requirements: 'Necesita Windows y Claude Code instalado.',
     image: '/nimbo/nimbo.webp',
+    video: {
+        src: '/nimbo/nimbo-intro.mp4',
+        poster: '/nimbo/nimbo-intro-poster.webp',
+        captions: '/nimbo/nimbo-intro.es.vtt',
+        note: 'Intro de 10 segundos. Es un video conceptual; la interfaz real es la de la captura.',
+    },
 };
 
 // ============================================================

@@ -8,9 +8,29 @@ import { personalAi } from '../data/portfolio';
  */
 export const PersonalAi: React.FC = () => (
   <aside className="ai-spot" aria-labelledby="ai-spot-title">
-    <div className="ai-spot-text">
+    <header className="ai-spot-head">
       <p className="ai-spot-name">{personalAi.name}</p>
       <h3 id="ai-spot-title" className="ai-spot-title">{personalAi.heading}</h3>
+    </header>
+
+    <figure className="ai-spot-video">
+      {/* preload="none": nothing is downloaded until the visitor presses play */}
+      <video
+        controls
+        playsInline
+        preload="none"
+        poster={personalAi.video.poster}
+        width={1280}
+        height={720}
+        aria-label="Video de presentación de Nimbo, 10 segundos"
+      >
+        <source src={personalAi.video.src} type="video/mp4" />
+        <track kind="captions" src={personalAi.video.captions} srcLang="es" label="Español" />
+      </video>
+      <figcaption>{personalAi.video.note}</figcaption>
+    </figure>
+
+    <div className="ai-spot-text">
       <p className="ai-spot-lead">{personalAi.description}</p>
 
       <ul className="ai-spot-points">
@@ -52,7 +72,7 @@ export const PersonalAi: React.FC = () => (
         .ai-spot {
           display: grid;
           grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-          gap: 48px;
+          gap: 32px 48px;
           align-items: center;
           max-width: 900px;
           margin: 72px auto 0;
@@ -77,7 +97,23 @@ export const PersonalAi: React.FC = () => (
           line-height: 1.2;
           letter-spacing: -0.01em;
           color: var(--color-text);
-          margin-bottom: 16px;
+        }
+        .ai-spot-head, .ai-spot-video { grid-column: 1 / -1; }
+        .ai-spot-video { margin: 0; }
+        .ai-spot-video video {
+          display: block;
+          width: 100%;
+          height: auto;
+          aspect-ratio: 16 / 9;
+          border-radius: var(--radius-md);
+          background: #10111f;
+          border: 1px solid var(--color-border);
+          box-shadow: var(--shadow-md);
+        }
+        .ai-spot-video figcaption {
+          margin-top: 10px;
+          font-size: 0.85rem;
+          color: var(--color-text-muted);
         }
         .ai-spot-lead {
           color: var(--color-text-secondary);
