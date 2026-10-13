@@ -4,8 +4,6 @@
 
 export type ProjectStatus = 'Completado' | 'En Progreso';
 
-export type ProjectCategory = 'Todos' | 'E-commerce' | 'Web Apps' | 'Arquitectura' | 'Herramientas';
-
 // Kinds of work a client can hire; 'Todos' is the unfiltered view
 export type WorkType = 'Todos' | 'Sitios y landings' | 'Apps web' | 'Apps móviles' | 'Tiendas y pagos' | 'Backend y datos';
 
@@ -15,12 +13,10 @@ export interface Project {
     description: string;
     longDescription: string;
     status: ProjectStatus;
-    category: ProjectCategory;
     tags: string[];
     githubUrl?: string; // omitted when the repository is private
     demoUrl?: string;
     previews?: { desktop: string; mobile: string }; // WebP captures in /public/previews (960x600 and 390x844)
-    imageColor: string; // gradient color for the card image placeholder
 }
 
 export interface TechProof {

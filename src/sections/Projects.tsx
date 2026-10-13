@@ -1,239 +1,129 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { SectionHeader } from '../components/ui/SectionHeader';
-import { FilterTabs } from '../components/ui/FilterTabs';
 import { Badge } from '../components/ui/Badge';
 import { ShowcaseCarousel } from '../components/ShowcaseCarousel';
 import { PersonalAi } from '../components/PersonalAi';
-import { filterProjects, getProjectFilters, projects } from '../data/portfolio';
+import { projects } from '../data/portfolio';
 
-import type { ProjectCategory } from '../types';
-
-const ITEMS_PER_PAGE = 6;
+// Live sites with captures go in the carousel; the rest get a compact list
 const showcaseProjects = projects.filter((p) => p.previews);
+const moreProjects = projects.filter((p) => !p.previews);
 
 /**
- * Projects - Filterable, paginated project grid.
- * Uses Strategy Pattern: filterProjects() is pure and injected, not embedded.
+ * Projects - the carousel of live sites, a compact list for everything else, and Nimbo's own space.
  */
-export const Projects: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('Todos');
-  const [page, setPage] = useState(1);
+export const Projects: React.FC = () => (
+  <section id="proyectos" className="section" style={{ background: 'var(--color-bg-secondary)' }}>
+    <div className="container">
+      <SectionHeader
+        title="Trabajo"
+        highlight="Real"
+        subtitle="Sitios en producción que puedes abrir ahora mismo, y el resto de mis proyectos."
+      />
 
-  const filtered = filterProjects(activeCategory);
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+      <ShowcaseCarousel projects={showcaseProjects} />
 
-  const handleCategoryChange = (cat: ProjectCategory) => {
-    setActiveCategory(cat);
-    setPage(1);
-  };
+      <div className="more-projects">
+        <h3 className="more-title">Más proyectos</h3>
+        <p className="more-subtitle">Código abierto, proyectos académicos y trabajos sin sitio público.</p>
 
-  return (
-    <section id="proyectos" className="section" style={{ background: 'var(--color-bg-secondary)' }}>
-      <div className="container">
-        <SectionHeader
-          title="Trabajo"
-          highlight="Real"
-          subtitle="Sitios en producción que puedes abrir ahora mismo, y el resto de mis proyectos."
-        />
-
-        <ShowcaseCarousel projects={showcaseProjects} />
-
-        <FilterTabs
-          options={getProjectFilters()}
-          active={activeCategory}
-          onChange={handleCategoryChange}
-        />
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory + page}
-            className="projects-grid"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.35 }}
-          >
-            {paginated.map((project) => (
-              <div key={project.id} className="project-card">
-                {/* Image */}
-                <div className="project-image" style={{ background: project.imageColor }}>
-                  <div className="project-image-overlay">
-                    <span className="project-title-overlay">{project.title}</span>
-                  </div>
-                  <div className="project-badge-wrapper">
-                    <Badge status={project.status} />
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="project-content">
-                  <h3 className="project-title">{project.title}</h3>
-                  <p className="project-description">{project.description}</p>
-
-                  <div className="project-tags">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="project-tag">{tag}</span>
-                    ))}
-                  </div>
-
-                  <div className="project-links">
-                    {project.demoUrl && project.demoUrl !== '#' && (
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link-demo"
-                      >
-                        <ExternalLink size={15} /> Ver Demo
-                      </a>
-                    )}
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                      >
-                        <Github size={16} /> GitHub
-                      </a>
-                    )}
-                  </div>
-                </div>
+        <div className="more-grid">
+          {moreProjects.map((project) => (
+            <article key={project.id} className="more-item">
+              <div className="more-head">
+                <h4 className="more-name">{project.title}</h4>
+                {project.status === 'En Progreso' && <Badge status={project.status} />}
               </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+              <p className="more-desc">{project.longDescription}</p>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="pagination">
-            <button
-              className="page-btn"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-            >
-              ‹ Anterior
-            </button>
-            <span className="page-info">
-              Página {page} de {totalPages} &nbsp;·&nbsp; {(page - 1) * ITEMS_PER_PAGE + 1}–{Math.min(page * ITEMS_PER_PAGE, filtered.length)} de {filtered.length}
-            </span>
-            <button
-              className="page-btn"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-            >
-              Siguiente ›
-            </button>
-          </div>
-        )}
+              <div className="project-tags">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="project-tag">{tag}</span>
+                ))}
+              </div>
 
-        <PersonalAi />
+              <div className="project-links">
+                {project.demoUrl && (
+                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                    <ExternalLink size={15} /> Ver sitio
+                  </a>
+                )}
+                {project.githubUrl && (
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                    <Github size={16} /> Ver código
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
 
-      <style>{`
+      <PersonalAi />
+    </div>
+
+    <style>{`
         /* The fanned showcase cards reach past the viewport edge */
         #proyectos { overflow-x: clip; }
-        .projects-grid {
+
+        .more-projects {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        .more-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: var(--color-text);
+          letter-spacing: -0.01em;
+          margin-bottom: 6px;
+        }
+        .more-subtitle {
+          color: var(--color-text-secondary);
+          font-weight: 300;
+          margin-bottom: 28px;
+        }
+        .more-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 20px;
+        }
+        .more-item {
           display: flex;
           flex-direction: column;
-          gap: 60px;
-          margin-bottom: 56px;
-          max-width: 900px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .project-card {
+          padding: 28px;
           border-radius: var(--radius-md);
           background: var(--color-bg-card);
           border: 1px solid var(--color-border);
-          overflow: hidden;
           box-shadow: var(--shadow-sm);
-          transition: all var(--transition-slow);
+        }
+        /* The first one is the strongest piece of code: give it the full row */
+        .more-item:first-child { grid-column: 1 / -1; }
+        .more-head {
           display: flex;
-          flex-direction: row;
-          height: 350px;
-        }
-        .project-card:nth-child(even) {
-          flex-direction: row-reverse;
-        }
-        .project-card:hover {
-          transform: translateY(-4px);
-          box-shadow: var(--shadow-md);
-          border-color: rgba(196, 138, 113, 0.3); /* Terracotta hover */
-        }
-        .project-image {
-          width: 45%;
-          height: 100%;
-          position: relative;
-          display: flex;
+          flex-wrap: wrap;
           align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          flex-shrink: 0;
+          gap: 12px;
+          margin-bottom: 10px;
         }
-        /* Soften the solid color backgrounds of the image placeholders */
-        .project-image::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: var(--color-bg-glass);
-          opacity: 0.1;
-          pointer-events: none;
-        }
-        .project-image-overlay {
-          position: absolute;
-          inset: 0;
-          background: rgba(47, 42, 36, 0.4); /* Espresso overlay */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 16px;
-          transition: background var(--transition-base);
-        }
-        .project-card:hover .project-image-overlay {
-          background: rgba(47, 42, 36, 0.2);
-        }
-        .project-title-overlay {
-          color: #F4F1ED;
+        .more-name {
           font-family: 'Playfair Display', serif;
-          font-weight: 500;
-          font-size: 1.4rem;
-          text-align: center;
-          letter-spacing: 0.02em;
-          text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-        }
-        .project-badge-wrapper {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          z-index: 1;
-        }
-        .project-content {
-          padding: 32px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          width: 55%;
-        }
-        .project-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.6rem;
+          font-size: 1.3rem;
           font-weight: 600;
           color: var(--color-text);
-          margin-bottom: 12px;
           letter-spacing: -0.01em;
         }
-        .project-description {
-          font-size: 1rem;
+        .more-desc {
           color: var(--color-text-secondary);
           line-height: 1.7;
-          margin-bottom: 24px;
           font-weight: 300;
+          margin-bottom: 20px;
           flex-grow: 1;
         }
+        .more-item .project-tags { margin-bottom: 20px; }
+
+        /* Shared by the carousel, this list and Nimbo's space */
         .project-tags {
           display: flex;
           flex-wrap: wrap;
@@ -292,57 +182,11 @@ export const Projects: React.FC = () => {
           transform: translateY(-1px);
           filter: brightness(1.08);
         }
-        
+
         @media (max-width: 768px) {
-          .project-card, .project-card:nth-child(even) {
-            flex-direction: column;
-            height: auto;
-          }
-          .project-image {
-            width: 100%;
-            height: 220px;
-          }
-          .project-content {
-            width: 100%;
-            padding: 24px;
-          }
+          .more-grid { grid-template-columns: 1fr; }
+          .more-item { padding: 22px; }
         }
-        .pagination {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 24px;
-          flex-wrap: wrap;
-        }
-        .page-btn {
-          padding: 10px 24px;
-          border-radius: var(--radius-sm);
-          border: 1px solid var(--color-border);
-          background: transparent;
-          color: var(--color-text);
-          font-size: 0.9rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all var(--transition-base);
-          font-family: 'Inter', sans-serif;
-        }
-        .page-btn:hover:not(:disabled) {
-          border-color: var(--color-primary);
-          background: rgba(62, 90, 71, 0.05);
-          color: var(--color-primary);
-        }
-        .page-btn:disabled {
-          opacity: 0.3; 
-          cursor: not-allowed; 
-        }
-        .page-info {
-          color: var(--color-text-muted);
-          font-size: 0.9rem;
-          font-weight: 400;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-        }
-      `}</style>
-    </section>
-  );
-};
+    `}</style>
+  </section>
+);

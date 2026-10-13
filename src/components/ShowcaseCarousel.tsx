@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink, Github } from 'lucide-react';
@@ -24,7 +24,17 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
   const [active, setActive] = useState(0);
   const reduceMotion = useReducedMotion();
   const dragged = useRef(false);
+  const tabsRef = useRef<HTMLDivElement>(null);
   const n = projects.length;
+
+  // Keep the active name centered in its strip (the strip scrolls sideways on small screens)
+  useEffect(() => {
+    const strip = tabsRef.current;
+    const tab = strip?.children[active] as HTMLElement | undefined;
+    if (strip && tab) {
+      strip.scrollTo({ left: tab.offsetLeft - (strip.clientWidth - tab.offsetWidth) / 2, behavior: 'smooth' });
+    }
+  }, [active]);
 
   if (n === 0) return null;
 
@@ -120,15 +130,17 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         <button className="showcase-arrow" onClick={() => go(-1)} aria-label="Sitio anterior">
           <ChevronLeft size={20} />
         </button>
-        <div className="showcase-dots">
+        <div className="showcase-tabs" ref={tabsRef}>
           {projects.map((p, i) => (
             <button
               key={p.id}
-              className={`showcase-dot ${i === active ? 'is-active' : ''}`}
+              type="button"
+              className="showcase-tab"
+              aria-pressed={i === active}
               onClick={() => setActive(i)}
-              aria-label={`Ir a ${p.title}`}
-              aria-current={i === active}
-            />
+            >
+              {p.title}
+            </button>
           ))}
         </div>
         <button className="showcase-arrow" onClick={() => go(1)} aria-label="Sitio siguiente">
@@ -148,6 +160,11 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         >
           <h3 className="showcase-title">{current.title}</h3>
           <p className="showcase-desc">{current.longDescription}</p>
+          <div className="project-tags showcase-tags">
+            {current.tags.map((tag) => (
+              <span key={tag} className="project-tag">{tag}</span>
+            ))}
+          </div>
           <div className="project-links showcase-links">
             {current.demoUrl && (
               <a href={current.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link-demo">
@@ -261,10 +278,11 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 20px;
+          gap: 12px;
           margin-top: 32px;
         }
         .showcase-arrow {
+          flex: 0 0 auto;
           width: 42px;
           height: 42px;
           border-radius: var(--radius-full);
@@ -279,29 +297,40 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         }
         .showcase-arrow:hover { border-color: var(--color-primary); color: var(--color-primary); }
         .showcase-arrow:active { transform: scale(0.96); }
-        .showcase-dots { display: flex; }
-        /* The button is a 24px touch target; the visible dot is its ::before */
-        .showcase-dot {
-          min-width: 24px;
-          height: 24px;
-          padding: 0 4px;
-          border: none;
-          background: transparent;
+        .showcase-tabs {
+          position: relative; /* offsetLeft of each name is measured against the strip */
           display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
+          gap: 8px;
+          min-width: 0;
+          padding: 4px;
+          overflow-x: auto;
+          scrollbar-width: none;
         }
-        .showcase-dot::before {
-          content: '';
-          width: 8px;
-          height: 8px;
+        .showcase-tabs::-webkit-scrollbar { display: none; }
+        .showcase-tab {
+          flex: 0 0 auto;
+          min-height: 36px;
+          padding: 8px 14px;
           border-radius: var(--radius-full);
-          background: var(--color-text-muted);
-          opacity: 0.5;
-          transition: width var(--transition-base), background var(--transition-base), opacity var(--transition-base);
+          border: 1px solid var(--color-border);
+          background: var(--color-bg-card);
+          color: var(--color-text-secondary);
+          font-family: 'Inter', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 500;
+          white-space: nowrap;
+          cursor: pointer;
+          transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
         }
-        .showcase-dot.is-active::before { width: 24px; background: var(--color-primary); opacity: 1; }
+        .showcase-tab:hover { border-color: var(--color-primary); color: var(--color-text); }
+        .showcase-tab:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+        .showcase-tab[aria-pressed='true'] {
+          background: var(--gradient-primary);
+          border-color: transparent;
+          color: #fff;
+          font-weight: 600;
+          box-shadow: var(--shadow-button);
+        }
         .showcase-info {
           text-align: center;
           max-width: 560px;
@@ -318,8 +347,9 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
           color: var(--color-text-secondary);
           font-weight: 300;
           line-height: 1.7;
-          margin-bottom: 20px;
+          margin-bottom: 16px;
         }
+        .showcase-tags { justify-content: center; margin-bottom: 20px; }
         .showcase-links { justify-content: center; }
         @media (max-width: 768px) {
           .showcase { --card-w: 88vw; margin-bottom: 64px; }

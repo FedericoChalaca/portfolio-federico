@@ -4,7 +4,6 @@ import type {
     Technology,
     NavItem,
     SocialLink,
-    ProjectCategory,
     WorkType,
     FilterOption,
 } from '../types';
@@ -96,12 +95,9 @@ export const projects: Project[] = [
         description: 'Tienda online de streetwear premium con catálogo por drops y carrito de compras.',
         longDescription: 'E-commerce para SILENT®, marca de streetwear: lanzamientos por drop, fichas de producto, carrito y una identidad visual tipográfica de alto contraste pensada para vender desde el celular.',
         status: 'Completado',
-        category: 'E-commerce',
         tags: ['E-commerce', 'Carrito', 'Branding', 'Responsive'],
-        githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://silentofficial-co.vercel.app/',
         previews: { desktop: '/previews/silent-desktop.webp', mobile: '/previews/silent-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #2f2a24, #5e564d)',
     },
     {
         id: 'tugu-landing',
@@ -109,12 +105,10 @@ export const projects: Project[] = [
         description: 'Landing page para Tugu, fintech de datáfonos con lector de huella digital.',
         longDescription: 'Landing para Tugu: producto, seguridad biométrica y flujo de registro en tres pasos, con respaldo de Ruta N y la Universidad Pontificia Bolivariana. Diseño responsive con foco en conversión.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['Landing', 'Fintech', 'Responsive', 'SEO'],
-        githubUrl: 'https://github.com/FedericoChalaca',
+        githubUrl: 'https://github.com/FedericoChalaca/Tugu-Landigpage',
         demoUrl: 'https://tugu-landing.vercel.app/',
         previews: { desktop: '/previews/tugu-desktop.webp', mobile: '/previews/tugu-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #567b62, #c48a71)',
     },
     {
         id: 'sara-posso',
@@ -122,12 +116,10 @@ export const projects: Project[] = [
         description: 'Portafolio bilingüe para una diseñadora de vestuario y modelo de Medellín.',
         longDescription: 'Sitio portafolio para Sara Posso: proyectos de diseño, modelaje y metodología, galería de fotos arrastrable e interfaz bilingüe ES/EN con SEO local.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['Portafolio', 'Bilingüe ES/EN', 'Galería interactiva', 'SEO'],
-        githubUrl: 'https://github.com/FedericoChalaca',
+        githubUrl: 'https://github.com/FedericoChalaca/sara-posso-portafolio',
         demoUrl: 'https://sara-posso-portafolio.vercel.app/',
         previews: { desktop: '/previews/saraposso-desktop.webp', mobile: '/previews/saraposso-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #c48a71, #2f2a24)',
     },
     {
         id: 'bionary',
@@ -135,11 +127,9 @@ export const projects: Project[] = [
         description: 'Portafolio bilingüe para Dany, divulgadora e ilustradora científica.',
         longDescription: 'Portafolio para Dany (@bionary_), divulgadora e ilustradora científica: reúne sus ilustraciones, sus videos y su perfil. Incluye el libro de los animales de Colombia, una galería animada con la ficha de cada animal y sus datos con fuente. Bilingüe ES/EN y pensado primero para celular.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['React', 'TypeScript', 'Framer Motion', 'Bilingüe ES/EN'],
         demoUrl: 'https://portafolio-bionary.vercel.app/',
         previews: { desktop: '/previews/bionary-desktop.webp', mobile: '/previews/bionary-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #7a2a2a, #1c1f1d)',
     },
     {
         id: 'parchate',
@@ -147,11 +137,9 @@ export const projects: Project[] = [
         description: 'Landing de mi marca de ropa pintada a mano con cloro y pintura, donde cada pieza es 1 de 1.',
         longDescription: 'Landing de Párchate, mi marca de ropa pintada a mano: diseñé la marca, pinté las prendas e hice la página. HTML, CSS y JavaScript sin dependencias, con animaciones ligadas al scroll, galería en diálogo nativo y tema oscuro con un solo acento.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['Marca propia', 'HTML', 'CSS', 'JavaScript'],
         demoUrl: 'https://parchate-omega.vercel.app/',
         previews: { desktop: '/previews/parchate-desktop.webp', mobile: '/previews/parchate-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #4a5240, #1c1f1d)',
     },
     {
         id: 'the-good-trip',
@@ -159,12 +147,10 @@ export const projects: Project[] = [
         description: 'Prototipo de aplicación de transporte tipo ride-hailing con flujos completos de pasajero y conductor.',
         longDescription: 'App de transporte con solicitud de viajes, mapa en vivo, pagos, historial y panel de ganancias para conductores. Interfaz bilingüe (ES/EN) enfocada en la experiencia móvil.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['JavaScript', 'Mapas', 'UX Móvil', 'i18n'],
-        githubUrl: 'https://github.com/FedericoChalaca',
+        githubUrl: 'https://github.com/FedericoChalaca/TheGoodTrip',
         demoUrl: 'https://www.thegoodtrip.online/',
         previews: { desktop: '/previews/thegoodtrip-desktop.webp', mobile: '/previews/thegoodtrip-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #0e7f9e, #3E5A47)',
     },
     {
         id: 'entre-dos',
@@ -172,12 +158,9 @@ export const projects: Project[] = [
         description: 'App web privada para parejas: recuerdos, diario compartido y mensajes.',
         longDescription: 'Espacio privado para dos personas con recuerdos por fecha, diario compartido, notas de gratitud con racha, canción del día y cápsulas del tiempo. Instalable en el celular como app.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['PWA', 'Autenticación', 'Mobile first', 'Fotos'],
-        githubUrl: 'https://github.com/FedericoChalaca',
         demoUrl: 'https://entredos-psi.vercel.app/',
         previews: { desktop: '/previews/entredos-desktop.webp', mobile: '/previews/entredos-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #a16b54, #567b62)',
     },
     {
         id: 'minevera',
@@ -185,12 +168,19 @@ export const projects: Project[] = [
         description: 'App híbrida para organizar la despensa del hogar, con alertas de vencimiento.',
         longDescription: 'Inventario de alimentos del hogar con categorías, alertas de productos por vencer y lista de compras. Funciona sin internet.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['App híbrida', 'Offline', 'Inventario', 'Alertas'],
         githubUrl: 'https://github.com/zteve0/AppHibridaEntrga2',
         demoUrl: 'https://zteve0.github.io/AppHibridaEntrga2/',
         previews: { desktop: '/previews/apphibrida-desktop.webp', mobile: '/previews/apphibrida-mobile.webp' },
-        imageColor: 'linear-gradient(135deg, #3E5A47, #8ea395)',
+    },
+    {
+        id: 'pizzeria-arquitectura',
+        title: 'Pizzería: arquitectura de software',
+        description: 'Sistema de gestión para una cadena de pizzerías, en .NET 9 y C#.',
+        longDescription: 'Sistema en .NET 9 y C# que modela la operación de una cadena de pizzerías: pedidos en local y a domicilio, medios de pago, facturación, inventario y fidelización. Aplica DDD, principios SOLID y siete patrones de diseño. Proyecto académico hecho en equipo.',
+        status: 'Completado',
+        tags: ['.NET 9', 'C#', 'DDD', 'SOLID', 'Patrones de diseño'],
+        githubUrl: 'https://github.com/FedericoChalaca/Pizzeria-Arquitectura',
     },
     {
         id: 'tienda-ropa-erp',
@@ -198,55 +188,35 @@ export const projects: Project[] = [
         description: 'Sistema integral de planificación de recursos empresariales diseñado específicamente para la gestión de tiendas de ropa.',
         longDescription: 'Aplicación ERP que permite administrar inventario, ventas, clientes y reportes financieros para una tienda de ropa de manera eficiente. Interfaz intuitiva enfocada en la productividad.',
         status: 'Completado',
-        category: 'Web Apps',
         tags: ['React', 'Node.js', 'ERP', 'Gestión'],
         githubUrl: 'https://github.com/Emanuel0428/Tienda-Ropa-ERP',
-        imageColor: 'linear-gradient(135deg, #3E5A47, #567b62)', /* Earthy green gradient matching the theme */
-    },
-    {
-        id: 'pizzeria-arquitectura',
-        title: 'Pizzeria - Arquitectura Software',
-        description: 'Sistema de gestión de pizzería construido aplicando principios de arquitectura de software y patrones de diseño.',
-        longDescription: 'Aplicación que modela el flujo completo de una pizzería implementando patrones como Factory, Observer y Repository. Aplica capas de dominio, aplicación e infraestructura.',
-        status: 'Completado',
-        category: 'Arquitectura',
-        tags: ['Arquitectura', 'Patrones', 'JavaScript', 'SOLID'],
-        githubUrl: 'https://github.com/FedericoChalaca/Pizzeria-ArquitecturaSoftware',
-        imageColor: 'linear-gradient(135deg, #f97316, #dc2626)',
     },
     {
         id: 'bigotes-pizzeria',
         title: 'BigoteS Pizzeria',
-        description: 'Aplicación web completa para una pizzería con catálogo de productos, carrito de compras y gestión de pedidos.',
-        longDescription: 'Frontend completo para pizzería BigoteS con interfaz intuitiva, carrito de compras dinámico y panel de administración de pedidos.',
+        description: 'Aplicación web para una pizzería con catálogo, carrito de compras y gestión de pedidos.',
+        longDescription: 'Aplicación web para la pizzería BigoteS: catálogo de productos, carrito de compras y panel para administrar los pedidos.',
         status: 'Completado',
-        category: 'E-commerce',
-        tags: ['JavaScript', 'HTML', 'CSS', 'E-commerce'],
+        tags: ['React', 'TypeScript', 'Supabase', 'E-commerce'],
         githubUrl: 'https://github.com/FedericoChalaca/BigoteS-pizzeria',
-        imageColor: 'linear-gradient(135deg, #a16b54, #2f2a24)',
     },
     {
         id: 'wing-house',
         title: 'Wing House',
-        description: 'Sitio web para restaurante de alitas con carta digital y promociones.',
-        longDescription: 'Sitio para restaurante de alitas con carta digital, secciones de promociones y diseño enfocado en la experiencia móvil del comensal.',
+        description: 'Sitio web para un restaurante de alitas con carta digital y promociones.',
+        longDescription: 'Sitio para un restaurante de alitas, con carta digital y secciones de promociones.',
         status: 'Completado',
-        category: 'E-commerce',
-        tags: ['HTML', 'CSS', 'JavaScript', 'Responsive'],
-        githubUrl: 'https://github.com/FedericoChalaca',
-        imageColor: 'linear-gradient(135deg, #c48a71, #dc2626)',
+        tags: ['PHP', 'HTML', 'CSS'],
+        githubUrl: 'https://github.com/FedericoChalaca/wing_house',
     },
     {
-        id: 'portfolio',
-        title: 'Portfolio Personal',
-        description: 'Portafolio web personal construido con React, TypeScript y principios SOLID con animaciones fluidas.',
-        longDescription: 'Este mismo portfolio, desarrollado con Vite + React + TypeScript + Framer Motion. Arquitectura limpia, componentes reutilizables y buenas prácticas.',
+        id: 'viajero-fiel',
+        title: 'Viajero Fiel',
+        description: 'App web privada para coordinar viajes entre conocidos.',
+        longDescription: 'App web privada para coordinar viajes entre conocidos, con acceso por PIN. La hice para aprender y está en pausa.',
         status: 'En Progreso',
-        category: 'Web Apps',
-        tags: ['React', 'TypeScript', 'Framer Motion', 'SOLID'],
-        githubUrl: 'https://github.com/FedericoChalaca',
-        demoUrl: '#',
-        imageColor: 'linear-gradient(135deg, #c48a71, #a16b54)', /* Terracotta gradient */
+        tags: ['App web', 'Acceso por PIN'],
+        demoUrl: 'https://viajero-fiel.vercel.app/',
     },
 ];
 
@@ -288,8 +258,7 @@ export const technologies: Technology[] = [
         proofs: [
             { project: 'Párchate', built: 'Landing de mi marca de ropa, sin dependencias ni build: animaciones ligadas al scroll en CSS y galería en diálogo nativo.', url: 'https://parchate-omega.vercel.app/' },
             { project: 'The Good Trip', built: 'Prototipo de app de transporte con vistas de cliente y conductor, sin frameworks.', url: 'https://www.thegoodtrip.online/' },
-            { project: 'BigoteS Pizzeria', built: 'Web de pizzería con menú, galería, contacto, mapa y modo oscuro.', url: 'https://github.com/FedericoChalaca/BigoteS-pizzeria' },
-            { project: 'Wing House', built: 'Sitio de restaurante con carta digital y promociones.' },
+            { project: 'Wing House', built: 'Sitio de restaurante con carta digital y promociones.', url: 'https://github.com/FedericoChalaca/wing_house' },
         ],
     },
     {
@@ -338,6 +307,7 @@ export const technologies: Technology[] = [
             { project: 'Vuelta', built: 'App de domicilios de barrio con tres vistas: cliente, domiciliario y administrador.' },
             { project: 'Bionary', built: 'Portafolio bilingüe con rutas e idiomas hechos a mano, sin librerías adicionales.', url: 'https://portafolio-bionary.vercel.app/' },
             { project: 'ERP Tienda de Ropa', built: 'Sistema de inventario, ventas, clientes y reportes.', url: 'https://github.com/Emanuel0428/Tienda-Ropa-ERP' },
+            { project: 'BigoteS Pizzeria', built: 'Web de una pizzería con catálogo, carrito y gestión de pedidos.', url: 'https://github.com/FedericoChalaca/BigoteS-pizzeria' },
             { project: 'Portfolio Personal', built: 'Este mismo sitio.' },
         ],
     },
@@ -458,6 +428,7 @@ export const technologies: Technology[] = [
         benefit: 'Cada usuario ve solo lo que le corresponde: los permisos se controlan desde la base de datos.',
         proofs: [
             { project: 'Yggdrasil', built: 'Autenticación y políticas de acceso por fila (RLS).' },
+            { project: 'BigoteS Pizzeria', built: 'Los datos de la web de la pizzería.', url: 'https://github.com/FedericoChalaca/BigoteS-pizzeria' },
         ],
     },
     {
@@ -488,7 +459,7 @@ export const technologies: Technology[] = [
         work: ['Backend y datos'],
         benefit: 'Sistemas empresariales ordenados, fáciles de mantener y de ampliar con el tiempo.',
         proofs: [
-            { project: 'Pizzeria - Arquitectura Software', built: 'Refactorización completa a SOLID y DDD, con 7 patrones de diseño.', url: 'https://github.com/FedericoChalaca/Pizzeria-ArquitecturaSoftware', note: 'Proyecto universitario' },
+            { project: 'Pizzería: arquitectura de software', built: 'Sistema de gestión para una cadena de pizzerías con DDD, SOLID y 7 patrones de diseño.', url: 'https://github.com/FedericoChalaca/Pizzeria-Arquitectura', note: 'Proyecto universitario' },
         ],
     },
     {
@@ -533,15 +504,6 @@ export const stats = [
 // ============================================================
 // FILTER HELPERS  (Strategy Pattern: filtering logic is pure)
 // ============================================================
-export function getProjectFilters(): FilterOption<ProjectCategory>[] {
-    const categories: ProjectCategory[] = ['Todos', 'E-commerce', 'Web Apps', 'Arquitectura', 'Herramientas'];
-    return categories.map((cat) => ({
-        id: cat,
-        label: cat,
-        count: cat === 'Todos' ? projects.length : projects.filter((p) => p.category === cat).length,
-    })).filter((f) => f.count > 0);
-}
-
 export function getTechFilters(): FilterOption<WorkType>[] {
     const kinds: WorkType[] = ['Todos', 'Sitios y landings', 'Apps web', 'Apps móviles', 'Tiendas y pagos', 'Backend y datos'];
     return kinds.map((kind) => ({
@@ -549,11 +511,6 @@ export function getTechFilters(): FilterOption<WorkType>[] {
         label: kind,
         count: filterTechnologies(kind).length,
     }));
-}
-
-export function filterProjects(category: ProjectCategory): Project[] {
-    if (category === 'Todos') return projects;
-    return projects.filter((p) => p.category === category);
 }
 
 export function filterTechnologies(kind: WorkType): Technology[] {
