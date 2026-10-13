@@ -30,9 +30,10 @@ interface HeroLaptopProps {
 }
 
 /**
- * Desktop: the live 3D laptop, as always.
- * Phones: a still of the same scene shows instantly, and the live 3D takes its place once the
- * visitor starts interacting, so three.js never competes with the first paint.
+ * A still of the 3D scene shows instantly and the live 3D laptop takes its place afterwards,
+ * so three.js never competes with the first paint:
+ * - desktop: right away, loading in the background while the still is on screen
+ * - phones: once the visitor starts interacting (touch, key or scroll)
  */
 export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
   const isPhone = useSyncExternalStore(subscribePhone, isPhoneNow);
@@ -48,54 +49,54 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
     return () => events.forEach((name) => window.removeEventListener(name, engage));
   }, [isPhone, engaged]);
 
+  // Desktop starts the 3D right away (measured: waiting for an idle moment made blocking worse)
+  const start = !isPhone || engaged;
+
   const still = laptopColors.find((c) => c.value === color) ?? laptopColors[0];
 
   return (
     <>
-      {!isPhone ? (
-        near && (
+      <div className="laptop-stage">
+        <div className={`laptop-still ${live ? 'is-hidden' : ''}`}>
+          <img
+            src={`/laptop/${isPhone ? '' : 'desktop-'}${still.still}.webp`}
+            alt="Laptop con código en la pantalla"
+            width={isPhone ? 780 : 1026}
+            height={isPhone ? 700 : 1125}
+          />
+          <div className="color-controls">
+            {laptopColors.map((c) => (
+              <button
+                key={c.name}
+                type="button"
+                className={`color-btn ${color === c.value ? 'active' : ''}`}
+                onClick={() => setColor(c.value)}
+                style={{ backgroundColor: c.value }}
+                aria-label={`Color ${c.name}`}
+                aria-pressed={color === c.value}
+              />
+            ))}
+          </div>
+        </div>
+        {start && near && (
           <Optional3D>
             <Suspense fallback={null}>
-              <InteractiveMonitor />
+              <div className={`laptop-live ${live ? 'is-ready' : ''}`}>
+                <InteractiveMonitor initialColor={color} onReady={() => setLive(true)} />
+              </div>
             </Suspense>
           </Optional3D>
-        )
-      ) : (
-        <div className="laptop-stage">
-          <div className={`laptop-still ${live ? 'is-hidden' : ''}`}>
-            <img src={`/laptop/${still.still}.webp`} alt="Laptop con código en la pantalla" width={780} height={700} />
-            <div className="color-controls">
-              {laptopColors.map((c) => (
-                <button
-                  key={c.name}
-                  type="button"
-                  className={`color-btn ${color === c.value ? 'active' : ''}`}
-                  onClick={() => setColor(c.value)}
-                  style={{ backgroundColor: c.value }}
-                  aria-label={`Color ${c.name}`}
-                  aria-pressed={color === c.value}
-                />
-              ))}
-            </div>
-          </div>
-          {engaged && near && (
-            <Optional3D>
-              <Suspense fallback={null}>
-                <div className={`laptop-live ${live ? 'is-ready' : ''}`}>
-                  <InteractiveMonitor initialColor={color} onReady={() => setLive(true)} />
-                </div>
-              </Suspense>
-            </Optional3D>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
       <style>{`
         .laptop-stage {
           position: relative;
           width: 100%;
-          height: 350px;
-          margin-top: -30px;
+          height: 750px;
+        }
+        @media (max-width: 768px) {
+          .laptop-stage { height: 350px; margin-top: -30px; }
         }
         .laptop-still {
           position: absolute;
@@ -106,7 +107,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
         .laptop-still img {
           width: 100%;
           height: 100%;
-          object-fit: contain;
+          object-fit: cover;
           display: block;
         }
         /* The live scene fades in over the still once its first frame is ready */
