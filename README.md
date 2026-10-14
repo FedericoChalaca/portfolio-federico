@@ -28,7 +28,7 @@ Las capturas del carrusel están en `public/previews/` (escritorio 960x600 y cel
 
 ## Propuestas
 
-Las propuestas de diseño son páginas HTML sueltas en `public/p/<nombre>/index.html` y se listan en `public/p/index.html` (enlace "Propuestas" al pie del sitio). Para agregar una: copiar su HTML a una carpeta nueva y sumar un elemento a esa lista. `/p/` tiene su propia política de seguridad en `vercel.json` (permite Google Fonts y cdnjs) y está fuera de buscadores por `robots.txt`.
+Las propuestas de diseño son páginas HTML sueltas en `public/p/<nombre>/index.html` y se listan en `public/p/index.html` (enlace "Propuestas" al pie del sitio). Para agregar una: copiar su HTML (o el `dist` de una app) a una carpeta nueva y sumar un elemento a esa lista. Una app compilada con `base: './'` necesita además una redirección a la ruta con barra final en `vercel.json`, como la de `/p/yggdrasil`. `/p/` tiene su propia política de seguridad en `vercel.json` (permite Google Fonts y cdnjs) y está fuera de buscadores por `robots.txt`.
 
 ## Desarrollo
 
