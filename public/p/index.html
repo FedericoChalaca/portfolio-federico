@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Propuestas | Federico Martinez</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!--
+  Lista de propuestas. Para agregar una:
+  1. Copia su HTML a public/p/<nombre>/index.html
+  2. Duplica un <li class="item"> de abajo y cambia enlace, título, datos y descripción.
+-->
+<script>
+  // Mismo tema que el portafolio (clave 'portfolio-theme')
+  try {
+    var t = localStorage.getItem('portfolio-theme');
+    document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch (e) { /* sin almacenamiento: queda en claro */ }
+</script>
+<style>
+  @font-face { font-family: 'Inter'; font-weight: 300 800; font-display: swap; src: url('/fonts/inter-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Playfair Display'; font-weight: 400 900; font-display: swap; src: url('/fonts/playfair-display-normal.woff2') format('woff2'); }
+  /* Mismos valores que src/index.css */
+  :root {
+    --color-primary: #3E5A47; --color-accent-text: #8f5238;
+    --color-bg: #F4F1ED; --color-bg-card: #f9f8f6;
+    --color-text: #2f2a24; --color-text-secondary: #5e564d; --color-text-muted: #696057;
+    --color-border: rgba(94, 86, 77, 0.15);
+  }
+  [data-theme='dark'] {
+    --color-primary: #8ea395; --color-accent-text: #c48a71;
+    --color-bg: #1c1f1d; --color-bg-card: #252a27;
+    --color-text: #ebdcd0; --color-text-secondary: #b5ac9f; --color-text-muted: #a39a8f;
+    --color-border: rgba(181, 172, 159, 0.1);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 400 1rem/1.7 'Inter', system-ui, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 24px 96px; }
+  a { color: var(--color-primary); }
+  a:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: 6px; }
+  .back { display: inline-block; font-size: 0.9rem; font-weight: 500; text-decoration: none; margin-bottom: 48px; }
+  .back:hover { text-decoration: underline; }
+  h1 { font: 700 clamp(2.2rem, 6vw, 3rem)/1.15 'Playfair Display', Georgia, serif; margin: 0 0 12px; }
+  .lead { color: var(--color-text-secondary); margin: 0 0 40px; max-width: 56ch; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .item { position: relative; padding: 24px; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px; transition: border-color 0.2s; }
+  .item:hover { border-color: var(--color-primary); }
+  .meta { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-accent-text); margin: 0 0 4px; }
+  h2 { font: 700 1.4rem/1.3 'Playfair Display', Georgia, serif; margin: 0 0 8px; }
+  h2 a { color: var(--color-text); text-decoration: none; }
+  h2 a::after { content: ''; position: absolute; inset: 0; border-radius: 16px; } /* toda la tarjeta es el enlace */
+  .item p:last-child { color: var(--color-text-secondary); margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">&larr; Volver al portafolio</a>
+  <h1>Propuestas</h1>
+  <p class="lead">Diseños que preparo antes de construir un sitio. Lo que aparece entre corchetes es contenido provisional.</p>
+  <ul>
+    <li class="item">
+      <p class="meta">Octubre 2026 · Landing bilingüe</p>
+      <h2><a href="/p/landing-campamento/">Landing para un campamento</a></h2>
+      <p>Propuesta de diseño en español e inglés, con animaciones al hacer scroll. Textos, fotos y cifras son provisionales.</p>
+    </li>
+  </ul>
+</main>
+</body>
+</html>

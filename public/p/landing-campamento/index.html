@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Propuesta Landing Campamento</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: bandas a sangre que alternan noche (ink) y polvo (dust); columna de 1200 con el texto a la izquierda y la escena del desierto a la derecha. */
+:root {
+  color-scheme: dark;
+  /* Color */
+  --ink-900: #120f24; --ink-800: #1b1636; --ink-700: #2a2350;
+  --dust-50: #fbf8f3; --dust-100: #f6f0e8; --dust-300: #e3d6c6;
+  --ember-500: #ff5b22; --ember-600: #e04812; --ember-700: #b8370a;
+  --sun-400: #ffc24b;
+  --muted-on-dark: #b9b3d1; --muted-on-light: #5e5878;
+  /* Espaciado */
+  --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px;
+  --space-32: 32px; --space-48: 48px; --space-64: 64px; --space-96: 96px; --space-128: 128px;
+  /* Radios */
+  --radius-sm: 8px; --radius-md: 16px; --radius-pill: 999px;
+  /* Tipografía */
+  --font-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+  --font-body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --display-size: 72px; --display-lh: 76px; --display-ls: -1.5px;
+  --h2-size: 44px; --h2-lh: 50px; --h2-ls: -0.8px;
+  /* Layout */
+  --container: 1200px; --gutter: 120px; --sec: var(--space-128);
+}
+@media (max-width: 1280px) { :root { --gutter: var(--space-64); } }
+@media (max-width: 1024px) { :root { --gutter: var(--space-48); --sec: var(--space-96); --display-size: 56px; --display-lh: 60px; --h2-size: 36px; --h2-lh: 42px; } }
+@media (max-width: 768px)  { :root { --gutter: var(--space-24); --sec: var(--space-64); } }
+@media (max-width: 600px)  { :root { --gutter: var(--space-16); --display-size: 44px; --display-lh: 48px; --display-ls: -1px; --h2-size: 32px; --h2-lh: 38px; --h2-ls: -0.5px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--ink-900); color: var(--dust-50); font: 400 16px/26px var(--font-body); overflow-x: hidden; }
+h1, h2, h3, p, dl, dd, ol, ul, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--sun-400); outline-offset: 3px; border-radius: var(--radius-sm); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Tipos */
+.display { font: 800 var(--display-size)/var(--display-lh) var(--font-display); letter-spacing: var(--display-ls); text-wrap: balance; }
+.h2 { font: 700 var(--h2-size)/var(--h2-lh) var(--font-display); letter-spacing: var(--h2-ls); text-wrap: balance; }
+.h3 { font: 600 24px/30px var(--font-display); }
+.body-l { font: 400 20px/30px var(--font-body); max-width: 60ch; }
+.label { font: 600 14px/20px var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; }
+.t-sun { color: var(--sun-400); } .t-ember { color: var(--ember-700); }
+.t-muted-d { color: var(--muted-on-dark); } .t-muted-l { color: var(--muted-on-light); }
+
+/* Estructura */
+.wrap { max-width: calc(var(--container) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.band { padding-block: var(--sec); }
+.band-night { background: var(--ink-900); color: var(--dust-50); }
+.band-night-2 { background: var(--ink-800); color: var(--dust-50); }
+.band-dust { background: var(--dust-100); color: var(--ink-900); }
+.stack { display: flex; flex-direction: column; gap: var(--space-24); min-width: 0; }
+.sec-head { display: flex; flex-direction: column; gap: var(--space-16); }
+.sec-body { display: flex; flex-direction: column; gap: var(--space-48); }
+
+/* Botones */
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: var(--space-16) var(--space-32); border-radius: var(--radius-pill); font: 600 16px/20px var(--font-body); border: 1.5px solid transparent; cursor: pointer; transition: background-color .2s, color .2s, transform .2s, border-color .2s; }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn-primary { background: var(--ember-500); color: var(--ink-900); }
+.btn-primary:hover { background: var(--sun-400); }
+.btn-ghost { border-color: var(--dust-100); color: var(--dust-100); background: transparent; }
+.btn-ghost:hover { background: var(--dust-100); color: var(--ink-900); }
+.btn-dark { background: var(--ink-900); color: var(--dust-50); }
+.btn-dark:hover { background: var(--ink-700); }
+.btn-sm { padding: var(--space-12) var(--space-24); }
+
+/* Barra de progreso de lectura */
+.progress { position: fixed; inset: 0 0 auto 0; z-index: 30; padding-top: env(safe-area-inset-top, 0px); pointer-events: none; }
+.progress span { display: block; height: var(--space-4); background: var(--sun-400); transform: scaleX(0); transform-origin: left center; }
+
+/* Encabezado */
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--ink-900); padding-block: var(--space-24); transition: padding .25s, box-shadow .25s; }
+.site-header.is-stuck { padding-block: var(--space-12); box-shadow: 0 1px 0 var(--ink-700); }
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-24); }
+.brand { display: inline-flex; align-items: center; gap: var(--space-12); font: 600 24px/30px var(--font-display); min-width: 0; white-space: nowrap; }
+.brand-mark { flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--ember-500); }
+.nav { display: flex; gap: var(--space-32); color: var(--muted-on-dark); }
+.nav a { transition: color .2s; white-space: nowrap; }
+.nav a:hover { color: var(--dust-50); }
+.header-actions { display: flex; align-items: center; gap: var(--space-16); flex: none; }
+.header-cta { white-space: nowrap; }
+.lang { display: inline-flex; border: 1.5px solid var(--ink-700); border-radius: var(--radius-pill); padding: var(--space-4); gap: var(--space-4); }
+.lang button { font: 600 14px/20px var(--font-body); letter-spacing: 0.06em; color: var(--muted-on-dark); background: transparent; border: 0; border-radius: var(--radius-pill); padding: var(--space-4) var(--space-12); cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink-700); color: var(--dust-50); }
+.menu-btn { display: none; flex-direction: column; gap: var(--space-4); padding: var(--space-12) var(--space-8); background: transparent; border: 0; cursor: pointer; }
+.menu-btn span:not(.sr-only) { width: 20px; height: 2px; background: var(--dust-50); }
+@media (max-width: 1380px) {
+  .header-cta { display: none; }
+}
+@media (max-width: 1024px) {
+  .brand { font: 600 16px/26px var(--font-body); }
+  .brand > span:last-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .site-header, .site-header.is-stuck { padding-block: var(--space-16); }
+  .header-actions { flex: none; gap: var(--space-12); }
+  .brand-mark { width: 28px; height: 28px; }
+  .menu-btn { display: inline-flex; }
+  .nav { display: none; position: absolute; inset: 100% 0 auto 0; flex-direction: column; gap: 0; background: var(--ink-800); padding: var(--space-8) var(--gutter) var(--space-24); }
+  .nav.open { display: flex; }
+  .nav a { padding-block: var(--space-12); border-bottom: 1px solid var(--ink-700); color: var(--dust-50); }
+}
+
+/* Hero */
+.band.hero { padding-block: var(--space-96) var(--space-128); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: var(--space-64); align-items: center; }
+.hero-copy { display: flex; flex-direction: column; gap: var(--space-24); min-width: 0; }
+.display .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.display .w > span { display: inline-block; }
+.cta-row { display: flex; flex-wrap: wrap; gap: var(--space-16); }
+.facts { display: flex; flex-wrap: wrap; gap: var(--space-16) var(--space-48); padding-top: var(--space-24); border-top: 1px solid var(--ink-700); }
+.facts dt { font: 600 14px/20px var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-on-dark); }
+.facts dd { font: 600 24px/30px var(--font-display); }
+.scene { position: relative; aspect-ratio: 520 / 580; max-width: 100%; border-radius: var(--radius-md); overflow: hidden; background: var(--ink-700); }
+.scene svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.scene .sky { fill: var(--ink-700); } .scene .sun { fill: var(--ember-500); }
+.scene .far { fill: var(--ink-800); } .scene .near { fill: var(--ink-900); }
+.scene .star { fill: var(--dust-100); } .scene .glow { fill: var(--sun-400); }
+.scene .line { stroke: var(--dust-300); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.scene .tent { fill: var(--ink-900); } .scene .flag { fill: var(--sun-400); }
+.chip { position: absolute; left: var(--space-16); bottom: var(--space-16); right: var(--space-16); width: fit-content; max-width: calc(100% - 2 * var(--space-16)); padding: var(--space-8) var(--space-12); border-radius: var(--radius-sm); background: var(--ink-900); color: var(--muted-on-dark); font: 400 14px/20px var(--font-body); }
+.chip-light { background: var(--dust-50); color: var(--muted-on-light); }
+@media (max-width: 900px) {
+  .band.hero { padding-block: var(--space-48) var(--space-64); }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-48); }
+  .scene { aspect-ratio: 343 / 320; }
+  .cta-row .btn { flex: 1 1 100%; }
+}
+
+/* Banda de verbos */
+.band-marquee { overflow: hidden; background: var(--ember-500); color: var(--ink-900); padding-block: var(--space-24); }
+.marquee-track { display: flex; align-items: center; gap: var(--space-32); width: max-content; white-space: nowrap; font: 800 var(--h2-size)/var(--h2-lh) var(--font-display); letter-spacing: var(--h2-ls); }
+.marquee-track i { flex: none; width: var(--space-12); height: var(--space-12); border-radius: 50%; background: var(--ink-900); }
+
+/* Quiénes somos */
+.about-grid { display: grid; grid-template-columns: minmax(0, 480px) minmax(0, 1fr); gap: var(--space-96); align-items: center; }
+.photo { position: relative; aspect-ratio: 480 / 520; max-width: 100%; border-radius: var(--radius-md); overflow: hidden; }
+.photo-dust { background:
+  radial-gradient(circle at 68% 34%, var(--sun-400) 0 13%, transparent 13.4%),
+  linear-gradient(172deg, transparent 0 62%, var(--ember-600) 62.3% 74%, var(--ink-700) 74.3%),
+  var(--dust-300); }
+.gift { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-24); border-radius: var(--radius-md); background: var(--dust-50); border: 1.5px solid var(--dust-300); }
+.stats { display: flex; flex-wrap: wrap; gap: var(--space-24) var(--space-48); }
+.stats dt { order: 2; color: var(--muted-on-light); }
+.stats > div { display: flex; flex-direction: column; gap: var(--space-4); }
+.stats dd { font: 700 var(--h2-size)/var(--h2-lh) var(--font-display); letter-spacing: var(--h2-ls); color: var(--ember-600); font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-32); }
+  .photo { aspect-ratio: 343 / 260; }
+}
+
+/* Eventos */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-24); }
+.card { display: flex; flex-direction: column; gap: var(--space-16); padding: var(--space-32); border-radius: var(--radius-md); background: var(--ink-700); border: 1.5px solid var(--ink-700); transition: transform .25s, border-color .25s; min-width: 0; }
+.card:hover { transform: translateY(-4px); border-color: var(--ember-500); }
+.card .meta { display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-32); padding-block: var(--space-16); border-block: 1px solid var(--ink-800); margin-top: auto; }
+.card .meta dt { font: 600 14px/20px var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-on-dark); }
+.card .meta dd { font: 600 24px/30px var(--font-display); }
+.card .meta .price { color: var(--ember-500); }
+.card .btn { align-self: flex-start; }
+@media (max-width: 900px) {
+  .cards { grid-template-columns: minmax(0, 1fr); }
+  .card { padding: var(--space-24); }
+  .card .btn { align-self: stretch; }
+}
+
+/* Cómo participar: la línea se llena al avanzar */
+.steps { --p: 1; position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-48); padding-top: var(--space-48); }
+.steps-line { position: absolute; inset: 0 0 auto 0; height: var(--space-4); border-radius: var(--radius-pill); background: var(--dust-300); overflow: hidden; }
+.steps-line span { display: block; width: 100%; height: 100%; background: var(--ember-500); transform: scaleX(var(--p)); transform-origin: left center; }
+.step { display: flex; flex-direction: column; gap: var(--space-12); min-width: 0; }
+.step .num { font: 700 var(--h2-size)/var(--h2-lh) var(--font-display); letter-spacing: var(--h2-ls); color: var(--ember-600); font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) {
+  .steps { grid-template-columns: minmax(0, 1fr); gap: var(--space-32); padding-top: 0; padding-left: var(--space-32); }
+  .steps-line { inset: 0 auto 0 0; width: var(--space-4); height: auto; }
+  .steps-line span { transform: scaleY(var(--p)); transform-origin: center top; }
+}
+
+/* Galería */
+.gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-24); }
+.tile { position: relative; aspect-ratio: 282 / 320; border-radius: var(--radius-md); overflow: hidden; max-width: 100%; }
+.tile:nth-child(even) { margin-top: var(--space-48); }
+.tile-1 { background: radial-gradient(circle at 30% 42%, var(--ember-500) 0 20%, transparent 20.4%), linear-gradient(176deg, transparent 0 64%, var(--ink-800) 64.3%), var(--ink-700); }
+.tile-2 { background: radial-gradient(circle at 72% 28%, var(--sun-400) 0 11%, transparent 11.4%), linear-gradient(168deg, transparent 0 58%, var(--ink-700) 58.3%), var(--ink-800); }
+.tile-3 { background: linear-gradient(174deg, transparent 0 56%, var(--ink-900) 56.3%), radial-gradient(circle at 50% 56%, var(--sun-400) 0 24%, transparent 24.4%), var(--ember-500); }
+.tile-4 { background: radial-gradient(circle at 24% 26%, var(--dust-100) 0 3%, transparent 3.4%), radial-gradient(circle at 64% 18%, var(--dust-100) 0 2%, transparent 2.4%), linear-gradient(184deg, transparent 0 60%, var(--ember-600) 60.3% 70%, var(--ink-800) 70.3%), var(--ink-700); }
+@media (max-width: 768px) {
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-12); }
+  .tile:nth-child(even) { margin-top: var(--space-24); }
+}
+
+/* Contacto */
+.band-ember { position: relative; overflow: hidden; background: var(--ember-500); color: var(--ink-900); padding-block: var(--space-96); }
+.cta-sun { position: absolute; left: 50%; bottom: -260px; width: 520px; height: 520px; margin-left: -260px; border-radius: 50%; background: var(--sun-400); }
+.cta-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--space-24); text-align: center; }
+.cta-inner .body-l { max-width: 40ch; }
+.cta-num { font: 600 16px/26px var(--font-body); user-select: all; }
+
+/* Pie */
+.site-footer { background: var(--ink-900); color: var(--muted-on-dark); padding-block: var(--space-48); }
+.footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-16); }
+.footer-row .h3 { color: var(--dust-50); }
+.footer-legal { margin-top: var(--space-16); padding-top: var(--space-16); border-top: 1px solid var(--ink-700); max-width: 70ch; }
+
+/* Notas de la propuesta (solo para aprobar, no va en el sitio final) */
+.notes-btn { position: fixed; right: var(--space-16); bottom: calc(var(--space-16) + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: var(--space-12) var(--space-24); border-radius: var(--radius-pill); border: 1.5px solid var(--ink-900); background: var(--dust-50); color: var(--ink-900); font: 600 14px/20px var(--font-body); cursor: pointer; box-shadow: 0 8px 24px rgb(18 15 36 / 0.35); }
+.notes { position: fixed; inset: 0 0 0 auto; z-index: 50; width: min(440px, 100%); overflow-y: auto; background: var(--dust-50); color: var(--ink-900); padding: calc(var(--space-32) + env(safe-area-inset-top, 0px)) var(--space-24) calc(var(--space-48) + env(safe-area-inset-bottom, 0px)); box-shadow: -16px 0 48px rgb(18 15 36 / 0.4); display: flex; flex-direction: column; gap: var(--space-24); }
+.notes h2 { font: 700 32px/38px var(--font-display); letter-spacing: -0.5px; }
+.notes h3 { font: 600 14px/20px var(--font-body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ember-700); margin-bottom: var(--space-8); }
+.notes ul { display: flex; flex-direction: column; gap: var(--space-8); padding-left: var(--space-16); list-style: disc; }
+.notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-16); }
+.notes-close { flex: none; padding: var(--space-8) var(--space-16); border-radius: var(--radius-pill); border: 1.5px solid var(--ink-900); background: transparent; color: var(--ink-900); font: 600 14px/20px var(--font-body); cursor: pointer; }
+.swatches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8); padding: 0 !important; list-style: none !important; }
+.swatches li { display: flex; align-items: center; gap: var(--space-8); font: 400 14px/20px var(--font-body); font-variant-numeric: tabular-nums; }
+.swatches b { flex: none; width: var(--space-24); height: var(--space-24); border-radius: var(--radius-sm); border: 1px solid var(--dust-300); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .card { transition: none; }
+}
+</style>
+
+<div class="progress" aria-hidden="true"><span id="bar"></span></div>
+
+<header class="site-header" id="inicio">
+  <div class="wrap header-row">
+    <a class="brand" href="#inicio"><span class="brand-mark"></span><span data-i18n="name"></span></a>
+    <nav class="nav" id="nav" aria-label="Principal">
+      <a href="#nosotros" data-i18n="nav.about"></a>
+      <a href="#eventos" data-i18n="nav.events"></a>
+      <a href="#participar" data-i18n="nav.how"></a>
+      <a href="#contacto" data-i18n="nav.contact"></a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" id="lang-es" aria-pressed="true">ES</button>
+        <button type="button" id="lang-en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn-primary btn-sm header-cta" href="#contacto" data-i18n="cta.write"></a>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span><span class="sr-only">Menú</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="band band-night hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="label t-sun" data-i18n="hero.eyebrow"></p>
+        <h1 class="display" id="hero-title"></h1>
+        <p class="body-l t-muted-d" data-i18n="hero.sub"></p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#contacto" data-i18n="cta.reserve"></a>
+          <a class="btn btn-ghost" href="#eventos" data-i18n="cta.events"></a>
+        </div>
+        <dl class="facts">
+          <div><dt data-i18n="facts.cap"></dt><dd data-i18n="facts.capV"></dd></div>
+          <div><dt data-i18n="facts.loc"></dt><dd data-i18n="facts.locV"></dd></div>
+          <div><dt data-i18n="facts.arr"></dt><dd data-i18n="facts.arrV"></dd></div>
+        </dl>
+      </div>
+      <figure class="scene">
+        <svg viewBox="0 0 520 580" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect class="sky" width="520" height="580"/>
+          <g class="js-stars">
+            <circle class="star" cx="70" cy="80" r="2.5"/><circle class="star" cx="150" cy="140" r="1.5"/>
+            <circle class="star" cx="230" cy="60" r="2"/><circle class="star" cx="430" cy="90" r="2.5"/>
+            <circle class="star" cx="470" cy="180" r="1.5"/><circle class="star" cx="100" cy="220" r="1.5"/>
+          </g>
+          <circle class="sun js-sun" cx="340" cy="300" r="104"/>
+          <g class="js-far">
+            <path class="far" d="M0 392 C120 336 220 412 340 368 S480 334 520 356 V620 H0 Z"/>
+            <path class="line" d="M118 384 L158 346 L232 346 L268 380 M158 346 V386 M232 346 V384"/>
+            <path class="tent" d="M286 380 l24 -34 l24 34 z M338 372 l18 -26 l18 26 z"/>
+            <path class="line" d="M86 394 V338"/><path class="flag" d="M86 338 l26 9 l-26 9 z"/>
+            <circle class="glow" cx="195" cy="372" r="5"/><circle class="glow" cx="310" cy="372" r="3.5"/>
+          </g>
+          <path class="near js-near" d="M0 486 C140 432 260 516 380 464 S500 452 520 470 V640 H0 Z"/>
+        </svg>
+        <figcaption class="chip" data-i18n="hero.chip"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="band-marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+  <section class="band band-dust" id="nosotros">
+    <div class="wrap about-grid">
+      <figure class="photo photo-dust js-clip"><figcaption class="chip chip-light" data-i18n="ph.photo"></figcaption></figure>
+      <div class="stack" data-stagger>
+        <p class="label t-ember" data-i18n="about.eyebrow"></p>
+        <h2 class="h2" data-i18n="about.title"></h2>
+        <p class="body-l t-muted-l" data-i18n="about.body"></p>
+        <div class="gift">
+          <p class="label t-ember" data-i18n="about.giftK"></p>
+          <p class="h3" data-i18n="about.giftV"></p>
+        </div>
+        <dl class="stats">
+          <div><dt data-i18n="stats.years"></dt><dd>[00]</dd></div>
+          <div><dt data-i18n="stats.people"></dt><dd>[00]</dd></div>
+          <div><dt data-i18n="stats.events"></dt><dd>[00]</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-night-2" id="eventos">
+    <div class="wrap sec-body">
+      <header class="sec-head" data-reveal>
+        <p class="label t-sun" data-i18n="events.eyebrow"></p>
+        <h2 class="h2" data-i18n="events.title"></h2>
+        <p class="body-l t-muted-d" data-i18n="events.sub"></p>
+      </header>
+      <ul class="cards" data-stagger>
+        <li class="card">
+          <p class="label t-sun" data-i18n="ev.date"></p>
+          <h3 class="h3" data-i18n="ev.name" data-suffix=" 1"></h3>
+          <p class="t-muted-d" data-i18n="ev.desc"></p>
+          <dl class="meta"><div><dt data-i18n="ev.capK"></dt><dd data-i18n="ev.capV"></dd></div><div><dt data-i18n="ev.priceK"></dt><dd class="price">[$000]</dd></div></dl>
+          <a class="btn btn-ghost btn-sm" href="#contacto" data-i18n="cta.reserve"></a>
+        </li>
+        <li class="card">
+          <p class="label t-sun" data-i18n="ev.date"></p>
+          <h3 class="h3" data-i18n="ev.name" data-suffix=" 2"></h3>
+          <p class="t-muted-d" data-i18n="ev.desc"></p>
+          <dl class="meta"><div><dt data-i18n="ev.capK"></dt><dd data-i18n="ev.capV"></dd></div><div><dt data-i18n="ev.priceK"></dt><dd class="price">[$000]</dd></div></dl>
+          <a class="btn btn-ghost btn-sm" href="#contacto" data-i18n="cta.reserve"></a>
+        </li>
+        <li class="card">
+          <p class="label t-sun" data-i18n="ev.date"></p>
+          <h3 class="h3" data-i18n="ev.name" data-suffix=" 3"></h3>
+          <p class="t-muted-d" data-i18n="ev.desc"></p>
+          <dl class="meta"><div><dt data-i18n="ev.capK"></dt><dd data-i18n="ev.capV"></dd></div><div><dt data-i18n="ev.priceK"></dt><dd class="price">[$000]</dd></div></dl>
+          <a class="btn btn-ghost btn-sm" href="#contacto" data-i18n="cta.reserve"></a>
+        </li>
+      </ul>
+      <p class="t-muted-d" data-i18n="events.note" data-reveal></p>
+    </div>
+  </section>
+
+  <section class="band band-dust" id="participar">
+    <div class="wrap sec-body">
+      <header class="sec-head" data-reveal>
+        <p class="label t-ember" data-i18n="how.eyebrow"></p>
+        <h2 class="h2" data-i18n="how.title"></h2>
+      </header>
+      <ol class="steps" id="steps">
+        <li class="steps-line" aria-hidden="true"><span></span></li>
+        <li class="step"><p class="num">01</p><h3 class="h3" data-i18n="how.s1"></h3><p class="t-muted-l" data-i18n="how.s1d"></p></li>
+        <li class="step"><p class="num">02</p><h3 class="h3" data-i18n="how.s2"></h3><p class="t-muted-l" data-i18n="how.s2d"></p></li>
+        <li class="step"><p class="num">03</p><h3 class="h3" data-i18n="how.s3"></h3><p class="t-muted-l" data-i18n="how.s3d"></p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band band-night">
+    <div class="wrap sec-body">
+      <header class="sec-head" data-reveal>
+        <p class="label t-sun" data-i18n="gallery.eyebrow"></p>
+        <h2 class="h2" data-i18n="gallery.title"></h2>
+      </header>
+      <div class="gallery">
+        <figure class="tile tile-1" data-speed="1"><figcaption class="chip" data-i18n="ph.tile"></figcaption></figure>
+        <figure class="tile tile-2" data-speed="-1"><figcaption class="chip" data-i18n="ph.tile"></figcaption></figure>
+        <figure class="tile tile-3" data-speed="1.5"><figcaption class="chip" data-i18n="ph.tile"></figcaption></figure>
+        <figure class="tile tile-4" data-speed="-0.5"><figcaption class="chip" data-i18n="ph.tile"></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-ember" id="contacto">
+    <div class="cta-sun js-cta-sun" aria-hidden="true"></div>
+    <div class="wrap cta-inner" data-stagger>
+      <h2 class="h2" data-i18n="contact.title"></h2>
+      <p class="body-l" data-i18n="contact.sub"></p>
+      <a class="btn btn-dark" href="#contacto" data-i18n="contact.btn"></a>
+      <p class="cta-num" data-i18n="contact.num"></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-row">
+      <p class="h3" data-i18n="name"></p>
+      <p data-i18n="footer.links"></p>
+    </div>
+    <p class="footer-legal" data-i18n="footer.legal"></p>
+  </div>
+</footer>
+
+<button type="button" class="notes-btn" id="notes-open" aria-controls="notes" aria-expanded="false">Notas de la propuesta</button>
+<aside class="notes" id="notes" aria-labelledby="notes-title" hidden>
+  <div class="notes-head">
+    <h2 id="notes-title">Notas de la propuesta</h2>
+    <button type="button" class="notes-close" id="notes-close">Cerrar</button>
+  </div>
+  <p>Este panel es solo para revisar la propuesta. No aparece en el sitio final.</p>
+  <div>
+    <h3>Qué se aprueba aquí</h3>
+    <ul>
+      <li>El orden y el contenido de las secciones.</li>
+      <li>La paleta y las dos tipografías.</li>
+      <li>Las animaciones al hacer scroll.</li>
+      <li>El comportamiento en celular, tablet y computador.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Qué es provisional</h3>
+    <ul>
+      <li>Todo lo que está entre corchetes: nombre, cifras, fechas, precios, textos y WhatsApp.</li>
+      <li>Las ilustraciones del desierto. Ocupan el lugar de las fotos reales.</li>
+      <li>La marca. No hay logo ni colores de la clienta todavía, así que esta identidad es una propuesta.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Paleta</h3>
+    <ul class="swatches">
+      <li><b style="background:var(--ink-900)"></b>Noche #120F24</li>
+      <li><b style="background:var(--ink-800)"></b>Noche 2 #1B1636</li>
+      <li><b style="background:var(--ink-700)"></b>Noche 3 #2A2350</li>
+      <li><b style="background:var(--dust-50)"></b>Polvo claro #FBF8F3</li>
+      <li><b style="background:var(--dust-100)"></b>Polvo #F6F0E8</li>
+      <li><b style="background:var(--dust-300)"></b>Arena #E3D6C6</li>
+      <li><b style="background:var(--ember-500)"></b>Brasa #FF5B22</li>
+      <li><b style="background:var(--ember-600)"></b>Brasa 2 #E04812</li>
+      <li><b style="background:var(--ember-700)"></b>Brasa texto #B8370A</li>
+      <li><b style="background:var(--sun-400)"></b>Sol #FFC24B</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Tipografías</h3>
+    <ul>
+      <li>Títulos: Bricolage Grotesque.</li>
+      <li>Texto: DM Sans.</li>
+      <li>Las dos son gratuitas y con licencia abierta para web.</li>
+      <li>Título principal: 72 px en computador, 56 en tablet, 44 en celular.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Animaciones</h3>
+    <ul>
+      <li>El título entra palabra por palabra al cargar.</li>
+      <li>El sol y las dunas se mueven a distinta velocidad al bajar.</li>
+      <li>La banda naranja de verbos se desliza con el scroll.</li>
+      <li>La foto de "Quiénes somos" se abre desde el centro.</li>
+      <li>La línea de los tres pasos se va llenando.</li>
+      <li>Las fotos de la galería suben y bajan con desfase.</li>
+      <li>El sol del contacto crece al llegar al final.</li>
+      <li>Quien tenga desactivadas las animaciones en su equipo ve la página quieta.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Lo que necesitamos para terminar</h3>
+    <ul>
+      <li>Nombre del campamento y logo.</li>
+      <li>Fotos: una principal, una del grupo y cuatro para la galería.</li>
+      <li>Textos en español e inglés.</li>
+      <li>Número de WhatsApp y redes.</li>
+      <li>Los primeros eventos: fecha, cupo y aporte.</li>
+    </ul>
+  </div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<script>
+// Contenido genérico: al recibir la información real se cambia solo este objeto.
+const T = {
+  es: {
+    name: 'Nombre del campamento',
+    nav: { about: 'Quiénes somos', events: 'Eventos', how: 'Cómo participar', contact: 'Contacto' },
+    cta: { write: 'Escríbenos por WhatsApp', reserve: 'Reservar por WhatsApp', events: 'Ver eventos' },
+    hero: {
+      eyebrow: 'Campamento · temporada [año]',
+      title: 'Un hogar en medio del desierto, construido en comunidad',
+      sub: 'Somos un campamento que se arma, se trabaja y se vive en grupo. Conoce quiénes somos, a qué eventos puedes sumarte y cómo reservar tu lugar.',
+      chip: 'Ilustración provisional. Aquí va una foto del campamento.'
+    },
+    facts: { cap: 'Cupo', capV: '[00] personas', loc: 'Ubicación en la ciudad', locV: '[hora] y [calle]', arr: 'Llegada', arrV: '[fecha]' },
+    marquee: ['Armar', 'Cocinar', 'Cuidar', 'Regalar', 'Desarmar', 'No dejar rastro'],
+    ph: { photo: 'Foto del grupo por recibir', tile: 'Foto por recibir' },
+    about: {
+      eyebrow: 'Quiénes somos',
+      title: 'Una comunidad que se arma con las manos de todos',
+      body: '[Texto por confirmar con la líder del campamento: su historia, cuántos años llevan y cómo se organizan.]',
+      giftK: 'Lo que regalamos a la ciudad',
+      giftV: '[Por confirmar: comida, música, sombra, talleres]'
+    },
+    stats: { years: 'años en el desierto', people: 'personas en el campamento', events: 'eventos al año' },
+    events: {
+      eyebrow: 'Eventos',
+      title: 'Próximos eventos del campamento',
+      sub: 'Cada evento ayuda a financiar el campamento. Reserva tu lugar escribiéndonos por WhatsApp.',
+      note: 'La líder del campamento publica y edita estos eventos desde su panel privado.'
+    },
+    ev: { date: '[Fecha]', name: 'Nombre del evento', desc: '[Descripción corta del evento]', capK: 'Cupo', capV: '[00] lugares', priceK: 'Aporte' },
+    how: {
+      eyebrow: 'Cómo participar', title: 'Tres pasos para sumarte',
+      s1: 'Escríbenos', s1d: 'Cuéntanos por WhatsApp quién eres y por qué quieres venir.',
+      s2: 'Conócenos', s2d: 'Resolvemos tus dudas sobre el campamento, los costos y la logística.',
+      s3: 'Confirma tu lugar', s3d: 'Si hay cupo y encajas con la comunidad, te confirmamos y coordinamos el pago.'
+    },
+    gallery: { eyebrow: 'Galería', title: 'Así se vive el campamento' },
+    contact: { title: '¿Quieres ser parte del campamento?', sub: 'Escríbenos y te contamos cómo reservar tu lugar.', btn: 'Escribir por WhatsApp', num: 'WhatsApp: [número por confirmar]' },
+    footer: { links: 'Instagram · WhatsApp · [correo]', legal: 'Este es el sitio de un campamento. No es un sitio oficial de Burning Man ni vende entradas al festival.' }
+  },
+  en: {
+    name: 'Camp name',
+    nav: { about: 'About us', events: 'Events', how: 'How to join', contact: 'Contact' },
+    cta: { write: 'Message us on WhatsApp', reserve: 'Reserve on WhatsApp', events: 'See events' },
+    hero: {
+      eyebrow: 'Camp · [year] season',
+      title: 'A home in the middle of the desert, built together',
+      sub: 'We are a camp that is built, worked and lived as a group. Meet us, see which events you can join and find out how to save your spot.',
+      chip: 'Placeholder illustration. A photo of the camp goes here.'
+    },
+    facts: { cap: 'Capacity', capV: '[00] people', loc: 'Address in the city', locV: '[hour] & [street]', arr: 'Arrival', arrV: '[date]' },
+    marquee: ['Build', 'Cook', 'Care', 'Gift', 'Strike', 'Leave no trace'],
+    ph: { photo: 'Group photo to come', tile: 'Photo to come' },
+    about: {
+      eyebrow: 'About us',
+      title: 'A community built by everyone’s hands',
+      body: '[Copy to be confirmed with the camp lead: its story, how many years it has run and how it is organized.]',
+      giftK: 'What we gift to the city',
+      giftV: '[To be confirmed: food, music, shade, workshops]'
+    },
+    stats: { years: 'years in the desert', people: 'people in the camp', events: 'events a year' },
+    events: {
+      eyebrow: 'Events',
+      title: 'Upcoming camp events',
+      sub: 'Every event helps fund the camp. Save your spot by messaging us on WhatsApp.',
+      note: 'The camp lead publishes and edits these events from her private panel.'
+    },
+    ev: { date: '[Date]', name: 'Event name', desc: '[Short description of the event]', capK: 'Capacity', capV: '[00] spots', priceK: 'Contribution' },
+    how: {
+      eyebrow: 'How to join', title: 'Three steps to join us',
+      s1: 'Message us', s1d: 'Tell us on WhatsApp who you are and why you want to come.',
+      s2: 'Meet us', s2d: 'We answer your questions about the camp, the costs and the logistics.',
+      s3: 'Confirm your spot', s3d: 'If there is room and you fit the community, we confirm and arrange payment.'
+    },
+    gallery: { eyebrow: 'Gallery', title: 'Life at the camp' },
+    contact: { title: 'Want to be part of the camp?', sub: 'Message us and we will tell you how to save your spot.', btn: 'Message on WhatsApp', num: 'WhatsApp: [number to be confirmed]' },
+    footer: { links: 'Instagram · WhatsApp · [email]', legal: 'This is the website of a camp. It is not an official Burning Man website and does not sell tickets to the event.' }
+  }
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const pick = (obj, path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
+
+function applyLang(lang) {
+  const dict = T[lang];
+  document.documentElement.lang = lang;
+  $$('[data-i18n]').forEach(el => {
+    const v = pick(dict, el.dataset.i18n);
+    if (typeof v === 'string') el.textContent = v + (el.dataset.suffix || '');
+  });
+  // Título en palabras, para animarlas una por una
+  const title = $('#hero-title');
+  title.textContent = '';
+  dict.hero.title.split(' ').forEach((word, i, all) => {
+    const outer = document.createElement('span'); outer.className = 'w';
+    const inner = document.createElement('span'); inner.textContent = word;
+    outer.appendChild(inner); title.appendChild(outer);
+    if (i < all.length - 1) title.appendChild(document.createTextNode(' '));
+  });
+  // Banda de verbos, repetida para que no se vea el final al deslizar
+  const track = $('#marquee');
+  track.textContent = '';
+  for (let n = 0; n < 4; n++) dict.marquee.forEach(word => {
+    const s = document.createElement('span'); s.textContent = word;
+    track.appendChild(s); track.appendChild(document.createElement('i'));
+  });
+  $('#lang-es').setAttribute('aria-pressed', String(lang === 'es'));
+  $('#lang-en').setAttribute('aria-pressed', String(lang === 'en'));
+  if (window.ScrollTrigger) ScrollTrigger.refresh();
+}
+
+applyLang('es');
+$('#lang-es').addEventListener('click', () => applyLang('es'));
+$('#lang-en').addEventListener('click', () => applyLang('en'));
+
+// Menú móvil
+const nav = $('#nav'), menuBtn = $('#menu-btn');
+menuBtn.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', String(open));
+});
+nav.addEventListener('click', e => {
+  if (e.target.closest('a')) { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+});
+
+// Panel de notas
+const notes = $('#notes'), notesOpen = $('#notes-open'), notesClose = $('#notes-close');
+function toggleNotes(show) {
+  notes.hidden = !show;
+  notesOpen.setAttribute('aria-expanded', String(show));
+  (show ? notesClose : notesOpen).focus();
+}
+notesOpen.addEventListener('click', () => toggleNotes(notes.hidden));
+notesClose.addEventListener('click', () => toggleNotes(false));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !notes.hidden) toggleNotes(false); });
+
+// Animaciones. Sin GSAP o con movimiento reducido, la página queda completa y quieta.
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Los estados iniciales se aplican dentro del primer cuadro: si la pestaña no está pintando (miniatura, segundo plano), la página se queda completa.
+if (!reduced && window.gsap && window.ScrollTrigger) requestAnimationFrame(() => {
+  gsap.registerPlugin(ScrollTrigger);
+  const scrub = (trigger, extra = {}) => ({ trigger, start: 'top bottom', end: 'bottom top', scrub: true, ...extra });
+
+  gsap.to('#bar', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.2 } });
+  ScrollTrigger.create({ start: 40, end: 'max', toggleClass: { targets: '.site-header', className: 'is-stuck' } });
+
+  // Entrada del hero
+  gsap.from('#hero-title .w > span', { yPercent: 110, duration: 0.9, ease: 'power3.out', stagger: 0.05 });
+  gsap.from('.hero-copy > :not(h1)', { y: 16, opacity: 0, duration: 0.7, ease: 'power2.out', stagger: 0.08, delay: 0.35 });
+  gsap.from('.scene', { scale: 0.94, opacity: 0, duration: 1, ease: 'power2.out', delay: 0.15 });
+
+  // Paralaje de la escena
+  const heroScrub = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
+  gsap.fromTo('.js-sun', { y: 40 }, { y: -90, ease: 'none', scrollTrigger: heroScrub });
+  gsap.to('.js-stars', { y: 30, ease: 'none', scrollTrigger: heroScrub });
+  gsap.to('.js-far', { y: -24, ease: 'none', scrollTrigger: heroScrub });
+  gsap.to('.js-near', { y: -64, ease: 'none', scrollTrigger: heroScrub });
+
+  gsap.fromTo('#marquee', { xPercent: 0 }, { xPercent: -25, ease: 'none', scrollTrigger: scrub('.band-marquee', { scrub: 0.4 }) });
+
+  gsap.fromTo('.js-clip', { clipPath: 'inset(14% 14% 14% 14% round 16px)' },
+    { clipPath: 'inset(0% 0% 0% 0% round 16px)', ease: 'none', scrollTrigger: { trigger: '.js-clip', start: 'top 90%', end: 'top 35%', scrub: true } });
+
+  $$('[data-reveal]').forEach(el => gsap.from(el, { y: 32, opacity: 0.2, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } }));
+  $$('[data-stagger]').forEach(group => gsap.from(group.children, { y: 32, opacity: 0.2, duration: 0.8, ease: 'power2.out', stagger: 0.1, scrollTrigger: { trigger: group, start: 'top 80%', once: true } }));
+
+  gsap.fromTo('#steps', { '--p': 0 }, { '--p': 1, ease: 'none', scrollTrigger: { trigger: '#steps', start: 'top 80%', end: 'bottom 55%', scrub: true } });
+  gsap.from('.step', { y: 24, opacity: 0.2, duration: 0.7, ease: 'power2.out', stagger: 0.15, scrollTrigger: { trigger: '#steps', start: 'top 80%', once: true } });
+
+  $$('.tile').forEach(tile => {
+    const s = Number(tile.dataset.speed) * 28;
+    gsap.fromTo(tile, { y: s }, { y: -s, ease: 'none', scrollTrigger: scrub('.gallery') });
+  });
+
+  gsap.fromTo('.js-cta-sun', { scale: 0.55 }, { scale: 1.5, ease: 'none', scrollTrigger: { trigger: '#contacto', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+});
+</script>
+
+</body>
+</html>

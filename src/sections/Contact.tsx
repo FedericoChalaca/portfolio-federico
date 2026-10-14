@@ -148,6 +148,7 @@ export const Contact: React.FC = () => {
         {/* Copyright bar */}
         <div className="contact-footer-bar">
           <span>© 2026 Federico Martinez. Todos los derechos reservados.</span>
+          <a href="/p/">Propuestas</a>
         </div>
 
         {/* Stats */}
@@ -288,7 +289,9 @@ export const Contact: React.FC = () => {
         }
         .contact-footer-bar {
           display: flex;
+          flex-wrap: wrap;
           justify-content: center;
+          gap: 4px 20px;
           color: var(--color-text-muted);
           font-size: 0.85rem;
           padding: 24px 0;
@@ -298,6 +301,11 @@ export const Contact: React.FC = () => {
           position: relative;
           z-index: 1;
         }
+        .contact-footer-bar a {
+          color: inherit;
+          text-underline-offset: 3px;
+        }
+        .contact-footer-bar a:hover { color: var(--color-primary); }
         .footer-stats {
           display: flex;
           justify-content: center;

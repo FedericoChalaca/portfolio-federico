@@ -26,6 +26,10 @@ Todo el contenido vive en `src/data/portfolio.ts`: datos personales, proyectos, 
 
 Las capturas del carrusel están en `public/previews/` (escritorio 960x600 y celular 390x844, en WebP). Un proyecto aparece en el carrusel solo si tiene `previews`; si no, va a la lista de "Más proyectos".
 
+## Propuestas
+
+Las propuestas de diseño son páginas HTML sueltas en `public/p/<nombre>/index.html` y se listan en `public/p/index.html` (enlace "Propuestas" al pie del sitio). Para agregar una: copiar su HTML a una carpeta nueva y sumar un elemento a esa lista. `/p/` tiene su propia política de seguridad en `vercel.json` (permite Google Fonts y cdnjs) y está fuera de buscadores por `robots.txt`.
+
 ## Desarrollo
 
 ```bash
