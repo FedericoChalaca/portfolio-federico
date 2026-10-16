@@ -99,7 +99,8 @@ export const Projects: React.FC = () => (
           box-shadow: var(--shadow-sm);
         }
         /* The first one is the strongest piece of code: give it the full row */
-        .more-item:first-child { grid-column: 1 / -1; }
+        .more-item:first-child,
+        .more-item:last-child:nth-child(even) { grid-column: 1 / -1; }
         .more-head {
           display: flex;
           flex-wrap: wrap;
