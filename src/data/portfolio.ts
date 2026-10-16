@@ -210,15 +210,6 @@ export const projects: Project[] = [
         githubUrl: 'https://github.com/FedericoChalaca/wing_house',
     },
     {
-        id: 'bingo-damas-rosadas',
-        title: 'Bingo Damas Rosadas',
-        description: 'Tablero para jugar bingo con el voluntariado Damas Rosadas.',
-        longDescription: 'Tablero para jugar bingo con el voluntariado Damas Rosadas: muestra la última balota en grande, las anteriores y el avance del juego. Es un solo archivo que funciona sin internet y guarda la partida aunque se cierre la página.',
-        status: 'Completado',
-        tags: ['HTML', 'CSS', 'JavaScript'],
-        demoUrl: '/p/bingo-damas-rosadas/',
-    },
-    {
         id: 'viajero-fiel',
         title: 'Viajero Fiel',
         description: 'App web privada para coordinar viajes entre conocidos.',
