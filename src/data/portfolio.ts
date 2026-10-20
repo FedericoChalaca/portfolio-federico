@@ -132,6 +132,16 @@ export const projects: Project[] = [
         previews: { desktop: '/previews/bionary-desktop.webp', mobile: '/previews/bionary-mobile.webp' },
     },
     {
+        id: 'macla',
+        title: 'Macla',
+        description: 'Portafolio bilingüe para Maria Clara Lopera, publicista y copywriter de Medellín.',
+        longDescription: 'Portafolio para Maria Clara Lopera, publicista y copywriter: nueve casos de estudio en cinco capítulos, cada uno presentado por un objeto fotografiado, y titulares que mezclan letra sans, caligrafía y letra punteada. Bilingüe ES/EN, sin backend, y las galerías se llenan solas desde una carpeta.',
+        status: 'En Progreso',
+        tags: ['React', 'TypeScript', 'Framer Motion', 'Bilingüe ES/EN'],
+        demoUrl: 'https://portafolio-macla.vercel.app/',
+        previews: { desktop: '/previews/macla-desktop.webp', mobile: '/previews/macla-mobile.webp' },
+    },
+    {
         id: 'parchate',
         title: 'Párchate',
         description: 'Landing de mi marca de ropa pintada a mano con cloro y pintura, donde cada pieza es 1 de 1.',
