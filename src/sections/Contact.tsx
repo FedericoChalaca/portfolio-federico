@@ -50,7 +50,7 @@ export const Contact: React.FC = () => {
               <span>{personalInfo.firstName} </span>
               <span>{personalInfo.lastName}</span>
             </h2>
-            <p className="contact-role">Desarrollador Web & Ingeniero de Procesos</p>
+            <p className="contact-role">Desarrollador Front-End y Full-Stack</p>
             <p className="contact-tagline">
               ¿Tienes un proceso que se puede automatizar o una idea que quieres lanzar? Cuéntame y lo revisamos juntos.
             </p>

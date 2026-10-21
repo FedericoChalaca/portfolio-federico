@@ -18,12 +18,12 @@ export const personalInfo: PersonalInfo = {
     roles: [
         'Desarrollador Front-End',
         'Desarrollador Full-Stack',
-        'Ingeniero de Procesos',
+        'Estudiante de Ingeniería de Sistemas',
     ],
     bio: [
-        '¡Hola! Soy Federico Martinez, desarrollador front-end e ingeniero de procesos en Medellín. Diseño y construyo sitios y aplicaciones web con React y TypeScript: rápidas, accesibles y pensadas primero para el celular.',
+        '¡Hola! Soy Federico Martinez, desarrollador front-end en Medellín y estudiante de octavo semestre de Ingeniería de Sistemas. Diseño y construyo sitios y aplicaciones web con React y TypeScript: rápidas, accesibles y pensadas primero para el celular.',
         'He hecho landings y portafolios para marcas y creativos, apps web y herramientas que la gente usa en eventos reales, como un bingo que se juega desde el celular. Cuido los detalles que se notan: animaciones con sentido, modo oscuro, buen rendimiento y textos claros.',
-        'Mi formación en ingeniería de procesos me ayuda a entender cómo funciona un negocio antes de programar. Cuando el proyecto lo pide, también hago el backend con Node.js, .NET o Supabase para que todo funcione de punta a punta.',
+        'Antes de programar me gusta entender cómo funciona el negocio: quién hace qué y dónde se pierde tiempo. Cuando el proyecto lo pide, también hago el backend con Node.js, .NET o Supabase para que todo funcione de punta a punta.',
     ],
     tagline: 'Diseño y desarrollo sitios y apps web que se ven bien y funcionan: landings, portafolios, apps y sistemas de gestión.',
     location: 'Medellín, Colombia',
