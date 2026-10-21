@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<title>Mi cartón de bingo</title>
+<style>
+  /* Cartón del jugador: se abre desde el QR del tablero. El enlace trae el título (t), el color (c),
+     la forma que hay que llenar (f, 25 ceros y unos por filas) y el premio (p). Todo se guarda en este celular. */
+  :root {
+    --fondo: #fdf1f5;
+    --brillo: #fbd9e6;
+    --panel: #fffafc;
+    --linea: #f3c6d6;
+    --texto: #5c2340;
+    --texto-suave: #94506f;
+    --acento: #c2255c;
+    --salido: #d02f68;
+    --ultimo: #9c1c48;
+    --sobre-salido: #fffafc;
+    --sobre-ultimo: #fffafc;
+    --sombra: rgba(156, 28, 72, 0.16);
+    --error: #b42318;
+    --resorte: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --suave: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #1f0f17;
+      --brillo: #3a1527;
+      --panel: #2c1520;
+      --linea: #57283f;
+      --texto: #fbe7f0;
+      --texto-suave: #e0a9c2;
+      --acento: #f783ac;
+      --salido: #a8255a;
+      --ultimo: #e64980;
+      --sombra: rgba(0, 0, 0, 0.35);
+      --error: #ff8a80;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
+  body {
+    min-height: 100dvh;
+    background:
+      radial-gradient(70vmax 70vmax at -10% -20%, var(--brillo), transparent 60%),
+      var(--fondo);
+    background-attachment: fixed;
+    color: var(--texto);
+    font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+    padding: max(18px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+  }
+  .envoltura { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+  button, input { font-family: inherit; }
+  button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+
+  .cab { animation: aparecer 0.6s var(--suave) both; }
+  .marca { color: var(--acento); font-weight: 800; font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+  h1 { font-size: clamp(30px, 9vw, 40px); line-height: 1.1; font-weight: 800; letter-spacing: -0.01em; }
+
+  .tarjeta {
+    background: var(--panel);
+    border: 2px solid var(--linea);
+    border-radius: 20px;
+    box-shadow: 0 10px 24px var(--sombra);
+    padding: 16px;
+    animation: aparecer 0.6s var(--suave) both;
+  }
+  .forma-info { display: flex; align-items: center; gap: 16px; animation-delay: 0.06s; }
+  .mini {
+    display: grid;
+    grid-template-columns: repeat(5, 18px);
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .mini span { width: 18px; height: 18px; border-radius: 4px; background: var(--fondo); border: 1.5px solid var(--linea); }
+  .mini span.si { background: var(--salido); border-color: var(--salido); }
+  .et { color: var(--texto-suave); font-size: 15px; }
+  .forma-nombre { font-size: 24px; font-weight: 800; line-height: 1.15; }
+  .premio-info { font-size: 17px; color: var(--texto-suave); animation-delay: 0.1s; }
+  .premio-info strong { color: var(--texto); display: block; font-size: 20px; margin-top: 2px; }
+
+  /* ---------- Cartón ---------- */
+  .carton { display: flex; flex-direction: column; gap: 14px; animation-delay: 0.14s; }
+  .carton-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .carton-cab h2 { font-size: 20px; color: var(--acento); }
+  .carton-botones { display: flex; gap: 8px; }
+  .rejilla { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .letra { text-align: center; font-size: 26px; font-weight: 800; color: var(--acento); }
+  .rejilla input, .casilla, .libre {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 14px;
+    border: 2px solid var(--linea);
+    background: var(--fondo);
+    color: var(--texto);
+    font-size: clamp(22px, 7vw, 30px);
+    font-weight: 800;
+    text-align: center;
+  }
+  .rejilla input { padding: 0; -moz-appearance: textfield; }
+  .rejilla input::placeholder { color: var(--texto-suave); font-weight: 500; font-size: 0.6em; opacity: 0.7; }
+  .rejilla input:focus { outline: none; border-color: var(--acento); background: var(--panel); }
+  .rejilla input.mal { border-color: var(--error); color: var(--error); }
+  .libre {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--salido);
+    border-color: var(--salido);
+    color: var(--sobre-salido);
+    font-size: clamp(13px, 3.6vw, 16px);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .casilla {
+    position: relative;
+    background: var(--panel);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s var(--suave);
+  }
+  .casilla:active { transform: scale(0.94); }
+  .casilla.forma { border-style: dashed; border-color: var(--acento); }
+  .casilla[aria-pressed="true"] { background: var(--salido); border-color: var(--salido); border-style: solid; color: var(--sobre-salido); }
+  .casilla[aria-pressed="true"].sella { animation: sello 0.45s var(--resorte); }
+  .error { color: var(--error); font-size: 16px; font-weight: 600; }
+  .error:empty { display: none; }
+  .pista { color: var(--texto-suave); font-size: 15px; }
+
+  .accion, .chico {
+    border-radius: 999px;
+    font-weight: 700;
+    border: 2px solid var(--linea);
+    background: var(--panel);
+    color: var(--acento);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--suave);
+  }
+  .accion { min-height: 56px; padding: 12px 22px; font-size: 19px; width: 100%; }
+  .accion.principal { background: var(--ultimo); border-color: var(--ultimo); color: var(--sobre-ultimo); }
+  .accion:active, .chico:active { transform: scale(0.97); }
+  .chico { padding: 8px 14px; font-size: 15px; }
+  .pie { display: flex; flex-direction: column; gap: 10px; }
+  .ayuda { color: var(--texto-suave); font-size: 15px; text-align: center; line-height: 1.5; }
+
+  /* ---------- ¡Bingo! ---------- */
+  .fiesta {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 24px;
+    text-align: center;
+    background: color-mix(in srgb, var(--fondo) 88%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    overflow: hidden;
+    animation: aparecer 0.3s var(--suave);
+  }
+  .fiesta .grande { font-size: clamp(64px, 22vw, 120px); font-weight: 900; color: var(--acento); line-height: 1; animation: rebote 0.9s var(--resorte); }
+  .fiesta p { font-size: 22px; font-weight: 700; max-width: 18ch; }
+  .fiesta .accion { max-width: 320px; margin-top: 10px; }
+  .confeti { position: absolute; top: -20px; width: 10px; height: 16px; border-radius: 3px; animation: caer 2.6s linear infinite; pointer-events: none; }
+
+  @keyframes aparecer { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes sello { 0% { transform: scale(0.7); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+  @keyframes rebote { 0% { transform: scale(0.3) rotate(-8deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+  @keyframes caer { to { transform: translateY(110vh) rotate(720deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .confeti { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="envoltura">
+  <header class="cab">
+    <p class="marca" id="titulo">Bingo</p>
+    <h1>Mi cartón</h1>
+  </header>
+  <section class="tarjeta forma-info" aria-labelledby="formaNombre">
+    <div class="mini" id="formaMini" aria-hidden="true"></div>
+    <div>
+      <p class="et">Hay que llenar</p>
+      <p class="forma-nombre" id="formaNombre">Cartón lleno</p>
+    </div>
+  </section>
+  <p class="premio-info" id="premioInfo" hidden>Premio<strong id="premioTexto"></strong></p>
+  <main id="cartones" class="envoltura"></main>
+  <div class="pie">
+    <button type="button" class="accion" id="btnAgregar">+ Agregar otro cartón</button>
+    <button type="button" class="accion" id="btnLimpiar">Borrar marcas (juego nuevo)</button>
+  </div>
+  <p class="ayuda">Toca cada número cuando lo canten. Las casillas con borde punteado son las de la forma.</p>
+</div>
+
+<div class="fiesta" id="fiesta" role="alertdialog" aria-modal="true" aria-labelledby="fiestaTitulo" hidden>
+  <div class="grande" id="fiestaTitulo">¡BINGO!</div>
+  <p id="fiestaTexto">Grita ¡Bingo! y muestra tu cartón</p>
+  <button type="button" class="accion principal" id="btnSeguir">Seguir jugando</button>
+</div>
+
+<script>
+(function () {
+  var LETRAS = ["B", "I", "N", "G", "O"];
+  var CENTRO = 12;
+  var FORMAS = [
+    ["Cartón lleno", "1111111111111111111111111"], ["L", "1000010000100001000011111"],
+    ["O (marco)", "1111110001100011000111111"], ["X", "1000101010001000101010001"],
+    ["T", "1111100100001000010000100"], ["Cruz", "0010000100111110010000100"],
+    ["Cuatro esquinas", "1000100000000000000010001"]
+  ];
+  var CLAVE = "bingo-cartones";
+  var quieto = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var oscuro = window.matchMedia("(prefers-color-scheme: dark)");
+  function $(id) { return document.getElementById(id); }
+
+  var params = {}, forma = FORMAS[0][1], color = "";
+  var cartones = [];
+
+  function leerEnlace() {
+    params = new URLSearchParams(location.hash.slice(1));
+    var titulo = (params.get("t") || "Bingo").slice(0, 60);
+    $("titulo").textContent = titulo;
+    document.title = "Mi cartón | " + titulo;
+    var f = params.get("f") || "";
+    forma = /^[01]{25}$/.test(f) && f.indexOf("1") !== -1 ? f : FORMAS[0][1];
+    var c = (params.get("c") || "").toLowerCase();
+    color = /^[0-9a-f]{6}$/.test(c) ? "#" + c : "";
+    var p = (params.get("p") || "").slice(0, 80);
+    $("premioTexto").textContent = p;
+    $("premioInfo").hidden = !p;
+    pintarForma();
+    aplicarColor();
+  }
+
+  function nombreForma(bits) {
+    for (var i = 0; i < FORMAS.length; i++) if (FORMAS[i][1] === bits) return FORMAS[i][0];
+    return "La forma del tablero";
+  }
+  function pintarForma() {
+    $("formaNombre").textContent = nombreForma(forma);
+    var mini = $("formaMini");
+    mini.textContent = "";
+    for (var i = 0; i < 25; i++) {
+      var s = document.createElement("span");
+      if (forma[i] === "1") s.className = "si";
+      mini.appendChild(s);
+    }
+  }
+
+  // ---------- Color (mismo cálculo que el tablero) ----------
+  var VARS = ["--fondo", "--brillo", "--panel", "--linea", "--texto", "--texto-suave", "--acento", "--salido", "--ultimo", "--sobre-salido", "--sobre-ultimo", "--sombra"];
+  function rgb(h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }); }
+  function hex(c) { return "#" + c.map(function (x) { return ("0" + Math.round(Math.max(0, Math.min(255, x))).toString(16)).slice(-2); }).join(""); }
+  function mezclar(a, b, t) { var x = rgb(a), y = rgb(b); return hex(x.map(function (v, i) { return v + (y[i] - v) * t; })); }
+  function lum(h) {
+    var k = [0.2126, 0.7152, 0.0722];
+    return rgb(h).reduce(function (s, v, i) { v /= 255; return s + k[i] * (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)); }, 0);
+  }
+  function contraste(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function legible(c, fondo, minimo) {
+    var meta = lum(fondo) > 0.4 ? "#000000" : "#ffffff";
+    for (var i = 0; i < 14 && contraste(c, fondo) < minimo; i++) c = mezclar(c, meta, 0.12);
+    return c;
+  }
+  function sobre(c) { return contraste("#fffafc", c) >= 3 ? "#fffafc" : "#1d1a1c"; }
+  function paleta(base, noche) {
+    var t = {};
+    if (!noche) {
+      t["--fondo"] = mezclar(base, "#ffffff", 0.94); t["--brillo"] = mezclar(base, "#ffffff", 0.82);
+      t["--panel"] = mezclar(base, "#ffffff", 0.985); t["--linea"] = mezclar(base, "#ffffff", 0.72);
+      t["--texto"] = legible(mezclar(base, "#1d1a1c", 0.72), t["--panel"], 7);
+      t["--texto-suave"] = legible(mezclar(base, "#5a5357", 0.55), t["--fondo"], 4.5);
+      t["--acento"] = legible(mezclar(base, "#000000", 0.12), t["--fondo"], 4.5);
+      t["--salido"] = base; t["--ultimo"] = mezclar(base, "#000000", 0.3);
+      t["--sombra"] = "rgba(" + rgb(t["--ultimo"]).join(", ") + ", 0.16)";
+    } else {
+      t["--fondo"] = mezclar(base, "#141013", 0.9); t["--brillo"] = mezclar(base, "#141013", 0.76);
+      t["--panel"] = mezclar(base, "#1c171a", 0.85); t["--linea"] = mezclar(base, "#1c171a", 0.62);
+      t["--texto"] = legible(mezclar(base, "#fff8fb", 0.88), t["--panel"], 7);
+      t["--texto-suave"] = legible(mezclar(base, "#f3e9ee", 0.62), t["--fondo"], 4.5);
+      t["--acento"] = legible(mezclar(base, "#ffffff", 0.3), t["--fondo"], 4.5);
+      t["--salido"] = mezclar(base, "#000000", 0.25); t["--ultimo"] = mezclar(base, "#ffffff", 0.12);
+      t["--sombra"] = "rgba(0, 0, 0, 0.35)";
+    }
+    t["--sobre-salido"] = sobre(t["--salido"]);
+    t["--sobre-ultimo"] = sobre(t["--ultimo"]);
+    return t;
+  }
+  function aplicarColor() {
+    var raiz = document.documentElement.style;
+    if (!color) { VARS.forEach(function (v) { raiz.removeProperty(v); }); return; }
+    var t = paleta(color, oscuro.matches);
+    VARS.forEach(function (v) { raiz.setProperty(v, t[v]); });
+  }
+  if (oscuro.addEventListener) oscuro.addEventListener("change", aplicarColor);
+
+  // ---------- Guardado ----------
+  function nuevoCarton() { return { nums: new Array(25).fill(null), marcas: new Array(25).fill(false), editando: true, cantado: false }; }
+  function guardar() { try { localStorage.setItem(CLAVE, JSON.stringify(cartones)); } catch (e) {} }
+  function cargar() {
+    var d = null;
+    try { d = JSON.parse(localStorage.getItem(CLAVE)); } catch (e) {}
+    if (Array.isArray(d)) {
+      cartones = d.slice(0, 12).map(function (c) {
+        var nums = Array.isArray(c.nums) ? c.nums.slice(0, 25) : [];
+        var marcas = Array.isArray(c.marcas) ? c.marcas.slice(0, 25) : [];
+        var r = nuevoCarton();
+        for (var i = 0; i < 25; i++) {
+          r.nums[i] = Number.isInteger(nums[i]) && nums[i] >= 1 && nums[i] <= 75 ? nums[i] : null;
+          r.marcas[i] = marcas[i] === true;
+        }
+        r.editando = c.editando !== false || !validar(r).ok;
+        r.cantado = c.cantado === true;
+        return r;
+      });
+    }
+    if (!cartones.length) cartones = [nuevoCarton()];
+  }
+
+  function rango(i) { var col = i % 5; return [col * 15 + 1, col * 15 + 15]; }
+  function validar(c) {
+    var malos = {}, vistos = {}, faltan = 0, fuera = null, repetido = false;
+    for (var i = 0; i < 25; i++) {
+      if (i === CENTRO) continue;
+      var n = c.nums[i];
+      if (n == null) { faltan++; continue; }
+      var r = rango(i);
+      if (n < r[0] || n > r[1]) { malos[i] = true; if (!fuera) fuera = LETRAS[i % 5] + " va del " + r[0] + " al " + r[1]; }
+      if (vistos[n] != null) { malos[i] = true; malos[vistos[n]] = true; repetido = true; }
+      vistos[n] = i;
+    }
+    var msg = fuera ? "Revisa los números en rojo: la " + fuera + "." : repetido ? "Hay un número repetido." : faltan ? "Faltan " + faltan + " números." : "";
+    return { ok: !fuera && !repetido && !faltan, malos: malos, msg: msg };
+  }
+  function completo(c) {
+    for (var i = 0; i < 25; i++) if (forma[i] === "1" && i !== CENTRO && !c.marcas[i]) return false;
+    return true;
+  }
+
+  // ---------- Dibujo ----------
+  var lista = $("cartones");
+  function pintar() {
+    lista.textContent = "";
+    cartones.forEach(function (c, k) { lista.appendChild(c.editando ? editor(c, k) : juego(c, k)); });
+  }
+  function cabecera(c, k) {
+    var cab = document.createElement("div");
+    cab.className = "carton-cab";
+    var h = document.createElement("h2");
+    h.textContent = "Cartón " + (k + 1);
+    cab.appendChild(h);
+    var bot = document.createElement("div");
+    bot.className = "carton-botones";
+    if (!c.editando) bot.appendChild(boton("chico", "Editar números", function () { c.editando = true; guardar(); pintar(); }));
+    if (cartones.length > 1) bot.appendChild(boton("chico", "Quitar", function () {
+      if (!window.confirm("¿Quitar el cartón " + (k + 1) + "?")) return;
+      cartones.splice(k, 1); guardar(); pintar();
+    }));
+    cab.appendChild(bot);
+    return cab;
+  }
+  function boton(clase, texto, alHacer) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = clase; b.textContent = texto;
+    b.addEventListener("click", alHacer);
+    return b;
+  }
+  function letras(rej) { LETRAS.forEach(function (l) { var d = document.createElement("div"); d.className = "letra"; d.textContent = l; d.setAttribute("aria-hidden", "true"); rej.appendChild(d); }); }
+  function libre() { var d = document.createElement("div"); d.className = "libre"; d.textContent = "Libre"; return d; }
+
+  // Orden de escritura: columna por columna, como vienen los cartones (B de arriba abajo, luego I...)
+  var ORDEN = [];
+  for (var col = 0; col < 5; col++) for (var fila = 0; fila < 5; fila++) if (fila * 5 + col !== CENTRO) ORDEN.push(fila * 5 + col);
+
+  function editor(c, k) {
+    var art = document.createElement("article");
+    art.className = "tarjeta carton";
+    art.appendChild(cabecera(c, k));
+    var pista = document.createElement("p");
+    pista.className = "pista";
+    pista.textContent = "Escribe los números de tu cartón. Pasa sola a la siguiente casilla.";
+    art.appendChild(pista);
+    var rej = document.createElement("div");
+    rej.className = "rejilla";
+    letras(rej);
+    var entradas = {};
+    var error = document.createElement("p");
+    error.className = "error";
+    error.setAttribute("role", "status");
+    for (var i = 0; i < 25; i++) {
+      if (i === CENTRO) { rej.appendChild(libre()); continue; }
+      var inp = document.createElement("input");
+      inp.type = "text";
+      inp.inputMode = "numeric";
+      inp.autocomplete = "off";
+      inp.maxLength = 2;
+      var r = rango(i);
+      inp.placeholder = r[0] + "-" + r[1];
+      inp.setAttribute("aria-label", LETRAS[i % 5] + ", fila " + (Math.floor(i / 5) + 1) + ", del " + r[0] + " al " + r[1]);
+      inp.value = c.nums[i] == null ? "" : c.nums[i];
+      (function (idx) {
+        inp.addEventListener("input", function (e) {
+          var v = e.target.value.replace(/\D/g, "").slice(0, 2);
+          e.target.value = v;
+          c.nums[idx] = v ? parseInt(v, 10) : null;
+          guardar();
+          if (marcarMalos().ok) error.textContent = "";
+          // Si ya no cabe otro dígito dentro del rango de la columna, salta a la siguiente casilla
+          var max = rango(idx)[1];
+          if (v && (v.length === 2 || parseInt(v, 10) * 10 > max)) {
+            var sig = ORDEN[ORDEN.indexOf(idx) + 1];
+            if (sig != null) entradas[sig].focus();
+          }
+        });
+      })(i);
+      entradas[i] = inp;
+      rej.appendChild(inp);
+    }
+    function marcarMalos() {
+      var v = validar(c);
+      for (var j in entradas) entradas[j].classList.toggle("mal", !!v.malos[j]);
+      return v;
+    }
+    art.appendChild(rej);
+    art.appendChild(error);
+    art.appendChild(boton("accion principal", "Listo, a jugar", function () {
+      var v = marcarMalos();
+      if (!v.ok) { error.textContent = v.msg; return; }
+      error.textContent = "";
+      c.editando = false;
+      guardar();
+      pintar();
+    }));
+    marcarMalos();
+    return art;
+  }
+
+  function juego(c, k) {
+    var art = document.createElement("article");
+    art.className = "tarjeta carton";
+    art.appendChild(cabecera(c, k));
+    var rej = document.createElement("div");
+    rej.className = "rejilla";
+    letras(rej);
+    for (var i = 0; i < 25; i++) {
+      if (i === CENTRO) { rej.appendChild(libre()); continue; }
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "casilla" + (forma[i] === "1" ? " forma" : "");
+      b.textContent = c.nums[i];
+      b.setAttribute("aria-label", LETRAS[i % 5] + " " + c.nums[i] + (forma[i] === "1" ? ", parte de la forma" : ""));
+      b.setAttribute("aria-pressed", c.marcas[i] ? "true" : "false");
+      (function (idx, el) {
+        el.addEventListener("click", function () {
+          c.marcas[idx] = !c.marcas[idx];
+          el.setAttribute("aria-pressed", c.marcas[idx] ? "true" : "false");
+          if (c.marcas[idx] && !quieto.matches) { el.classList.remove("sella"); void el.offsetWidth; el.classList.add("sella"); }
+          var lleno = completo(c);
+          if (lleno && !c.cantado) celebrar(k);
+          c.cantado = lleno;
+          guardar();
+        });
+      })(i, b);
+      rej.appendChild(b);
+    }
+    art.appendChild(rej);
+    return art;
+  }
+
+  // ---------- ¡Bingo! ----------
+  var fiesta = $("fiesta");
+  function celebrar(k) {
+    $("fiestaTexto").textContent = cartones.length > 1 ? "Grita ¡Bingo! y muestra tu cartón " + (k + 1) : "Grita ¡Bingo! y muestra tu cartón";
+    [].slice.call(fiesta.querySelectorAll(".confeti")).forEach(function (n) { n.remove(); });
+    if (!quieto.matches) {
+      var tonos = ["var(--salido)", "var(--ultimo)", "var(--acento)", "var(--linea)"];
+      for (var i = 0; i < 36; i++) {
+        var s = document.createElement("span");
+        s.className = "confeti";
+        s.style.left = Math.random() * 100 + "%";
+        s.style.background = tonos[i % tonos.length];
+        s.style.animationDelay = (Math.random() * 1.6).toFixed(2) + "s";
+        s.style.animationDuration = (2.2 + Math.random() * 1.6).toFixed(2) + "s";
+        fiesta.appendChild(s);
+      }
+    }
+    fiesta.hidden = false;
+    if (navigator.vibrate) navigator.vibrate([220, 100, 220]);
+    $("btnSeguir").focus();
+  }
+  $("btnSeguir").addEventListener("click", function () { fiesta.hidden = true; });
+
+  $("btnAgregar").addEventListener("click", function () {
+    if (cartones.length >= 12) return;
+    cartones.push(nuevoCarton());
+    guardar();
+    pintar();
+    var ultimo = lista.lastElementChild;
+    ultimo.scrollIntoView({ behavior: quieto.matches ? "auto" : "smooth", block: "start" });
+    var primera = ultimo.querySelector("input");
+    if (primera) primera.focus({ preventScroll: true });
+  });
+  $("btnLimpiar").addEventListener("click", function () {
+    if (!window.confirm("¿Borrar las marcas de todos tus cartones? Los números se quedan.")) return;
+    cartones.forEach(function (c) { c.marcas = new Array(25).fill(false); c.cantado = false; });
+    guardar();
+    pintar();
+  });
+  window.addEventListener("hashchange", function () { leerEnlace(); pintar(); });
+
+  leerEnlace();
+  cargar();
+  pintar();
+})();
+</script>
+</body>
+</html>
