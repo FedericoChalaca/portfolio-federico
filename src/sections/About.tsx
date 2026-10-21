@@ -60,7 +60,7 @@ export const About: React.FC = () => {
             </div>
 
             <div className="about-tags">
-              {['JavaScript', 'React', 'TypeScript', 'Node.js', 'Ingeniería'].map((tag) => (
+              {['React', 'TypeScript', 'Framer Motion', 'Diseño responsive', 'Accesibilidad'].map((tag) => (
                 <span key={tag} className="about-tag">{tag}</span>
               ))}
             </div>
