@@ -7,7 +7,7 @@ import { personalAi } from '../data/portfolio';
  * it is the one project a visitor can install and use themselves.
  */
 export const PersonalAi: React.FC = () => (
-  <aside className="ai-spot" aria-labelledby="ai-spot-title">
+  <aside id="proyecto-nimbo" className="ai-spot" aria-labelledby="ai-spot-title">
     <header className="ai-spot-head">
       <p className="ai-spot-name">{personalAi.name}</p>
       <h3 id="ai-spot-title" className="ai-spot-title">{personalAi.heading}</h3>

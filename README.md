@@ -8,6 +8,7 @@ Portafolio personal, publicado en **https://portafolio-federico.vercel.app/**
 
 - **Inicio** con un laptop 3D interactivo (en celular entra primero una imagen y el 3D la reemplaza al interactuar).
 - **Proyectos:** carrusel de sitios en vivo con vista de escritorio y de celular, lista de proyectos de código, y un espacio propio para [Nimbo](https://github.com/FedericoChalaca/nimbo).
+- **Índice:** botón "Índice" en la barra superior (y "Ver índice" en Proyectos) con las secciones y todos los proyectos numerados. Cada proyecto tiene su propio enlace, `#proyecto-<id>`: los del carrusel lo seleccionan y los demás bajan hasta su tarjeta.
 - **Tecnologías:** cada una dice para qué le sirve a un cliente y en qué proyecto real se usó.
 - **Contacto** con WhatsApp, correo, GitHub y LinkedIn.
 - Modo claro y oscuro, y respeto a la preferencia de movimiento reducido.

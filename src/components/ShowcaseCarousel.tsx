@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink, Github } from 'lucide-react';
 import type { Project } from '../types';
+import { projectIdFromHash } from '../lib/projectNav';
 
 interface ShowcaseCarouselProps {
   projects: Project[];
@@ -35,6 +36,17 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
       strip.scrollTo({ left: tab.offsetLeft - (strip.clientWidth - tab.offsetWidth) / 2, behavior: 'smooth' });
     }
   }, [active]);
+
+  // #proyecto-<id> (from the index or a shared link) makes that site the active slide
+  useEffect(() => {
+    const sync = () => {
+      const i = projects.findIndex((p) => p.id === projectIdFromHash(window.location.hash));
+      if (i >= 0) setActive(i);
+    };
+    sync();
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, [projects]);
 
   if (n === 0) return null;
 
@@ -182,6 +194,7 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
 
       <style>{`
         .showcase {
+          scroll-margin-top: calc(var(--navbar-height) + 16px);
           --card-w: clamp(260px, 46vw, 560px);
           position: relative;
           max-width: 1100px;

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Code2, Sun, Moon, Menu, X } from 'lucide-react';
+import { Code2, Sun, Moon, Menu, X, ListTree } from 'lucide-react';
 import { navItems } from '../../data/portfolio';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
+import { IndexPanel } from '../ProjectIndex';
+import { OPEN_INDEX_EVENT, goToProject } from '../../lib/projectNav';
 import type { NavItem } from '../../types';
 
 interface NavbarProps {
@@ -18,12 +20,42 @@ const sectionIds = navItems.map((n) => n.id);
 export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
     const activeSection = useScrollSpy(sectionIds);
     const [menuOpen, setMenuOpen] = React.useState(false);
+    const [indexOpen, setIndexOpen] = React.useState(false);
+    const panelRef = React.useRef<HTMLDivElement>(null);
+    const indexToggleRef = React.useRef<HTMLButtonElement>(null);
 
     const handleNavClick = (href: string) => {
         setMenuOpen(false);
+        setIndexOpen(false);
         const el = document.querySelector(href);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
     };
+
+    // The projects section has its own "Ver índice" button: it asks the navbar to open the panel
+    React.useEffect(() => {
+        const open = () => { setMenuOpen(false); setIndexOpen(true); };
+        window.addEventListener(OPEN_INDEX_EVENT, open);
+        return () => window.removeEventListener(OPEN_INDEX_EVENT, open);
+    }, []);
+
+    // While the index is open: focus its first link, close it with Escape or a click outside
+    React.useEffect(() => {
+        if (!indexOpen) return;
+        panelRef.current?.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') { setIndexOpen(false); indexToggleRef.current?.focus(); }
+        };
+        const onDown = (e: PointerEvent) => {
+            const t = e.target as Node;
+            if (!panelRef.current?.contains(t) && !indexToggleRef.current?.contains(t)) setIndexOpen(false);
+        };
+        document.addEventListener('keydown', onKey);
+        document.addEventListener('pointerdown', onDown);
+        return () => {
+            document.removeEventListener('keydown', onKey);
+            document.removeEventListener('pointerdown', onDown);
+        };
+    }, [indexOpen]);
 
     return (
         <>
@@ -54,12 +86,23 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
 
                     {/* Right controls */}
                     <div className="nav-controls">
+                        <button
+                            ref={indexToggleRef}
+                            className={`index-toggle ${indexOpen ? 'open' : ''}`}
+                            onClick={() => { setMenuOpen(false); setIndexOpen((o) => !o); }}
+                            aria-expanded={indexOpen}
+                            aria-controls="indice"
+                            aria-label="Índice del portafolio"
+                        >
+                            <ListTree size={18} />
+                            <span className="index-toggle-label">Índice</span>
+                        </button>
                         <button className="theme-toggle" onClick={onToggleTheme} aria-label="Toggle theme">
                             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
                         </button>
                         <button
                             className="menu-toggle"
-                            onClick={() => setMenuOpen((o) => !o)}
+                            onClick={() => { setIndexOpen(false); setMenuOpen((o) => !o); }}
                             aria-label="Toggle menu"
                         >
                             {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -80,6 +123,15 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
                         </a>
                     ))}
                 </div>
+
+                {indexOpen && (
+                    <IndexPanel
+                        ref={panelRef}
+                        activeSection={activeSection}
+                        onSection={handleNavClick}
+                        onProject={(hash) => { setIndexOpen(false); setMenuOpen(false); goToProject(hash); }}
+                    />
+                )}
             </nav>
 
             <style>{`
@@ -173,6 +225,26 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
           color: var(--color-primary);
           transform: rotate(15deg);
         }
+        .index-toggle {
+          height: 38px;
+          padding: 0 14px 0 12px;
+          border-radius: var(--radius-full);
+          border: 1.5px solid var(--color-border);
+          background: var(--color-bg-card);
+          color: var(--color-text-secondary);
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: inherit;
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all var(--transition-base);
+        }
+        .index-toggle:hover, .index-toggle.open {
+          border-color: var(--color-primary);
+          color: var(--color-primary);
+        }
         .menu-toggle {
           display: none;
           width: 38px;
@@ -212,6 +284,8 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
         @media (max-width: 768px) {
           .nav-links { display: none; }
           .menu-toggle { display: flex; }
+          .index-toggle { width: 38px; padding: 0; justify-content: center; }
+          .index-toggle-label { display: none; }
           .navbar { height: auto; min-height: var(--navbar-height); }
           .nav-inner { height: var(--navbar-height); }
         }
