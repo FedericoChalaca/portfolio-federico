@@ -1041,7 +1041,7 @@ var __qr=(()=>{var or=(L,T)=>()=>(T||L((T={exports:{}}).exports,T),T.exports);va
   var compartir = $("compartir");
   function enlaceCarton() {
     var q = new URLSearchParams();
-    q.set("t", ajustes.titulo || DEF.titulo);
+    q.set("t", (ajustes.titulo || "").trim() || DEF.titulo);
     q.set("f", forma.bits);
     if (ajustes.color) q.set("c", ajustes.color.slice(1));
     if (premio.texto.trim()) q.set("p", premio.texto.trim());
@@ -1159,7 +1159,7 @@ var __qr=(()=>{var or=(L,T)=>()=>(T||L((T={exports:{}}).exports,T),T.exports);va
 
   // ---------- Textos y logo ----------
   function aplicarAjustes() {
-    var titulo = ajustes.titulo || DEF.titulo;
+    var titulo = (ajustes.titulo || "").trim() || DEF.titulo;
     $("tituloTexto").textContent = titulo;
     document.title = titulo;
     $("lema").textContent = ajustes.lema;

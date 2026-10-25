@@ -81,7 +81,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
           />
           {askFirst && !live && (
             <button type="button" className="laptop-hint" onClick={() => setEngaged(true)} disabled={engaged} aria-live="polite">
-              {failed ? 'Sin conexión para cargar el 3D' : engaged ? 'Cargando 3D…' : 'Toca para moverlo en 3D'}
+              {failed ? 'Sin conexión: recarga para ver el 3D' : engaged ? 'Cargando 3D…' : 'Toca para moverlo en 3D'}
             </button>
           )}
           <div className="color-controls">

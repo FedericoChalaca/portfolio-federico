@@ -355,8 +355,12 @@ export const Contact: React.FC = () => {
             padding-top: 48px;
           }
         }
+        .contact-grid > * { min-width: 0; }
+        .social-link-large span { overflow-wrap: anywhere; }
         @media (max-width: 480px) {
           .contact-grid { padding: 40px 24px; }
+          .social-link-large { padding: 14px 16px; }
+          .contact-left > a { width: 100%; justify-content: center; white-space: normal; text-align: center; }
           .footer-stats { gap: 32px; }
           .footer-stat-value { font-size: 1.8rem; }
         }

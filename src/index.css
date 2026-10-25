@@ -200,6 +200,8 @@ body {
   .project-link, .projects-index-btn, .laptop-hint { min-height: 44px; }
   .showcase .showcase-tab, .showcase .showcase-info a { min-height: 44px; }
   .showcase .showcase-arrow { width: 44px; height: 44px; }
+  .filter-tabs .filter-tab { min-height: 44px; }
+  .contact-footer-bar a { display: inline-flex; align-items: center; min-height: 44px; }
 }
 
 /* Static first view in index.html: on screen until React mounts (slow connections) */
