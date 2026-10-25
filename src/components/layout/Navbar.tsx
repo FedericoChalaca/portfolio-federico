@@ -97,13 +97,14 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
                             <ListTree size={18} />
                             <span className="index-toggle-label">Índice</span>
                         </button>
-                        <button className="theme-toggle" onClick={onToggleTheme} aria-label="Toggle theme">
+                        <button className="theme-toggle" onClick={onToggleTheme} aria-label={theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'}>
                             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
                         </button>
                         <button
                             className="menu-toggle"
                             onClick={() => { setIndexOpen(false); setMenuOpen((o) => !o); }}
-                            aria-label="Toggle menu"
+                            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                            aria-expanded={menuOpen}
                         >
                             {menuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
@@ -285,6 +286,9 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
           .nav-links { display: none; }
           .menu-toggle { display: flex; }
           .index-toggle { width: 38px; padding: 0; justify-content: center; }
+        }
+        @media (pointer: coarse) and (max-width: 768px) {
+          .index-toggle, .theme-toggle, .menu-toggle { width: 44px; height: 44px; }
           .index-toggle-label { display: none; }
           .navbar { height: auto; min-height: var(--navbar-height); }
           .nav-inner { height: var(--navbar-height); }

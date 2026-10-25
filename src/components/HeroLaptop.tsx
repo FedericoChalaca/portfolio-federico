@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState, useSyncExternalStore } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { laptopColors } from './laptopColors';
 
 // three.js is ~1 MB: its own chunk, downloaded only when the 3D scene is really going to run
@@ -13,6 +13,19 @@ const subscribePhone = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange);
 };
 const isPhoneNow = () => window.matchMedia(PHONE).matches;
+
+type NetInfo = { saveData?: boolean; effectiveType?: string };
+/** Data saver on, or a 2G/3G connection (only Chromium browsers report it) */
+const isSlowNetwork = () => {
+  const c = (navigator as Navigator & { connection?: NetInfo }).connection;
+  return !!c && (!!c.saveData || /(^|-)2g$|^3g$/.test(c.effectiveType ?? ''));
+};
+
+/** Calls `run` when it unmounts: the still must come back if the 3D scene goes away (e.g. resizing to phone width). */
+function OnUnmount({ run }: { run: () => void }) {
+  useEffect(() => run, [run]);
+  return null;
+}
 
 /** If the 3D chunk fails to load (bad connection), drop the 3D instead of taking the whole page down. */
 class Optional3D extends React.Component<{ children: React.ReactNode }, { failed: boolean }> {
@@ -33,24 +46,20 @@ interface HeroLaptopProps {
  * A still of the 3D scene shows instantly and the live 3D laptop takes its place afterwards,
  * so three.js never competes with the first paint:
  * - desktop: right away, loading in the background while the still is on screen
- * - phones: once the visitor starts interacting (touch, key or scroll)
+ * - phones and slow connections: only when the visitor taps the laptop or its hint,
+ *   so nobody spends 290 KB of data and a busy second on an ornament they did not ask for
  */
 export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
   const isPhone = useSyncExternalStore(subscribePhone, isPhoneNow);
-  const [engaged, setEngaged] = useState(false); // the visitor touched, typed or scrolled
+  const [slow] = useState(isSlowNetwork);
+  const [engaged, setEngaged] = useState(false); // the visitor asked for the 3D
   const [live, setLive] = useState(false); // the 3D scene is drawn and ready to replace the still
   const [color, setColor] = useState(laptopColors[0].value);
-
-  useEffect(() => {
-    if (!isPhone || engaged) return;
-    const engage = () => setEngaged(true);
-    const events = ['pointerdown', 'keydown', 'scroll'] as const;
-    events.forEach((name) => window.addEventListener(name, engage, { once: true, passive: true }));
-    return () => events.forEach((name) => window.removeEventListener(name, engage));
-  }, [isPhone, engaged]);
+  const hideLive = useCallback(() => setLive(false), []);
 
   // Desktop starts the 3D right away (measured: waiting for an idle moment made blocking worse)
-  const start = !isPhone || engaged;
+  const askFirst = isPhone || slow;
+  const start = !askFirst || engaged;
 
   const still = laptopColors.find((c) => c.value === color) ?? laptopColors[0];
 
@@ -60,10 +69,16 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
         <div className={`laptop-still ${live ? 'is-hidden' : ''}`}>
           <img
             src={`/laptop/${isPhone ? '' : 'desktop-'}${still.still}.webp`}
-            alt="Laptop con código en la pantalla"
+            alt="Portátil con código en la pantalla"
             width={isPhone ? 780 : 1026}
             height={isPhone ? 700 : 1125}
+            onPointerDown={askFirst ? () => setEngaged(true) : undefined}
           />
+          {askFirst && !engaged && (
+            <button type="button" className="laptop-hint" onClick={() => setEngaged(true)}>
+              Toca para moverlo en 3D
+            </button>
+          )}
           <div className="color-controls">
             {laptopColors.map((c) => (
               <button
@@ -73,6 +88,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
                 onClick={() => setColor(c.value)}
                 style={{ backgroundColor: c.value }}
                 aria-label={`Color ${c.name}`}
+                title={c.name}
                 aria-pressed={color === c.value}
               />
             ))}
@@ -80,6 +96,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
         </div>
         {start && near && (
           <Optional3D>
+            <OnUnmount run={hideLive} />
             <Suspense fallback={null}>
               <div className={`laptop-live ${live ? 'is-ready' : ''}`}>
                 <InteractiveMonitor initialColor={color} onReady={() => setLive(true)} />
@@ -150,6 +167,26 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
         .color-btn:hover {
           transform: scale(1.1);
         }
+        .color-btn { position: relative; }
+        /* 24 px dots, 44 px finger area */
+        @media (pointer: coarse) { .color-btn::after { content: ''; position: absolute; inset: -10px; } }
+        .laptop-hint {
+          position: absolute;
+          bottom: 84px; /* in the empty band between the laptop's shadow and the color dots */
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10;
+          min-height: 36px;
+          padding: 6px 14px;
+          border-radius: var(--radius-full);
+          border: 1px solid var(--color-border);
+          background: var(--color-bg-card);
+          color: var(--color-text-secondary);
+          font: 500 0.8rem/1 'Inter', sans-serif;
+          white-space: nowrap;
+          cursor: pointer;
+        }
+        @media (pointer: coarse) { .laptop-hint { min-height: 44px; } }
       `}</style>
     </>
   );

@@ -48,6 +48,13 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
     return () => window.removeEventListener('hashchange', sync);
   }, [projects]);
 
+  // If the address already points at a project, keep it in step with the slide so a copied link opens what is on screen
+  useEffect(() => {
+    const id = projects[active]?.id;
+    const current = projectIdFromHash(window.location.hash);
+    if (id && current !== null && current !== id) window.history.replaceState(null, '', `#proyecto-${id}`);
+  }, [active, projects]);
+
   if (n === 0) return null;
 
   const go = (step: number) => setActive((a) => (a + step + n) % n);
@@ -180,7 +187,7 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
           <div className="project-links showcase-links">
             {current.demoUrl && (
               <a href={current.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link-demo">
-                <ExternalLink size={15} /> Ver Demo
+                <ExternalLink size={15} /> Ver sitio
               </a>
             )}
             {current.githubUrl && (
@@ -287,6 +294,14 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
         }
         .device-laptop-screen img { aspect-ratio: 16 / 10; border-radius: 3px; }
         .device-phone img { aspect-ratio: 390 / 844; border-radius: 15px; }
+        /* Soft tone instead of a black screen while a capture is still downloading */
+        .device-laptop-screen img, .device-phone img { background: var(--color-bg-secondary); }
+        /* Finger-sized targets on touch screens */
+        @media (pointer: coarse) {
+          .showcase-tab { min-height: 44px; }
+          .showcase-arrow { width: 44px; height: 44px; }
+          .showcase-info .project-link { min-height: 44px; }
+        }
         .showcase-controls {
           display: flex;
           align-items: center;

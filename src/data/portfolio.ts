@@ -79,7 +79,7 @@ export const socialLinks: SocialLink[] = [
     },
     {
         id: 'email',
-        label: 'Email',
+        label: 'Correo',
         url: 'mailto:federicoml2004@gmail.com',
         icon: 'mail',
     },
@@ -279,7 +279,7 @@ export const technologies: Technology[] = [
         benefit: 'Animaciones y 3D para que tu marca se recuerde.',
         proofs: [
             { project: 'Bionary', built: 'El libro de los animales, una galería animada, y el retrato del inicio, con Framer Motion.', url: 'https://portafolio-bionary.vercel.app/' },
-            { project: 'Portfolio Personal', built: 'La laptop 3D interactiva, el carrusel de proyectos y las animaciones de este mismo sitio.' },
+            { project: 'Este portafolio', built: 'El portátil 3D interactivo, el carrusel de proyectos y las animaciones de este mismo sitio.' },
         ],
     },
     {
@@ -318,7 +318,7 @@ export const technologies: Technology[] = [
             { project: 'Bionary', built: 'Portafolio bilingüe con rutas e idiomas hechos a mano, sin librerías adicionales.', url: 'https://portafolio-bionary.vercel.app/' },
             { project: 'ERP Tienda de Ropa', built: 'Sistema de inventario, ventas, clientes y reportes.', url: 'https://github.com/Emanuel0428/Tienda-Ropa-ERP' },
             { project: 'BigoteS Pizzeria', built: 'Web de una pizzería con catálogo, carrito y gestión de pedidos.', url: 'https://github.com/FedericoChalaca/BigoteS-pizzeria' },
-            { project: 'Portfolio Personal', built: 'Este mismo sitio.' },
+            { project: 'Este portafolio', built: 'Este mismo sitio.' },
         ],
     },
     {
@@ -341,7 +341,7 @@ export const technologies: Technology[] = [
         proofs: [
             { project: 'Vuelta', built: 'Toda la app de domicilios y sus funciones de servidor.' },
             { project: 'Bionary', built: 'Todo el sitio, incluidas sus rutas y traducciones.', url: 'https://portafolio-bionary.vercel.app/' },
-            { project: 'Portfolio Personal', built: 'Los componentes y datos de este sitio.' },
+            { project: 'Este portafolio', built: 'Los componentes y datos de este sitio.' },
         ],
     },
     {

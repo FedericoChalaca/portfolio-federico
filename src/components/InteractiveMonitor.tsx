@@ -114,7 +114,7 @@ const LaptopModel: React.FC<LaptopProps> = ({ color }) => {
                                 anchorX="center"
                                 anchorY="middle"
                             >
-                                {`const dev = {\n  status: "Ready",\n  vision: "Minimalist",\n  output: "Premium"\n};`}
+                                {`const dev = {\n  estado: "Listo",\n  estilo: "Minimalista",\n  resultado: "Premium"\n};`}
                             </Text>
                         </mesh>
                     </mesh>

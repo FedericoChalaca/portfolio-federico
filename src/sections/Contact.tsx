@@ -26,10 +26,14 @@ export const Contact: React.FC = () => {
 
   const handleCopyEmail = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigator.clipboard.writeText(personalInfo.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // The address is on screen anyway, so a blocked clipboard only skips the confirmation
+    navigator.clipboard?.writeText(personalInfo.email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }, () => {});
   };
+  const phone = personalInfo.phone;
+  const phoneShown = phone ? `+57 ${phone.slice(0, 3)} ${phone.slice(3, 6)} ${phone.slice(6)}` : '';
 
   return (
     <section id="contacto" className="section contact-section">
@@ -78,7 +82,7 @@ export const Contact: React.FC = () => {
                       key={link.id}
                       onClick={handleCopyEmail}
                       className="social-link-large"
-                      aria-label="Copiar Email"
+                      aria-label={`Copiar el correo ${personalInfo.email}`}
                       whileHover={{ scale: 1.03, y: -2 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                       style={{ width: '100%', border: 'none', cursor: 'pointer', textAlign: 'left', outline: 'none' }}
@@ -86,9 +90,9 @@ export const Contact: React.FC = () => {
                       <div className="social-link-icon">
                         {copied ? <Check size={24} color="var(--color-primary)" /> : <Mail size={24} />}
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                        <span>{copied ? '¡Email Copiado!' : link.label}</span>
-                        {!copied && <span className="copy-hint" style={{ fontSize: '0.75rem', opacity: 0.5, fontWeight: 400 }}>Clic para copiar</span>}
+                      <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
+                        <span>{copied ? '¡Correo copiado!' : personalInfo.email}</span>
+                        {!copied && <span className="copy-hint" style={{ fontSize: '0.75rem', opacity: 0.7, fontWeight: 400 }}>Toca para copiarlo</span>}
                       </div>
                     </motion.button>
                   );
@@ -118,14 +122,17 @@ export const Contact: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link-large"
-                  aria-label="WhatsApp"
+                  aria-label={`WhatsApp ${phoneShown}`}
                   whileHover={{ scale: 1.03, y: -2 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
                   <div className="social-link-icon">
-                    <Phone size={24} />
+                    <MessageCircle size={24} />
                   </div>
-                  <span>{personalInfo.phone}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span>{phoneShown}</span>
+                    <span className="copy-hint" style={{ fontSize: '0.75rem', opacity: 0.7, fontWeight: 400 }}>WhatsApp</span>
+                  </div>
                 </motion.a>
               )}
             </div>
@@ -149,6 +156,7 @@ export const Contact: React.FC = () => {
         <div className="contact-footer-bar">
           <span>© 2026 Federico Martinez. Todos los derechos reservados.</span>
           <a href="/p/">Propuestas</a>
+          <span>Sin cookies: solo cuento visitas anónimas con Vercel Analytics.</span>
         </div>
 
         {/* Stats */}

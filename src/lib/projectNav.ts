@@ -11,7 +11,12 @@ const showcaseIds = projects.filter((p) => p.previews).map((p) => p.id);
 export const OPEN_INDEX_EVENT = 'abrir-indice';
 
 export function projectIdFromHash(hash: string) {
-  return hash.startsWith(PROJECT_HASH) ? decodeURIComponent(hash.slice(PROJECT_HASH.length)) : null;
+  if (!hash.startsWith(PROJECT_HASH)) return null;
+  try {
+    return decodeURIComponent(hash.slice(PROJECT_HASH.length));
+  } catch {
+    return null; // a cut or hand-typed link like #proyecto-% is ignored, not fatal
+  }
 }
 
 export function scrollToProject(hash: string) {

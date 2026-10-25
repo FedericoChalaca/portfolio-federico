@@ -5,11 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#3E5A47" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Federico Martinez | Portfolio</title>
+    <title>Federico Martinez | Portafolio</title>
     <meta name="description" content="Portafolio de Federico Martinez, desarrollador front-end en Medellín: landings, portafolios, apps web y sistemas de gestión." />
     <meta name="keywords" content="Federico Martinez, desarrollador web, React, JavaScript, TypeScript, portafolio, Medellín, Colombia" />
     <meta name="author" content="Federico Martinez" />
-    <meta property="og:title" content="Federico Martinez | Portfolio" />
+    <meta property="og:title" content="Federico Martinez | Portafolio" />
     <meta property="og:description" content="Desarrollador front-end en Medellín: landings, portafolios, apps web y sistemas de gestión." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://portafolio-federico.vercel.app/" />
@@ -22,7 +22,16 @@
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static first view: shown until React takes over, so a slow connection never sees a blank page -->
+      <div class="boot">
+        <p class="boot-name"><em>Federico</em> Martinez</p>
+        <p class="boot-role">Desarrollador Front-End</p>
+        <p class="boot-bio">Diseño y desarrollo sitios y apps web que se ven bien y funcionan: landings, portafolios, apps y sistemas de gestión.</p>
+        <a class="boot-wa" href="https://wa.me/573016935489?text=Hola%20Federico%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20de%20un%20proyecto." target="_blank" rel="noopener noreferrer">Hablemos por WhatsApp</a>
+        <p class="boot-loading">Cargando los proyectos…</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

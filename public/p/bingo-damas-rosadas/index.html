@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
 <title>Bingo</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <style>
   /* Archivo único y sin recursos externos: funciona sin internet durante el evento.
      Los colores salen de estas variables; el lápiz las reemplaza con el color que se elija. */
@@ -591,7 +592,7 @@
     .historial { justify-content: center; }
     .premio, .forma { flex-basis: 100%; max-width: none; text-align: left; }
     .acciones { margin-left: 0; flex-wrap: wrap; justify-content: center; }
-    .botonera { flex-direction: row; }
+    .botonera { flex-direction: row; flex-wrap: wrap; justify-content: center; }
     .fila { grid-template-columns: 26px repeat(15, 1fr); gap: 3px; }
     button.celda { font-size: clamp(12px, 3.4vw, 18px); border-width: 1px; border-radius: 6px; min-height: 34px; }
     .letraFila { font-size: 18px; }

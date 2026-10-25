@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
 <title>Mi cartón de bingo</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <style>
   /* Cartón del jugador: se abre desde el QR del tablero. El enlace trae el título (t), el color (c),
      la forma que hay que llenar (f, 25 ceros y unos por filas) y el premio (p). Todo se guarda en este celular. */
@@ -61,6 +62,7 @@
 
   .cab { animation: aparecer 0.6s var(--suave) both; }
   .marca { color: var(--acento); font-weight: 800; font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .marca { overflow-wrap: anywhere; }
   h1 { font-size: clamp(30px, 9vw, 40px); line-height: 1.1; font-weight: 800; letter-spacing: -0.01em; }
 
   .tarjeta {
@@ -83,7 +85,7 @@
   .et { color: var(--texto-suave); font-size: 15px; }
   .forma-nombre { font-size: 24px; font-weight: 800; line-height: 1.15; }
   .premio-info { font-size: 17px; color: var(--texto-suave); animation-delay: 0.1s; }
-  .premio-info strong { color: var(--texto); display: block; font-size: 20px; margin-top: 2px; }
+  .premio-info strong { color: var(--texto); display: block; font-size: 20px; margin-top: 2px; overflow-wrap: anywhere; }
 
   /* ---------- Cartón ---------- */
   .carton { display: flex; flex-direction: column; gap: 14px; animation-delay: 0.14s; }
