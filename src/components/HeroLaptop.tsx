@@ -28,10 +28,13 @@ function OnUnmount({ run }: { run: () => void }) {
 }
 
 /** If the 3D chunk fails to load (bad connection), drop the 3D instead of taking the whole page down. */
-class Optional3D extends React.Component<{ children: React.ReactNode }, { failed: boolean }> {
+class Optional3D extends React.Component<{ children: React.ReactNode; onFail?: () => void }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onFail?.();
   }
   render() {
     return this.state.failed ? null : this.props.children;
@@ -56,6 +59,8 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
   const [live, setLive] = useState(false); // the 3D scene is drawn and ready to replace the still
   const [color, setColor] = useState(laptopColors[0].value);
   const hideLive = useCallback(() => setLive(false), []);
+  const [failed, setFailed] = useState(false); // the 3D download failed (no signal): the still stays
+  const onFail = useCallback(() => setFailed(true), []);
 
   // Desktop starts the 3D right away (measured: waiting for an idle moment made blocking worse)
   const askFirst = isPhone || slow;
@@ -74,9 +79,9 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
             height={isPhone ? 700 : 1125}
             onPointerDown={askFirst ? () => setEngaged(true) : undefined}
           />
-          {askFirst && !engaged && (
-            <button type="button" className="laptop-hint" onClick={() => setEngaged(true)}>
-              Toca para moverlo en 3D
+          {askFirst && !live && (
+            <button type="button" className="laptop-hint" onClick={() => setEngaged(true)} disabled={engaged} aria-live="polite">
+              {failed ? 'Sin conexión para cargar el 3D' : engaged ? 'Cargando 3D…' : 'Toca para moverlo en 3D'}
             </button>
           )}
           <div className="color-controls">
@@ -95,7 +100,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
           </div>
         </div>
         {start && near && (
-          <Optional3D>
+          <Optional3D onFail={onFail}>
             <OnUnmount run={hideLive} />
             <Suspense fallback={null}>
               <div className={`laptop-live ${live ? 'is-ready' : ''}`}>

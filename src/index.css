@@ -195,6 +195,13 @@ body {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
+/* Finger-sized targets on touch screens and phone widths */
+@media (pointer: coarse), (max-width: 768px) {
+  .project-link, .projects-index-btn, .laptop-hint { min-height: 44px; }
+  .showcase .showcase-tab, .showcase .showcase-info a { min-height: 44px; }
+  .showcase .showcase-arrow { width: 44px; height: 44px; }
+}
+
 /* Static first view in index.html: on screen until React mounts (slow connections) */
 .boot { min-height: 100vh; max-width: 1100px; margin: 0 auto; padding: calc(var(--navbar-height) + 24px) 24px 48px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
 .boot-name { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 9vw, 6rem); font-weight: 700; line-height: 1.05; color: var(--color-text); }

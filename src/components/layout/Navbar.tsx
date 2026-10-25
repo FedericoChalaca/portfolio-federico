@@ -31,6 +31,14 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
         if (el) el.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // Going back or following a #link closes whatever is open
+    React.useEffect(() => {
+        const close = () => { setMenuOpen(false); setIndexOpen(false); };
+        window.addEventListener('popstate', close);
+        window.addEventListener('hashchange', close);
+        return () => { window.removeEventListener('popstate', close); window.removeEventListener('hashchange', close); };
+    }, []);
+
     // The projects section has its own "Ver índice" button: it asks the navbar to open the panel
     React.useEffect(() => {
         const open = () => { setMenuOpen(false); setIndexOpen(true); };

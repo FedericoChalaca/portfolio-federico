@@ -52,7 +52,8 @@ export const ShowcaseCarousel: React.FC<ShowcaseCarouselProps> = ({ projects }) 
   useEffect(() => {
     const id = projects[active]?.id;
     const current = projectIdFromHash(window.location.hash);
-    if (id && current !== null && current !== id) window.history.replaceState(null, '', `#proyecto-${id}`);
+    const inCarousel = current !== null && projects.some((p) => p.id === current);
+    if (id && inCarousel && current !== id) window.history.replaceState(null, '', `#proyecto-${id}`);
   }, [active, projects]);
 
   if (n === 0) return null;
