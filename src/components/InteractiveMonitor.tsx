@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Float, Text, ContactShadows, RoundedBox } from '@react-three/drei';
+import React, { Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera, Float, ContactShadows, RoundedBox, Environment, Lightformer, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { useInView } from 'framer-motion';
 import { laptopColors } from './laptopColors';
@@ -9,8 +9,61 @@ interface LaptopProps {
     color: string;
 }
 
+// Keyboard rows as relative key widths; each row is stretched to the same total width
+const KEY_ROWS = [
+    { depth: 0.11, keys: Array(14).fill(1) },
+    { depth: 0.19, keys: [...Array(13).fill(1), 1.6] },
+    { depth: 0.19, keys: [1.6, ...Array(13).fill(1)] },
+    { depth: 0.19, keys: [1.9, ...Array(11).fill(1), 1.9] },
+    { depth: 0.19, keys: [2.4, ...Array(10).fill(1), 2.4] },
+    { depth: 0.19, keys: [1, 1, 1, 1.3, 5.6, 1.3, 1, 1, 1] },
+];
+const KEYBOARD_WIDTH = 3.3;
+const KEY_GAP = 0.035;
+const KEY_COUNT = KEY_ROWS.reduce((n, r) => n + r.keys.length, 0);
+
+/** Every key in one instanced mesh: a single draw call instead of one per key */
+const Keyboard: React.FC = () => {
+    const ref = useRef<THREE.InstancedMesh>(null);
+
+    useLayoutEffect(() => {
+        const mesh = ref.current;
+        if (!mesh) return;
+        const m = new THREE.Matrix4();
+        const turn = new THREE.Quaternion();
+        let i = 0;
+        let z = -0.62;
+        for (const row of KEY_ROWS) {
+            const units = row.keys.reduce((a, b) => a + b, 0);
+            const unit = (KEYBOARD_WIDTH - KEY_GAP * (row.keys.length - 1)) / units;
+            let x = -KEYBOARD_WIDTH / 2;
+            for (const k of row.keys) {
+                const w = k * unit;
+                m.compose(new THREE.Vector3(x + w / 2, 0, z + row.depth / 2), turn, new THREE.Vector3(w, 0.022, row.depth));
+                mesh.setMatrixAt(i++, m);
+                x += w + KEY_GAP;
+            }
+            z += row.depth + KEY_GAP;
+        }
+        mesh.instanceMatrix.needsUpdate = true;
+    }, []);
+
+    return (
+        <instancedMesh ref={ref} args={[undefined, undefined, KEY_COUNT]}>
+            <boxGeometry />
+            <meshStandardMaterial color="#1c1d1f" roughness={0.65} metalness={0.1} />
+        </instancedMesh>
+    );
+};
+
 const LaptopModel: React.FC<LaptopProps> = ({ color }) => {
     const group = useRef<THREE.Group>(null);
+    // The portfolio's own first view on the screen
+    const screen = useTexture('/laptop/pantalla.webp', (t) => {
+        t.colorSpace = THREE.SRGBColorSpace;
+        t.anisotropy = 8;
+    });
+    const trackpad = useMemo(() => new THREE.Color(color).multiplyScalar(0.9), [color]);
 
     // Subtle rotation effect
     useFrame((state) => {
@@ -19,109 +72,72 @@ const LaptopModel: React.FC<LaptopProps> = ({ color }) => {
         }
     });
 
+    // Aluminium: its shine comes from the studio reflections set up in the scene
+    const aluminium = <meshStandardMaterial color={color} metalness={0.85} roughness={0.32} envMapIntensity={1.1} />;
+
     return (
         <group ref={group} dispose={null}>
-            {/* Base / Keyboard part */}
+            {/* Base */}
             <group position={[0, -0.05, 0]}>
-                <RoundedBox args={[4, 0.15, 2.8]} radius={0.05} smoothness={4}>
-                    <meshPhysicalMaterial
-                        color={color}
-                        roughness={0.2}
-                        metalness={0.8}
-                        clearcoat={1}
-                        clearcoatRoughness={0.1}
-                    />
+                <RoundedBox args={[4, 0.12, 2.8]} radius={0.05} smoothness={4}>
+                    {aluminium}
                 </RoundedBox>
 
-                {/* Keyboard Grid - Detailed Look */}
-                <group position={[0, 0.08, -0.2]}>
-                    {[...Array(5)].map((_, row) => (
-                        <group key={row} position={[0, 0, row * 0.3 - 0.6]}>
-                            {[...Array(10)].map((_, col) => (
-                                <mesh key={col} position={[col * 0.35 - 1.57, 0, 0]}>
-                                    <boxGeometry args={[0.3, 0.02, 0.25]} />
-                                    <meshStandardMaterial color="#888" roughness={0.4} />
-                                </mesh>
-                            ))}
-                        </group>
-                    ))}
+                {/* Keyboard well and keys */}
+                <mesh position={[0, 0.0605, -0.18]} rotation={[-Math.PI / 2, 0, 0]}>
+                    <planeGeometry args={[3.42, 1.32]} />
+                    <meshStandardMaterial color="#0d0e0f" roughness={0.8} />
+                </mesh>
+                <group position={[0, 0.072, -0.2]}>
+                    <Keyboard />
                 </group>
 
-                <group position={[0, 0.08, 0.9]} rotation={[-Math.PI / 2, 0, 0]}>
-                    <mesh>
-                        <planeGeometry args={[1.4, 0.9]} />
-                        <meshStandardMaterial
-                            color={color}
-                            roughness={0.4}
-                            metalness={0.1}
-                            opacity={0.4}
-                            transparent
-                        />
-                    </mesh>
-                    {/* Stronger Border effect for trackpad visibility on dark colors */}
-                    <mesh position={[0, 0, 0.001]}>
-                        <planeGeometry args={[1.42, 0.92]} />
-                        <meshStandardMaterial color="#fff" opacity={0.3} transparent />
-                    </mesh>
-                </group>
+                {/* Trackpad */}
+                <RoundedBox args={[1.5, 0.004, 0.92]} radius={0.002} smoothness={2} position={[0, 0.061, 0.86]}>
+                    <meshStandardMaterial color={trackpad} metalness={0.6} roughness={0.45} />
+                </RoundedBox>
             </group>
 
-            {/* Hinge Cylinder */}
-            <mesh position={[0, 0.02, -1.4]} rotation={[0, 0, Math.PI / 2]}>
-                <cylinderGeometry args={[0.08, 0.08, 3.9, 12]} />
-                <meshStandardMaterial color="#444" metalness={0.9} roughness={0.1} />
+            {/* Hinge */}
+            <mesh position={[0, 0.02, -1.36]} rotation={[0, 0, Math.PI / 2]}>
+                <cylinderGeometry args={[0.055, 0.055, 3.3, 20]} />
+                <meshStandardMaterial color="#1a1b1c" metalness={0.7} roughness={0.35} />
             </mesh>
 
-            {/* Screen / Lid - Adjusted rotation to match 90-100 degrees */}
+            {/* Lid, opened a little past 90 degrees */}
             <group position={[0, 0.02, -1.4]} rotation={[-0.2, 0, 0]}>
-                <mesh position={[0, 1.4, 0]}>
-                    <RoundedBox args={[4, 2.8, 0.1]} radius={0.05} smoothness={4}>
-                        <meshPhysicalMaterial
-                            color={color}
-                            roughness={0.1}
-                            metalness={0.5}
-                            clearcoat={1}
-                            clearcoatRoughness={0.1}
-                            emissive={color}
-                            emissiveIntensity={0.25}
-                        />
-                    </RoundedBox>
+                <RoundedBox args={[4, 2.8, 0.07]} radius={0.035} smoothness={4} position={[0, 1.4, -0.035]}>
+                    {aluminium}
+                </RoundedBox>
 
-                    {/* Display surface */}
-                    <mesh position={[0, 0, 0.051]}>
-                        <planeGeometry args={[3.85, 2.65]} />
-                        <meshStandardMaterial
-                            color="#000"
-                            emissive="#000"
-                            roughness={0}
-                        />
+                {/* Black glass bezel */}
+                <RoundedBox args={[3.96, 2.76, 0.004]} radius={0.002} smoothness={2} position={[0, 1.4, 0.001]}>
+                    <meshStandardMaterial color="#050505" roughness={0.06} metalness={0.2} />
+                </RoundedBox>
 
-                        {/* Screen Content area */}
-                        <mesh position={[0, 0, 0.001]}>
-                            <planeGeometry args={[3.7, 2.5]} />
-                            <meshStandardMaterial color="#080808" />
+                {/* Display: unlit so the screenshot keeps its real colors */}
+                <mesh position={[0, 1.36, 0.0035]}>
+                    <planeGeometry args={[3.74, 2.43]} />
+                    <meshBasicMaterial map={screen} toneMapped={false} />
+                </mesh>
 
-                            {/* Subtle Code Overlay */}
-                            {/* Local font: without it troika downloads one from a CDN on every visit */}
-                            <Text
-                                font="/fonts/noto-sans-latin.woff"
-                                position={[0, 0, 0.01]}
-                                fontSize={0.18}
-                                color={color}
-                                maxWidth={3}
-                                lineHeight={1.6}
-                                textAlign="left"
-                                anchorX="center"
-                                anchorY="middle"
-                            >
-                                {`const dev = {\n  estado: "Listo",\n  estilo: "Minimalista",\n  resultado: "Premium"\n};`}
-                            </Text>
-                        </mesh>
-                    </mesh>
+                {/* Camera */}
+                <mesh position={[0, 2.68, 0.004]}>
+                    <circleGeometry args={[0.022, 16]} />
+                    <meshStandardMaterial color="#1d2a30" roughness={0.2} />
                 </mesh>
             </group>
-        </group >
+        </group>
     );
+};
+
+/** Mounts once the model (and its screen texture) is ready: compile the shaders, then start drawing */
+const WhenReady: React.FC<{ onReady: () => void }> = ({ onReady }) => {
+    const { gl, scene, camera } = useThree();
+    useEffect(() => {
+        gl.compileAsync(scene, camera).then(onReady);
+    }, [gl, scene, camera, onReady]);
+    return null;
 };
 
 interface InteractiveMonitorProps {
@@ -138,12 +154,16 @@ export const InteractiveMonitor: React.FC<InteractiveMonitorProps> = ({ initialC
     // Shaders compile in the background (KHR_parallel_shader_compile); drawing starts once they are ready,
     // so the first frame does not freeze the page
     const [compiled, setCompiled] = useState(false);
+    const ready = useCallback(() => {
+        setCompiled(true);
+        onReady?.();
+    }, [onReady]);
 
     useEffect(() => {
         const handleResize = () => {
             const isMobile = window.innerWidth <= 768; // same breakpoint as the phone still
-            setScale(isMobile ? 0.7 : 1); // Very slightly larger
-            setPositionY(isMobile ? 1.0 : 0); // Lowered the shift upwards
+            setScale(isMobile ? 1.25 : 1); // big enough on phones to read the screen
+            setPositionY(isMobile ? -0.85 : 0); // centered in the phone box, just above its shadow
         };
 
         handleResize(); // Set initial scale
@@ -159,26 +179,29 @@ export const InteractiveMonitor: React.FC<InteractiveMonitorProps> = ({ initialC
                     frameloop={compiled && onScreen ? 'always' : 'never'}
                     gl={{ antialias: true, alpha: true }}
                     dpr={[1, 2]}
-                    onCreated={({ gl, scene, camera }) => {
-                        gl.compileAsync(scene, camera).then(() => {
-                            setCompiled(true);
-                            onReady?.();
-                        });
-                    }}
                 >
                     <PerspectiveCamera makeDefault position={[0, 2, 11.5]} fov={35} />
-                    <ambientLight intensity={1.2} />
-                    <spotLight position={[15, 20, 15]} angle={0.3} penumbra={1} intensity={2.5} />
-                    <spotLight position={[-15, 20, 10]} angle={0.3} penumbra={1} intensity={1.5} color="#fff" />
-                    <pointLight position={[0, 5, 0]} intensity={2} color="#fff" distance={10} />
-                    <pointLight position={[5, -5, -5]} intensity={1.5} color="#fff" />
+                    <ambientLight intensity={0.35} />
+                    <spotLight position={[15, 20, 15]} angle={0.3} penumbra={1} intensity={2} />
                     <pointLight position={[0, 0, -12]} intensity={2.5} color={color} distance={20} /> {/* Rim Light */}
 
-                    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                        <group scale={scale} position={[0, positionY, 0]}>
-                            <LaptopModel color={color} />
-                        </group>
-                    </Float>
+                    {/* Studio reflections for the metal, drawn once on the GPU: no HDR file to download */}
+                    <Environment resolution={64} frames={1}>
+                        <Lightformer form="rect" intensity={2.5} position={[0, 6, 2]} rotation={[Math.PI / 2, 0, 0]} scale={[10, 4, 1]} />
+                        <Lightformer form="rect" intensity={1.5} position={[-6, 2, 3]} rotation={[0, Math.PI / 2, 0]} scale={[6, 3, 1]} />
+                        <Lightformer form="rect" intensity={1.2} position={[6, 1, 4]} rotation={[0, -Math.PI / 2, 0]} scale={[6, 3, 1]} />
+                        <Lightformer form="ring" intensity={0.8} position={[0, 1, -8]} scale={4} />
+                        <Lightformer form="rect" intensity={0.8} position={[0, -5, 2]} rotation={[-Math.PI / 2, 0, 0]} scale={[10, 4, 1]} />
+                    </Environment>
+
+                    <Suspense fallback={null}>
+                        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+                            <group scale={scale} position={[0, positionY, 0]}>
+                                <LaptopModel color={color} />
+                            </group>
+                        </Float>
+                        <WhenReady onReady={ready} />
+                    </Suspense>
 
                     <ContactShadows
                         position={[0, -1.2, 0]}

@@ -3,7 +3,13 @@ import { laptopColors } from './laptopColors';
 
 // three.js is ~1 MB: its own chunk, downloaded only when the visitor shows interest in the laptop
 const loadMonitor = () => import('./InteractiveMonitor');
-const prefetch = () => { loadMonitor().catch(() => {}); }; // a failed early download only matters on click
+// Early download of the scene and its screen image; a failure here only matters on click
+const prefetch = () => {
+  loadMonitor().catch(() => {});
+  const img = new Image();
+  img.crossOrigin = 'anonymous'; // same request mode as three's loader, so it hits the cache
+  img.src = '/laptop/pantalla.webp';
+};
 const InteractiveMonitor = lazy(() => loadMonitor().then((m) => ({ default: m.InteractiveMonitor })));
 
 const PHONE = '(max-width: 768px)';
@@ -61,7 +67,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
           <img
             src={`/laptop/${isPhone ? '' : 'desktop-'}${still.still}.webp`}
             alt="Portátil con código en la pantalla"
-            width={isPhone ? 780 : 1026}
+            width={isPhone ? 700 : 1026}
             height={isPhone ? 700 : 1125}
             onPointerDown={() => setEngaged(true)}
           />
