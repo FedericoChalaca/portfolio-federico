@@ -17,20 +17,41 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" href="/fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/playfair-display-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/playfair-display-italic.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/laptop/desktop-forest.webp" as="image" type="image/webp" media="(min-width: 769px)" />
+    <script src="/theme.js"></script>
     <!-- Vercel Web Analytics: visitas sin cookies, servido desde el mismo dominio -->
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <div id="root">
-      <!-- Static first view: shown until React takes over, so a slow connection never sees a blank page -->
-      <div class="boot">
-        <p class="boot-name"><em>Federico</em> Martinez</p>
-        <p class="boot-role">Desarrollador Front-End</p>
-        <p class="boot-bio">Diseño y desarrollo sitios y apps web que se ven bien y funcionan: landings, portafolios, apps y sistemas de gestión.</p>
-        <a class="boot-wa" href="https://wa.me/573016935489?text=Hola%20Federico%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20de%20un%20proyecto." target="_blank" rel="noopener noreferrer">Hablemos por WhatsApp</a>
-        <p class="boot-loading">Cargando los proyectos…</p>
-      </div>
+      <!-- Static first view: the hero's own markup and styles, shown until React takes over,
+           so a slow connection never sees a blank page and nothing jumps when the app arrives -->
+      <div class="app"><main>
+      <section class="hero-section">
+        <div class="hero-content">
+          <div class="hero-grid">
+            <div class="hero-text-col">
+              <h1 class="hero-name">
+                <span class="hero-first" style="color: var(--color-primary)">Federico</span>
+                <span class="hero-last" style="color: var(--color-text)">Martinez</span>
+              </h1>
+              <div class="hero-role-wrapper"><span class="hero-role">Desarrollador Front-End</span><span class="hero-cursor">|</span></div>
+              <p class="hero-bio">Diseño y desarrollo sitios y apps web que se ven bien y funcionan: landings, portafolios, apps y sistemas de gestión.</p>
+              <div class="hero-actions">
+                <a class="boot-btn primary" href="#proyectos">&lt;/&gt; Ver proyectos</a>
+                <a class="boot-btn ghost" href="https://wa.me/573016935489?text=Hola%20Federico%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20de%20un%20proyecto." target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> Hablemos</a>
+              </div>
+              <div class="hero-location">
+                <span class="hero-loc-item"><span class="hero-available" aria-hidden="true"></span> Disponible para proyectos</span>
+                <span class="hero-loc-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Medellín, Colombia</span>
+              </div>
+            </div>
+            <div class="hero-graphic-col"><p class="boot-loading">Cargando los proyectos…</p></div>
+          </div>
+        </div>
+      </section>
+      </main></div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

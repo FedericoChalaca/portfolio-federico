@@ -204,11 +204,160 @@ body {
   .contact-footer-bar a { display: inline-flex; align-items: center; min-height: 44px; }
 }
 
-/* Static first view in index.html: on screen until React mounts (slow connections) */
-.boot { min-height: 100vh; max-width: 1100px; margin: 0 auto; padding: calc(var(--navbar-height) + 24px) 24px 48px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
-.boot-name { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 9vw, 6rem); font-weight: 700; line-height: 1.05; color: var(--color-text); }
-.boot-name em { color: var(--color-primary); }
-.boot-role { font-size: 0.95rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-text-secondary); }
-.boot-bio { max-width: 36ch; font-size: 1.15rem; line-height: 1.7; font-weight: 300; color: var(--color-text-secondary); }
-.boot-wa { align-self: flex-start; min-height: 44px; padding: 13px 26px; border-radius: var(--radius-full); background: var(--gradient-primary); color: #fff; font-weight: 600; text-decoration: none; }
-.boot-loading { font-size: 0.9rem; color: var(--color-text-muted); }
+/* Hero: global so the static first view in index.html (same markup) looks exactly like it before React loads */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 80px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+.hero-orb-1 {
+  width: 50vw; height: 50vh;
+  background: radial-gradient(circle, rgba(196, 138, 113, 0.1), transparent 70%);
+  top: -20%; left: -10%;
+}
+.hero-orb-2 {
+  width: 60vw; height: 60vh;
+  background: radial-gradient(circle, rgba(62, 90, 71, 0.08), transparent 70%);
+  bottom: -20%; right: -10%;
+}
+.hero-content {
+  position: relative; 
+  z-index: 1; 
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-text-col {
+  text-align: left;
+}
+.hero-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+.hero-first { color: var(--color-text); font-style: italic; }
+.hero-last { display: block; color: var(--color-primary); }
+.hero-role-wrapper {
+  display: flex;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  height: 2em;
+  margin-bottom: 32px;
+}
+.hero-cursor {
+  margin-left: 4px;
+  color: var(--color-accent);
+  animation: blink 1s infinite;
+  font-weight: 300;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero-bio {
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  color: var(--color-text-secondary);
+  max-width: 540px;
+  margin-bottom: 48px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.hero-location {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.02em;
+}
+.hero-loc-item { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.hero-available {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  margin-right: 4px;
+}
+.hero-graphic-col {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 700px;
+}
+@media (max-width: 968px) {
+  .hero-section {
+    padding: 100px 20px 60px;
+    height: auto;
+    min-height: 100vh;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 20px;
+  }
+  .hero-text-col {
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     order: 1;
+  }
+  .hero-location, .hero-actions { justify-content: center; }
+  .hero-bio {
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .hero-graphic-col {
+    width: 100%;
+    height: auto;
+    min-height: 320px; /* Override 700px min-height to reduce vertical space */
+    justify-content: center;
+    order: 2; /* Name and CTAs first on small screens */
+    margin-bottom: 0;
+  }
+  .hero-name {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    margin-bottom: 16px;
+  }
+}
+
+/* Static first view in index.html: the hero itself, with links instead of the React buttons */
+.boot-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 36px; border-radius: var(--radius-full); font-weight: 600; font-size: 1rem; text-decoration: none; white-space: nowrap; }
+.boot-btn.primary { background: var(--gradient-primary); color: #fff; box-shadow: var(--shadow-button); }
+.boot-btn.ghost { background: var(--color-bg-glass); color: var(--color-text); border: 1.5px solid var(--color-border); }
+.boot-loading { margin: auto; font-size: 0.9rem; color: var(--color-text-muted); }

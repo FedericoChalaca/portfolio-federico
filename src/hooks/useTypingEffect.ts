@@ -5,7 +5,8 @@ import { useState, useEffect, useRef } from 'react';
  * Single Responsibility: only handles typing animation state.
  */
 export function useTypingEffect(texts: string[], speed = 80, pause = 2000) {
-    const [displayed, setDisplayed] = useState('');
+    // Starts with the first text already written: it matches the static first view and nothing flickers on load
+    const [displayed, setDisplayed] = useState(texts[0] ?? '');
     const [isDeleting, setIsDeleting] = useState(false);
     const [textIndex, setTextIndex] = useState(0);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);

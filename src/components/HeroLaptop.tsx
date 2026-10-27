@@ -1,10 +1,10 @@
 import React, { Suspense, lazy, useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { laptopColors } from './laptopColors';
 
-// three.js is ~1 MB: its own chunk, downloaded only when the 3D scene is really going to run
-const InteractiveMonitor = lazy(() =>
-  import('./InteractiveMonitor').then((m) => ({ default: m.InteractiveMonitor })),
-);
+// three.js is ~1 MB: its own chunk, downloaded only when the visitor shows interest in the laptop
+const loadMonitor = () => import('./InteractiveMonitor');
+const prefetch = () => { loadMonitor().catch(() => {}); }; // a failed early download only matters on click
+const InteractiveMonitor = lazy(() => loadMonitor().then((m) => ({ default: m.InteractiveMonitor })));
 
 const PHONE = '(max-width: 768px)';
 const subscribePhone = (onChange: () => void) => {
@@ -13,13 +13,6 @@ const subscribePhone = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange);
 };
 const isPhoneNow = () => window.matchMedia(PHONE).matches;
-
-type NetInfo = { saveData?: boolean; effectiveType?: string };
-/** Data saver on, or a 2G/3G connection (only Chromium browsers report it) */
-const isSlowNetwork = () => {
-  const c = (navigator as Navigator & { connection?: NetInfo }).connection;
-  return !!c && (!!c.saveData || /(^|-)2g$|^3g$/.test(c.effectiveType ?? ''));
-};
 
 /** Calls `run` when it unmounts: the still must come back if the 3D scene goes away (e.g. resizing to phone width). */
 function OnUnmount({ run }: { run: () => void }) {
@@ -46,15 +39,12 @@ interface HeroLaptopProps {
 }
 
 /**
- * A still of the 3D scene shows instantly and the live 3D laptop takes its place afterwards,
- * so three.js never competes with the first paint:
- * - desktop: right away, loading in the background while the still is on screen
- * - phones and slow connections: only when the visitor taps the laptop or its hint,
- *   so nobody spends 290 KB of data and a busy second on an ornament they did not ask for
+ * A still of the 3D scene shows instantly; the live 3D laptop replaces it only when the visitor
+ * clicks or taps it, so nobody pays 290 KB and a busy second for an ornament they did not ask for.
+ * Hovering or focusing the laptop starts the download early, so on a mouse the click feels instant.
  */
 export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
   const isPhone = useSyncExternalStore(subscribePhone, isPhoneNow);
-  const [slow] = useState(isSlowNetwork);
   const [engaged, setEngaged] = useState(false); // the visitor asked for the 3D
   const [live, setLive] = useState(false); // the 3D scene is drawn and ready to replace the still
   const [color, setColor] = useState(laptopColors[0].value);
@@ -62,26 +52,22 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
   const [failed, setFailed] = useState(false); // the 3D download failed (no signal): the still stays
   const onFail = useCallback(() => setFailed(true), []);
 
-  // Desktop starts the 3D right away (measured: waiting for an idle moment made blocking worse)
-  const askFirst = isPhone || slow;
-  const start = !askFirst || engaged;
-
   const still = laptopColors.find((c) => c.value === color) ?? laptopColors[0];
 
   return (
     <>
-      <div className="laptop-stage">
+      <div className="laptop-stage" onPointerEnter={prefetch} onFocus={prefetch}>
         <div className={`laptop-still ${live ? 'is-hidden' : ''}`}>
           <img
             src={`/laptop/${isPhone ? '' : 'desktop-'}${still.still}.webp`}
             alt="Portátil con código en la pantalla"
             width={isPhone ? 780 : 1026}
             height={isPhone ? 700 : 1125}
-            onPointerDown={askFirst ? () => setEngaged(true) : undefined}
+            onPointerDown={() => setEngaged(true)}
           />
-          {askFirst && !live && (
+          {!live && (
             <button type="button" className="laptop-hint" onClick={() => setEngaged(true)} disabled={engaged} aria-live="polite">
-              {failed ? 'Sin conexión: recarga para ver el 3D' : engaged ? 'Cargando 3D…' : 'Toca para moverlo en 3D'}
+              {failed ? 'Sin conexión: recarga para ver el 3D' : engaged ? 'Cargando 3D…' : `${isPhone ? 'Toca' : 'Haz clic'} para moverlo en 3D`}
             </button>
           )}
           <div className="color-controls">
@@ -99,7 +85,7 @@ export const HeroLaptop: React.FC<HeroLaptopProps> = ({ near }) => {
             ))}
           </div>
         </div>
-        {start && near && (
+        {engaged && near && (
           <Optional3D onFail={onFail}>
             <OnUnmount run={hideLive} />
             <Suspense fallback={null}>

@@ -1,22 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
+
+// Same condition in JS and CSS: a real mouse on a wide screen
+const FINE_POINTER = '(hover: hover) and (pointer: fine) and (min-width: 969px)';
 
 export const CustomCursor: React.FC = () => {
     const [isHovering, setIsHovering] = useState(false);
     const [clickEffect, setClickEffect] = useState(false);
+    const [visible, setVisible] = useState(false);
     const [activeColor, setActiveColor] = useState('var(--color-primary)');
+    const dotRef = useRef<HTMLDivElement>(null);
 
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
-    const springConfig = { damping: 25, stiffness: 250 };
+    // The ring trails the dot just a little: fast, no overshoot
+    const springConfig = { stiffness: 700, damping: 40, mass: 0.4 };
     const smoothX = useSpring(cursorX, springConfig);
     const smoothY = useSpring(cursorY, springConfig);
 
     useEffect(() => {
+        if (!window.matchMedia(FINE_POINTER).matches) return;
+        // The dot IS the mouse: hide the system arrow (only while this component is alive)
+        document.documentElement.classList.add('custom-cursor-on');
+
         const moveCursor = (e: MouseEvent) => {
+            // Written straight to the element, not on the next animation frame, so the dot never lags the mouse
+            if (dotRef.current) dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
             cursorX.set(e.clientX);
             cursorY.set(e.clientY);
+            setVisible(true);
         };
 
         const handleHoverStart = (e: MouseEvent) => {
@@ -41,19 +54,23 @@ export const CustomCursor: React.FC = () => {
 
         const handleMouseDown = () => setClickEffect(true);
         const handleMouseUp = () => setClickEffect(false);
+        const handleLeave = () => setVisible(false);
 
         window.addEventListener('mousemove', moveCursor);
         window.addEventListener('mouseover', handleHoverStart);
         window.addEventListener('mouseout', handleHoverEnd);
         window.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mouseup', handleMouseUp);
+        document.documentElement.addEventListener('mouseleave', handleLeave);
 
         return () => {
+            document.documentElement.classList.remove('custom-cursor-on');
             window.removeEventListener('mousemove', moveCursor);
             window.removeEventListener('mouseover', handleHoverStart);
             window.removeEventListener('mouseout', handleHoverEnd);
             window.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mouseup', handleMouseUp);
+            document.documentElement.removeEventListener('mouseleave', handleLeave);
         };
     }, [cursorX, cursorY]);
 
@@ -71,25 +88,20 @@ export const CustomCursor: React.FC = () => {
                 }}
                 animate={{
                     scale: isHovering ? 1.5 : 1,
-                    opacity: 1,
+                    opacity: visible ? 1 : 0,
                     borderWidth: isHovering ? '1px' : '2px',
                 }}
             />
 
-            {/* Inner Dot */}
-            <motion.div
-                className="custom-cursor-dot"
-                style={{
-                    translateX: cursorX,
-                    translateY: cursorY,
-                    left: -4,
-                    top: -4,
-                    backgroundColor: activeColor,
-                }}
-                animate={{
-                    scale: clickEffect ? 0.5 : (isHovering ? 0 : 1),
-                }}
-            />
+            {/* Inner Dot: the outer div follows the mouse, the inner one shrinks on click */}
+            <div ref={dotRef} className="custom-cursor-dot" style={{ opacity: visible ? 1 : 0 }}>
+                <motion.div
+                    className="custom-cursor-dot-inner"
+                    style={{ backgroundColor: activeColor }}
+                    // Never hidden over links: with the system arrow gone, the dot is where the click lands
+                    animate={{ scale: clickEffect ? 0.5 : 1 }}
+                />
+            </div>
 
             <style>{`
         .custom-cursor-ring {
@@ -106,15 +118,25 @@ export const CustomCursor: React.FC = () => {
 
         .custom-cursor-dot {
           position: fixed;
+          left: -4px;
+          top: -4px;
           width: 8px;
           height: 8px;
-          background-color: var(--color-primary);
-          border-radius: 50%;
           pointer-events: none;
           z-index: 10000;
+          transform: translate3d(-100px, -100px, 0);
+          will-change: transform;
+        }
+        .custom-cursor-dot-inner {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: var(--color-primary);
         }
 
-        @media (max-width: 968px) {
+        html.custom-cursor-on, html.custom-cursor-on * { cursor: none !important; }
+
+        @media not all and ${FINE_POINTER} {
           .custom-cursor-ring, .custom-cursor-dot {
             display: none;
           }
